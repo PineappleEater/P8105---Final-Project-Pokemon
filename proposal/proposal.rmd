@@ -51,6 +51,8 @@ The data is mainly from Kaggle; the latest data is imported and extracted manual
 
 ## The Planned Analyses / Visualizations / Coding Challenges
 
+
+### The Planned Analyses
 With this dataset, we wanted to be able to answer the following questions:
 
 - Is it possible to build a classifier to identify legendary Pokemon?
@@ -58,6 +60,21 @@ With this dataset, we wanted to be able to answer the following questions:
 - Which type is the strongest overall? Which is the weakest?
 - Which type is the most likely to be a legendary Pokemon?
 - Can you build a Pokemon dream team? A team of 6 Pokemon that inflicts the most damage while remaining relatively impervious to any other team of 6 Pokemon.
+
+### Visualizations
+
+- Dashboard with interactive plots to explore relationships between different attributes (e.g., scatter plots of attack vs. defense, bar charts of type distributions).
+- Heatmaps to show correlations between different stats.
+- Clustering visualizations (e.g., dendrograms, cluster plots) to illustrate groupings of similar Pokémon.
+- Violin plots or box plots to compare stat distributions across different types or generations.
+- Complete bivariate analysis visualizations to show relationships between two variables, such as attack vs. defense or speed vs. HP.
+
+### Coding Challenges
+
+- Data cleaning and preprocessing: Handling missing values, normalizing data, and encoding categorical variables.
+- Feature engineering: Creating new features that may improve model performance.
+- Model selection and evaluation: Choosing appropriate algorithms.
+
 
 ## The Planned Timeline
 

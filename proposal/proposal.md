@@ -68,6 +68,8 @@ extracted manually from the Bukbagarden.
 
 ## The Planned Analyses / Visualizations / Coding Challenges
 
+### The Planned Analyses
+
 With this dataset, we wanted to be able to answer the following
 questions:
 
@@ -79,6 +81,24 @@ questions:
 - Can you build a Pokemon dream team? A team of 6 Pokemon that inflicts
   the most damage while remaining relatively impervious to any other
   team of 6 Pokemon.
+
+### Visualizations
+
+- Dashboard with interactive plots to explore relationships between
+  different attributes (e.g., scatter plots of attack vs. defense, bar
+  charts of type distributions).
+- Heatmaps to show correlations between different stats.
+- Clustering visualizations (e.g., dendrograms, cluster plots) to
+  illustrate groupings of similar Pokémon.
+- Violin plots or box plots to compare stat distributions across
+  different types or generations.
+
+### Coding Challenges
+
+- Data cleaning and preprocessing: Handling missing values, normalizing
+  data, and encoding categorical variables.
+- Feature engineering: Creating new features that may improve model
+  performance.
 
 ## The Planned Timeline
 
