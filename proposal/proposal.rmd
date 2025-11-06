@@ -2,7 +2,7 @@
 title: "P8105 Final Project Proposal"
 author: "Leah Li(yl5828), Ruipeng Li(rl3616), Xuange Liang (xl3493), Yiwen Zhang (yz4994)"
 date: "`r Sys.Date()`"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
