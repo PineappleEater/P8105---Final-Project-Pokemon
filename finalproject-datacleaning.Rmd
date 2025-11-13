@@ -1,0 +1,9 @@
+---
+title: "Data Source and Data Cleaning Process"
+output: html_document
+---
+
+### Data Source  
+The data used in this project were scraped from pokemondb.net, a resource that maintains one of the most complete collections of Pokémon information to date, encompassing all nine generations (1,025 Pokémon species including alternate forms).  
+The dataset includes variables such as base statistics, physical dimensions (height and weight), and type attributes.  
+A portion of the metadata is sourced from the Veekun database, with additional details compiled by community contributors based on in-game data.
