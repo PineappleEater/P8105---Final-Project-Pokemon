@@ -383,8 +383,10 @@ format.</p>
 <pre class="r"><code>raw_state_df &lt;- read_html(&quot;data/Pokemon.html&quot;) |&gt; 
   html_table()
 
-
 raw_wh_df &lt;- read_html(&quot;data/Pokemon by height and weight.html&quot;) |&gt; 
+  html_table()
+
+raw_evolved_df &lt;- read_html(&quot;data/Pokemon fully evolved.html&quot;) |&gt; 
   html_table()</code></pre>
 <pre class="r"><code>pokemon_state_df &lt;- as_tibble(raw_state_df[[1]]) |&gt; 
   janitor::clean_names()
@@ -412,6 +414,8 @@ pokemon_df &lt;- as_tibble(raw_wh_df[[1]]) |&gt;
          height_m, weight_kgs, bmi, 
          -height_ft, -weight_lbs, -type_split, -type)
 
+
+
 write_csv(pokemon_df, &quot;data result/pokemon_data.csv&quot;)</code></pre>
 <p>Note: For “Eternamax” Eternatus, no official height or weight data
 exists. Based on its in-game appearance and the way it is portrayed in
@@ -421,7 +425,6 @@ fractures, and crystalline lines—I set its size to 999.9 meters tall and
 perfectly matching the idea of a non-physical energy entity. This also
 aligns with how the anime almost never shows its full body, only
 fragmented sections of its form.</p>
-<pre class="r"><code># About special form of Pokémon:</code></pre>
 <pre class="r"><code># About Legendary of Pokémon:
 pokemon_legend &lt;- pokemon_df |&gt; 
   filter(dex %in% c(144, 145, 146, 150, 
@@ -456,6 +459,20 @@ pokemon_para &lt;- pokemon_df |&gt;
 # About Ultra Beast of Pokémon:
 pokemon_ub &lt;- pokemon_df |&gt; 
   filter(dex %in% c(793:799, 803:806))</code></pre>
+<pre class="r"><code># About Final form list of Pokémon:
+pokemon_evolved_n &lt;- raw_evolved_df[[1]] |&gt; 
+  as_tibble(.name_repair = &quot;unique&quot;) |&gt; 
+  janitor::clean_names() |&gt; 
+  rename(dex = number) |&gt; 
+  select(dex)</code></pre>
+<pre><code>## New names:
+## • `` -&gt; `...2`</code></pre>
+<pre class="r"><code>pokemon_evolved_df &lt;- pokemon_df |&gt; 
+  filter(dex %in% pokemon_evolved_n$dex)
+legend_evolved_df &lt;- pokemon_legend |&gt; 
+  filter(dex %in% pokemon_evolved_n$dex)
+myth_evolved_df &lt;- pokemon_myth |&gt; 
+  filter(dex %in% pokemon_evolved_n$dex)</code></pre>
 </div>
 
 
