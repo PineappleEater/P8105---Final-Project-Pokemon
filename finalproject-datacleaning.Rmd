@@ -56,7 +56,47 @@ write_csv(pokemon_df, "data result/pokemon_data.csv")
 Note: For "Eternamax" Eternatus, no official height or weight data exists. Based on its in-game appearance and the way it is portrayed in the anime—as a colossal, rift-like dragon composed of red energy, fractures, and crystalline lines—I set its size to 999.9 meters tall and 9999.9 kilograms in weight. The resulting BMI is effectively zero, perfectly matching the idea of a non-physical energy entity. This also aligns with how the anime almost never shows its full body, only fragmented sections of its form.
 
 ```{r}
-# About spectial form of pokemon:
+# About special form of Pokémon:
+
+
+
+```
+
+```{r}
+# About Legendary of Pokémon:
+pokemon_legend <- pokemon_df |> 
+  filter(dex %in% c(144, 145, 146, 150, 
+                    243, 244, 245, 249, 250, 
+                    377, 378, 379, 380, 381, 382, 383, 384, 
+                    480, 481, 482, 483, 484, 485, 486, 487, 488, 
+                    638, 639, 640, 641, 642, 643, 644, 645, 646, 
+                    716, 717, 718, 
+                    772, 773, 785, 786, 787, 788, 789, 790, 791, 792, 
+                    800, 888, 889, 890, 891, 892, 894, 895, 896, 897, 898, 905, 
+                    1001, 1002, 1003, 1004, 1007, 1008, 1014, 1015, 1016, 1017, 1024))
+
+
+# About Mythical of Pokémon:
+pokemon_myth <- pokemon_df |> 
+  filter(dex %in% c(151, 
+                    251, 
+                    385, 386, 
+                    489, 490, 491, 492, 493, 
+                    494, 647, 684, 689, 
+                    719, 720, 721, 
+                    801, 802, 807, 808, 809, 
+                    893, 
+                    1025))
+
+
+# About Paradox of Pokémon:
+pokemon_para <- pokemon_df |> 
+  filter(dex %in% c(984:995, 1005:1010, 1020:1023))
+
+
+# About Ultra Beast of Pokémon:
+pokemon_ub <- pokemon_df |> 
+  filter(dex %in% c(793:799, 803:806))
 
 
 
