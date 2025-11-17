@@ -13,7 +13,7 @@ The data used in this project were scraped from pokemondb.net, a resource that m
 The dataset includes variables such as base statistics, physical dimensions (height and weight), and type attributes.  
 A portion of the metadata is sourced from the Veekun database, with additional details compiled by community contributors based on in-game data.
 
-
+I used `read_html()`, `html_table()`, and `as_tibble()` converted web page data into a tabular format.  
 ```{r}
 raw_state_df <- read_html("data/Pokemon.html") |> 
   html_table()
@@ -29,6 +29,34 @@ pokemon_state_df <- as_tibble(raw_state_df[[1]]) |>
 
 pokemon_df <- as_tibble(raw_wh_df[[1]]) |> 
   janitor::clean_names() |> 
-  right_join(pokemon_state_df, by = c("name", "type", "number"))
+  right_join(pokemon_state_df, by = c("name", "type", "number")) |> 
+  
+  mutate(type_split = str_extract_all(type, "[A-Z][a-z]+")) |> 
+  mutate(
+    type_1 = map_chr(type_split, ~ .x[1] %||% NA_character_),
+    type_2 = map_chr(type_split, ~ .x[2] %||% NA_character_)
+  ) |> 
+  
+  rename(
+    dex = number
+  ) |> 
+  mutate(
+    weight_kgs = ifelse(name == "EternatusEternamax", 9999.9, weight_kgs),
+    height_m = ifelse(name == "EternatusEternamax", 999.9, height_m),
+    bmi = ifelse(name == "EternatusEternamax", round(9999.9/(999.9^2),1), bmi)
+  ) |> 
+  select(dex, name, type_1, type_2, 
+         total, hp, attack, defense, sp_atk, sp_def, speed, 
+         height_m, weight_kgs, bmi, 
+         -height_ft, -weight_lbs, -type_split, -type)
+
 ```
 
+Note: For "Eternamax" Eternatus, no official height or weight data exists. Based on its in-game appearance and the way it is portrayed in the anime—as a colossal, rift-like dragon composed of red energy, fractures, and crystalline lines—I set its size to 999.9 meters tall and 9999.9 kilograms in weight. The resulting BMI is effectively zero, perfectly matching the idea of a non-physical energy entity. This also aligns with how the anime almost never shows its full body, only fragmented sections of its form.
+
+```{r}
+# About spectial form of pokemon:
+
+
+
+```

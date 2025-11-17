@@ -377,6 +377,9 @@ dimensions (height and weight), and type attributes.<br />
 A portion of the metadata is sourced from the Veekun database, with
 additional details compiled by community contributors based on in-game
 data.</p>
+<p>I used <code>read_html()</code>, <code>html_table()</code>, and
+<code>as_tibble()</code> converted web page data into a tabular
+format.</p>
 <pre class="r"><code>raw_state_df &lt;- read_html(&quot;data/Pokemon.html&quot;) |&gt; 
   html_table()
 
@@ -388,7 +391,35 @@ raw_wh_df &lt;- read_html(&quot;data/Pokemon by height and weight.html&quot;) |&
 
 pokemon_df &lt;- as_tibble(raw_wh_df[[1]]) |&gt; 
   janitor::clean_names() |&gt; 
-  right_join(pokemon_state_df, by = c(&quot;name&quot;, &quot;type&quot;, &quot;number&quot;))</code></pre>
+  right_join(pokemon_state_df, by = c(&quot;name&quot;, &quot;type&quot;, &quot;number&quot;)) |&gt; 
+  
+  mutate(type_split = str_extract_all(type, &quot;[A-Z][a-z]+&quot;)) |&gt; 
+  mutate(
+    type_1 = map_chr(type_split, ~ .x[1] %||% NA_character_),
+    type_2 = map_chr(type_split, ~ .x[2] %||% NA_character_)
+  ) |&gt; 
+  
+  rename(
+    dex = number
+  ) |&gt; 
+  mutate(
+    weight_kgs = ifelse(name == &quot;EternatusEternamax&quot;, 9999.9, weight_kgs),
+    height_m = ifelse(name == &quot;EternatusEternamax&quot;, 999.9, height_m),
+    bmi = ifelse(name == &quot;EternatusEternamax&quot;, round(9999.9/(999.9^2),1), bmi)
+  ) |&gt; 
+  select(dex, name, type_1, type_2, 
+         total, hp, attack, defense, sp_atk, sp_def, speed, 
+         height_m, weight_kgs, bmi, 
+         -height_ft, -weight_lbs, -type_split, -type)</code></pre>
+<p>Note: For “Eternamax” Eternatus, no official height or weight data
+exists. Based on its in-game appearance and the way it is portrayed in
+the anime—as a colossal, rift-like dragon composed of red energy,
+fractures, and crystalline lines—I set its size to 999.9 meters tall and
+9999.9 kilograms in weight. The resulting BMI is effectively zero,
+perfectly matching the idea of a non-physical energy entity. This also
+aligns with how the anime almost never shows its full body, only
+fragmented sections of its form.</p>
+<pre class="r"><code># About spectial form of pokemon:</code></pre>
 </div>
 
 
