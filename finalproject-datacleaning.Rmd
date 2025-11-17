@@ -111,4 +111,57 @@ legend_evolved_df <- pokemon_legend |>
 myth_evolved_df <- pokemon_myth |> 
   filter(dex %in% pokemon_evolved_n$dex)
 
+```   
+### Cleaned Datasets   
+#### There are total 8 datasets for future analysis, included:   
+`pokemon_df`: Dataset that included all 9 Generation of Pokémon states, height and weight.   
+`pokemon_evolved_n`: Sub dataset `pokemon_df` for that only included **Fully Evolved Pokémon**.  
+
+`pokemon_legend`: Sub dataset `pokemon_df` for that only included **Legendary Pokémon**  
+`pokemon_myth`: Sub dataset `pokemon_df` for that only included **Mythical Pokémon**  
+`pokemon_para`: Sub dataset `pokemon_df` for that only included **Paradox Pokémon**  
+`pokemon_ub`: Sub dataset `pokemon_df` for that only included **Ultra Beast Pokémon**  
+
+`legend_evolved_df`: Auxiliary dataset only included *Fully Evolved* **Legendary Pokémon**  
+`myth_evolved_df`: Auxiliary dataset only included *Fully Evolved* **Mythical Pokémon**  
+
+
+#### The cleaned dataset is tidy, readable and analyzable. It includes the following variables:  
+`dex` **National Pokédex number**  
+A unique integer identifier assigned to each Pokémon species in the National Pokédex.  
+`name` **Species name**.  
+The official English name of the Pokémon species or form.  
+`type_1` **Primary typing**.  
+The Pokémon’s first (primary) elemental type, such as Fire, Water, Grass, etc.  
+`type_2` **Secondary typing**.  
+The Pokémon’s second elemental type.  
+If a Pokémon is monotype, this value is `NA`.  
+`total` **Base Stat Total (BST)**.  
+The sum of all six base stats (HP, Attack, Defense, Special Attack, Special Defense, Speed).  
+This is a common indicator of overall stat strength.  
+`hp` **Base HP (Hit Points)**.  
+Determines how much damage the Pokémon can take before fainting.  
+`attack` **Base Attack**.  
+Affects the power of physical (non-special) moves used by the Pokémon.  
+`defence` **Base Defense**.  
+Reduces damage taken from physical (non-special) moves.  
+`sp_atk` **Base Special Attack**.  
+Affects the power of special-category moves (moves using the Special Attack stat).  
+`sp_def` **Base Special Defense**.  
+Reduces damage taken from special-category moves.  
+`speed` **Base Speed**.  
+Determines the order of actions in battle; higher Speed moves first.  
+`height_m` **Official height (meters)**.  
+The height of the Pokémon species as listed in the official Pokédex, measured in meters.  
+`weight_kg` **Official weight (kilograms)**.  
+The weight of the Pokémon species as listed in the official Pokédex.  
+`bmi` **Body Mass Index (derived variable)**.  
+A numerical value calculated as:  
+$BMI = \frac{weight(kg)}{(height(m))^2}$  
+Used in this dataset only as a mathematical descriptor—  
+does not reflect health/evaluation in Pokémon canon.  
+```{r}
+#Final dataset
+
+
 ```

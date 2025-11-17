@@ -474,6 +474,77 @@ legend_evolved_df &lt;- pokemon_legend |&gt;
 myth_evolved_df &lt;- pokemon_myth |&gt; 
   filter(dex %in% pokemon_evolved_n$dex)</code></pre>
 </div>
+<div id="cleaned-datasets" class="section level3">
+<h3>Cleaned Datasets</h3>
+<div id="there-are-total-8-datasets-for-future-analysis-included" class="section level4">
+<h4>There are total 8 datasets for future analysis, included:</h4>
+<p><code>pokemon_df</code>: Dataset that included all 9 Generation of
+Pokémon states, height and weight.<br />
+<code>pokemon_evolved_n</code>: Sub dataset <code>pokemon_df</code> for
+that only included <strong>Fully Evolved Pokémon</strong>.</p>
+<p><code>pokemon_legend</code>: Sub dataset <code>pokemon_df</code> for
+that only included <strong>Legendary Pokémon</strong><br />
+<code>pokemon_myth</code>: Sub dataset <code>pokemon_df</code> for that
+only included <strong>Mythical Pokémon</strong><br />
+<code>pokemon_para</code>: Sub dataset <code>pokemon_df</code> for that
+only included <strong>Paradox Pokémon</strong><br />
+<code>pokemon_ub</code>: Sub dataset <code>pokemon_df</code> for that
+only included <strong>Ultra Beast Pokémon</strong></p>
+<p><code>legend_evolved_df</code>: Auxiliary dataset only included
+<em>Fully Evolved</em> <strong>Legendary Pokémon</strong><br />
+<code>myth_evolved_df</code>: Auxiliary dataset only included <em>Fully
+Evolved</em> <strong>Mythical Pokémon</strong></p>
+</div>
+<div id="the-cleaned-dataset-is-tidy-readable-and-analyzable.-it-includes-the-following-variables" class="section level4">
+<h4>The cleaned dataset is tidy, readable and analyzable. It includes
+the following variables:</h4>
+<p><code>dex</code> <strong>National Pokédex number</strong><br />
+A unique integer identifier assigned to each Pokémon species in the
+National Pokédex.<br />
+<code>name</code> <strong>Species name</strong>.<br />
+The official English name of the Pokémon species or form.<br />
+<code>type_1</code> <strong>Primary typing</strong>.<br />
+The Pokémon’s first (primary) elemental type, such as Fire, Water,
+Grass, etc.<br />
+<code>type_2</code> <strong>Secondary typing</strong>.<br />
+The Pokémon’s second elemental type.<br />
+If a Pokémon is monotype, this value is <code>NA</code>.<br />
+<code>total</code> <strong>Base Stat Total (BST)</strong>.<br />
+The sum of all six base stats (HP, Attack, Defense, Special Attack,
+Special Defense, Speed).<br />
+This is a common indicator of overall stat strength.<br />
+<code>hp</code> <strong>Base HP (Hit Points)</strong>.<br />
+Determines how much damage the Pokémon can take before fainting.<br />
+<code>attack</code> <strong>Base Attack</strong>.<br />
+Affects the power of physical (non-special) moves used by the
+Pokémon.<br />
+<code>defence</code> <strong>Base Defense</strong>.<br />
+Reduces damage taken from physical (non-special) moves.<br />
+<code>sp_atk</code> <strong>Base Special Attack</strong>.<br />
+Affects the power of special-category moves (moves using the Special
+Attack stat).<br />
+<code>sp_def</code> <strong>Base Special Defense</strong>.<br />
+Reduces damage taken from special-category moves.<br />
+<code>speed</code> <strong>Base Speed</strong>.<br />
+Determines the order of actions in battle; higher Speed moves
+first.<br />
+<code>height_m</code> <strong>Official height (meters)</strong>.<br />
+The height of the Pokémon species as listed in the official Pokédex,
+measured in meters.<br />
+<code>weight_kg</code> <strong>Official weight
+(kilograms)</strong>.<br />
+The weight of the Pokémon species as listed in the official
+Pokédex.<br />
+<code>bmi</code> <strong>Body Mass Index (derived
+variable)</strong>.<br />
+A numerical value calculated as:<br />
+<span class="math inline">\(BMI =
+\frac{weight(kg)}{(height(m))^2}\)</span><br />
+Used in this dataset only as a mathematical descriptor—<br />
+does not reflect health/evaluation in Pokémon canon.</p>
+<pre class="r"><code>#Final dataset</code></pre>
+</div>
+</div>
 
 
 
