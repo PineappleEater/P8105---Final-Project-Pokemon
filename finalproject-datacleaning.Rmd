@@ -5,6 +5,7 @@ output: html_document
 ```{r}
 library(rvest)
 library(tidyverse)
+library(janitor)
 ```
 
 
@@ -28,6 +29,8 @@ raw_evolved_df <- read_html("data/Pokemon fully evolved.html") |>
 ```{r}
 pokemon_state_df <- as_tibble(raw_state_df[[1]]) |> 
   janitor::clean_names()
+
+names(pokemon_state_df) 
 
 pokemon_df <- as_tibble(raw_wh_df[[1]]) |> 
   janitor::clean_names() |> 

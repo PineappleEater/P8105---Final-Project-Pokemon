@@ -1,0 +1,607 @@
+---
+title: "Pokemon EDA - Exploratory Data Analysis"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+    theme: cosmo
+  # gihub_document:
+  #   toc: true
+  #   toc_depth: 2
+  #   number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 10,
+  fig.height = 6
+)
+```
+
+## 1. Load Libraries and Data
+
+```{r libraries}
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+
+# Set ggplot theme
+theme_set(theme_minimal(base_size = 12))
+
+# Check for optional packages
+has_corrplot <- requireNamespace("corrplot", quietly = TRUE)
+has_patchwork <- requireNamespace("patchwork", quietly = TRUE)
+has_kableExtra <- requireNamespace("kableExtra", quietly = TRUE)
+
+if (has_patchwork) library(patchwork)
+```
+
+```{r load-data}
+# Load cleaned data
+pokemon_df <- read_csv("data result/pokemon_data.csv")
+
+# Display structure
+glimpse(pokemon_df)
+```
+
+## 2. Feature Engineering: Labels & Categories
+
+### 2.1 Category Labels
+
+```{r add-labels}
+# Legendary Pokemon
+legend_dex <- c(144, 145, 146, 150, 
+                243, 244, 245, 249, 250, 
+                377, 378, 379, 380, 381, 382, 383, 384, 
+                480, 481, 482, 483, 484, 485, 486, 487, 488, 
+                638, 639, 640, 641, 642, 643, 644, 645, 646, 
+                716, 717, 718, 
+                772, 773, 785, 786, 787, 788, 789, 790, 791, 792, 
+                800, 888, 889, 890, 891, 892, 894, 895, 896, 897, 898, 905, 
+                1001, 1002, 1003, 1004, 1007, 1008, 1014, 1015, 1016, 1017, 1024)
+
+# Mythical Pokemon
+myth_dex <- c(151, 251, 385, 386, 489, 490, 491, 492, 493, 
+              494, 647, 684, 689, 719, 720, 721, 
+              801, 802, 807, 808, 809, 893, 1025)
+
+# Paradox Pokemon
+paradox_dex <- c(984:995, 1005:1010, 1020:1023)
+
+# Ultra Beast Pokemon
+ub_dex <- c(793:799, 803:806)
+
+# Add category columns
+pokemon_df <- pokemon_df |>
+  mutate(
+    is_legendary = dex %in% legend_dex,
+    is_mythical = dex %in% myth_dex,
+    is_paradox = dex %in% paradox_dex,
+    is_ultra_beast = dex %in% ub_dex,
+    # Combined special category
+    is_special = is_legendary | is_mythical | is_paradox | is_ultra_beast,
+    # Category label for plotting
+    category = case_when(
+      is_legendary ~ "Legendary",
+      is_mythical ~ "Mythical",
+      is_paradox ~ "Paradox",
+      is_ultra_beast ~ "Ultra Beast",
+      TRUE ~ "Regular"
+    )
+  )
+```
+
+### 2.2 Generation Assignment
+
+```{r add-generation}
+pokemon_df <- pokemon_df |>
+  mutate(
+    generation = case_when(
+      dex <= 151 ~ "Gen 1",
+      dex <= 251 ~ "Gen 2",
+      dex <= 386 ~ "Gen 3",
+      dex <= 493 ~ "Gen 4",
+      dex <= 649 ~ "Gen 5",
+      dex <= 721 ~ "Gen 6",
+      dex <= 809 ~ "Gen 7",
+      dex <= 905 ~ "Gen 8",
+      TRUE ~ "Gen 9"
+    )
+  )
+
+# Set factor order
+pokemon_df$generation <- factor(pokemon_df$generation, 
+                                levels = paste0("Gen ", 1:9))
+pokemon_df$category <- factor(pokemon_df$category,
+                              levels = c("Regular", "Legendary", "Mythical", 
+                                        "Paradox", "Ultra Beast"))
+```
+
+### 2.3 Type One-Hot Encoding
+
+```{r type-encoding}
+# Get all unique types
+all_types <- sort(unique(na.omit(c(pokemon_df$type_1, pokemon_df$type_2))))
+
+cat("Unique types:", paste(all_types, collapse = ", "), "\n")
+
+# Create one-hot encoding for each type
+for (type in all_types) {
+  col_name <- paste0("has_", tolower(type))
+  pokemon_df[[col_name]] <- (pokemon_df$type_1 == type | pokemon_df$type_2 == type)
+}
+
+# Count dual-type Pokemon
+pokemon_df <- pokemon_df |>
+  mutate(is_dual_type = !is.na(type_2))
+```
+
+## 3. Data Overview
+
+### 3.1 Basic Statistics
+
+```{r summary-stats}
+# Numeric columns
+num_cols <- c("total", "hp", "attack", "defense", "sp_atk", "sp_def", "speed", 
+              "height_m", "weight_kgs", "bmi")
+
+# Summary table
+summary_stats <- pokemon_df |>
+  select(all_of(num_cols)) |>
+  summary()
+
+print(summary_stats)
+```
+
+### 3.2 Category Counts
+
+```{r category-counts}
+# Count by category
+category_summary <- pokemon_df |>
+  count(category) |>
+  mutate(percentage = round(100 * n / sum(n), 2)) |>
+  arrange(desc(n))
+
+print(kable(category_summary, caption = "Pokemon by Category"))
+
+# Count by generation
+gen_summary <- pokemon_df |>
+  count(generation) |>
+  mutate(percentage = round(100 * n / sum(n), 2))
+
+print(kable(gen_summary, caption = "Pokemon by Generation"))
+
+# Type distribution (primary type)
+type_summary <- pokemon_df |>
+  count(type_1, sort = TRUE) |>
+  mutate(percentage = round(100 * n / sum(n), 2))
+
+print(kable(head(type_summary, 10), caption = "Pokemon by Primary Type (Top 10)"))
+```
+
+## 4. Univariate Analysis
+
+### 4.1 Base Stat Total Distribution
+
+```{r total-dist}
+# Overall distribution
+p1 <- ggplot(pokemon_df, aes(x = total)) +
+  geom_histogram(bins = 40, fill = "steelblue", alpha = 0.7) +
+  geom_vline(aes(xintercept = mean(total, na.rm = TRUE)), 
+             color = "red", linetype = "dashed", size = 1) +
+  labs(title = "Distribution of Base Stat Total (BST)",
+       subtitle = paste("Mean:", round(mean(pokemon_df$total, na.rm = TRUE), 1)),
+       x = "Total BST", y = "Count")
+
+# By category
+p2 <- ggplot(pokemon_df, aes(x = total, fill = category)) +
+  geom_density(alpha = 0.5) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "BST Distribution by Category",
+       x = "Total BST", y = "Density", fill = "Category")
+
+if (has_patchwork) {
+  p1 / p2
+} else {
+  print(p1)
+  print(p2)
+}
+```
+
+### 4.2 Individual Stat Distributions
+
+```{r stat-distributions}
+stat_cols <- c("hp", "attack", "defense", "sp_atk", "sp_def", "speed")
+
+pokemon_long <- pokemon_df |>
+  select(dex, name, category, all_of(stat_cols)) |>
+  pivot_longer(cols = all_of(stat_cols), 
+               names_to = "stat", 
+               values_to = "value")
+
+ggplot(pokemon_long, aes(x = value, fill = stat)) +
+  geom_histogram(bins = 30, alpha = 0.7) +
+  facet_wrap(~ stat, scales = "free_y") +
+  scale_fill_brewer(palette = "Set3") +
+  labs(title = "Distribution of Individual Base Stats",
+       x = "Stat Value", y = "Count") +
+  theme(legend.position = "none")
+```
+
+### 4.3 Physical Attributes
+
+```{r physical-dist}
+p1 <- ggplot(pokemon_df, aes(x = height_m)) +
+  geom_histogram(bins = 40, fill = "darkgreen", alpha = 0.7) +
+  scale_x_log10() +
+  labs(title = "Height Distribution (log scale)", 
+       x = "Height (m)", y = "Count")
+
+p2 <- ggplot(pokemon_df, aes(x = weight_kgs)) +
+  geom_histogram(bins = 40, fill = "darkorange", alpha = 0.7) +
+  scale_x_log10() +
+  labs(title = "Weight Distribution (log scale)", 
+       x = "Weight (kg)", y = "Count")
+
+p3 <- pokemon_df |>
+  filter(bmi < 1000) |>  # Filter extreme outliers (Cosmoem BMI=99990)
+  # otherwise the plot will be severly compressed
+  ggplot(aes(x = bmi)) +
+  geom_histogram(bins = 40, fill = "purple", alpha = 0.7) +
+  labs(title = "BMI Distribution (filtered < 1000)", 
+       subtitle = "Note: Cosmoem (BMI=99,990) excluded as extreme outlier",
+       x = "BMI", y = "Count")
+
+if (has_patchwork) {
+  (p1 | p2) / p3
+} else {
+  print(p1)
+  print(p2)
+  print(p3)
+}
+```
+
+## 5. Bivariate Analysis
+
+### 5.1 Correlation Matrix
+
+```{r correlation}
+# Compute correlation
+cor_matrix <- pokemon_df |>
+  select(all_of(num_cols)) |>
+  cor(use = "pairwise.complete.obs")
+
+# Visualize
+if (has_corrplot) {
+  corrplot::corrplot(cor_matrix, 
+           method = "color", 
+           type = "upper",
+           tl.col = "black",
+           tl.srt = 45,
+           addCoef.col = "black",
+           number.cex = 0.7,
+           title = "Correlation Matrix of Pokemon Attributes",
+           mar = c(0, 0, 2, 0))
+} else {
+  # Alternative: heatmap
+  cor_df <- as.data.frame(cor_matrix) |>
+    rownames_to_column("var1") |>
+    pivot_longer(-var1, names_to = "var2", values_to = "correlation")
+  
+  ggplot(cor_df, aes(x = var1, y = var2, fill = correlation)) +
+    geom_tile() +
+    scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +
+    labs(title = "Correlation Matrix of Pokemon Attributes") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+```
+
+### 5.2 Attack vs Defense
+
+```{r attack-defense}
+ggplot(pokemon_df, aes(x = attack, y = defense, color = category)) +
+  geom_point(alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
+  scale_color_brewer(palette = "Set2") +
+  labs(title = "Attack vs Defense by Category",
+       x = "Attack", y = "Defense", color = "Category")
+```
+
+### 5.3 Special Attack vs Special Defense
+
+```{r sp-attack-defense}
+ggplot(pokemon_df, aes(x = sp_atk, y = sp_def, color = category)) +
+  geom_point(alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
+  scale_color_brewer(palette = "Set2") +
+  labs(title = "Special Attack vs Special Defense by Category",
+       x = "Special Attack", y = "Special Defense", color = "Category")
+```
+
+### 5.4 Height vs Weight
+
+```{r height-weight}
+ggplot(pokemon_df, aes(x = height_m, y = weight_kgs, color = type_1)) +
+  geom_point(alpha = 0.6, size = 2) +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  labs(title = "Height vs Weight (log-log scale)",
+       x = "Height (m)", y = "Weight (kg)", color = "Primary Type") +
+  theme(legend.position = "right")
+```
+
+## 6. Group Comparisons
+
+### 6.1 Stats by Category
+
+```{r stats-by-category}
+# Box plots for each stat
+pokemon_long |>
+  ggplot(aes(x = category, y = value, fill = category)) +
+  geom_boxplot(alpha = 0.7) +
+  facet_wrap(~ stat, scales = "free_y") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Base Stats by Pokemon Category",
+       x = "Category", y = "Stat Value") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")
+```
+
+### 6.2 BST by Generation
+
+```{r bst-generation}
+ggplot(pokemon_df, aes(x = generation, y = total, fill = generation)) +
+  geom_violin(alpha = 0.7) +
+  geom_boxplot(width = 0.2, alpha = 0.5) +
+  scale_fill_brewer(palette = "Spectral") +
+  labs(title = "Base Stat Total by Generation",
+       x = "Generation", y = "Total BST") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")
+```
+
+### 6.3 Stats by Primary Type (Top Types)
+
+```{r stats-by-type}
+# Get top 10 types
+top_types <- pokemon_df |>
+  count(type_1, sort = TRUE) |>
+  head(10) |>
+  pull(type_1)
+
+pokemon_df |>
+  filter(type_1 %in% top_types) |>
+  ggplot(aes(x = reorder(type_1, total, median), y = total, fill = type_1)) +
+  geom_boxplot(alpha = 0.7) +
+  coord_flip() +
+  labs(title = "BST by Primary Type (Top 10 Most Common)",
+       x = "Primary Type", y = "Total BST") +
+  theme(legend.position = "none")
+```
+
+## 7. Type Analysis
+
+### 7.1 Type Distribution
+
+```{r type-counts}
+# Primary type
+p1 <- pokemon_df |>
+  count(type_1, sort = TRUE) |>
+  head(10) |>
+  ggplot(aes(x = reorder(type_1, n), y = n, fill = type_1)) +
+  geom_col(alpha = 0.8) +
+  coord_flip() +
+  labs(title = "Top 10 Primary Types", x = "Type", y = "Count") +
+  theme(legend.position = "none")
+
+# Dual-type proportion
+p2 <- pokemon_df |>
+  count(is_dual_type) |>
+  mutate(label = if_else(is_dual_type, "Dual-type", "Mono-type")) |>
+  ggplot(aes(x = "", y = n, fill = label)) +
+  geom_col(width = 1) +
+  coord_polar("y") +
+  labs(title = "Mono-type vs Dual-type", fill = "") +
+  theme_void()
+
+if (has_patchwork) {
+  p1 | p2
+} else {
+  print(p1)
+  print(p2)
+}
+```
+
+### 7.2 Type Combinations
+
+```{r type-combos}
+# Top type combinations
+pokemon_df |>
+  filter(!is.na(type_2)) |>
+  count(type_1, type_2, sort = TRUE) |>
+  head(15) |>
+  mutate(combo = paste(type_1, "/", type_2)) |>
+  ggplot(aes(x = reorder(combo, n), y = n, fill = type_1)) +
+  geom_col(alpha = 0.8) +
+  coord_flip() +
+  labs(title = "Top 15 Type Combinations",
+       x = "Type Combination", y = "Count", fill = "Primary Type")
+```
+
+### 7.3 Average Stats by Type
+
+```{r avg-stats-type}
+# Calculate average stats per type
+type_stats <- pokemon_df |>
+  group_by(type_1) |>
+  summarise(
+    count = n(),
+    avg_total = mean(total, na.rm = TRUE),
+    avg_attack = mean(attack, na.rm = TRUE),
+    avg_defense = mean(defense, na.rm = TRUE),
+    avg_speed = mean(speed, na.rm = TRUE)
+  ) |>
+  arrange(desc(avg_total))
+
+print(kable(head(type_stats, 10), caption = "Top 10 Types by Average BST", digits = 1))
+
+# Heatmap
+type_stats |>
+  head(12) |>
+  select(type_1, avg_attack, avg_defense, avg_speed) |>
+  pivot_longer(-type_1, names_to = "stat", values_to = "value") |>
+  mutate(stat = str_remove(stat, "avg_")) |>
+  ggplot(aes(x = stat, y = reorder(type_1, value), fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(low = "lightblue", high = "darkred") +
+  labs(title = "Average Stats Heatmap (Top 12 Types by BST)",
+       x = "Stat", y = "Primary Type", fill = "Average Value")
+```
+
+## 8. Special Categories Deep Dive
+
+### 8.1 Legendary vs Regular Stats
+
+```{r legendary-comparison}
+# Statistical test
+legendary_test <- t.test(total ~ is_legendary, data = pokemon_df)
+
+cat("T-test: Legendary vs Regular BST\n")
+cat("p-value:", legendary_test$p.value, "\n")
+cat("Mean Regular:", legendary_test$estimate[1], "\n")
+cat("Mean Legendary:", legendary_test$estimate[2], "\n\n")
+
+# Violin plot
+pokemon_df |>
+  mutate(label = if_else(is_legendary, "Legendary", "Regular")) |>
+  ggplot(aes(x = label, y = total, fill = label)) +
+  geom_violin(alpha = 0.7) +
+  geom_boxplot(width = 0.2, alpha = 0.5) +
+  scale_fill_manual(values = c("Regular" = "steelblue", "Legendary" = "gold")) +
+  labs(title = "BST: Legendary vs Regular Pokemon",
+       x = "", y = "Total BST") +
+  theme(legend.position = "none")
+```
+
+### 8.2 All Special Categories
+
+```{r special-categories}
+category_stats <- pokemon_df |>
+  group_by(category) |>
+  summarise(
+    count = n(),
+    avg_total = mean(total, na.rm = TRUE),
+    avg_hp = mean(hp, na.rm = TRUE),
+    avg_attack = mean(attack, na.rm = TRUE),
+    avg_defense = mean(defense, na.rm = TRUE),
+    avg_sp_atk = mean(sp_atk, na.rm = TRUE),
+    avg_sp_def = mean(sp_def, na.rm = TRUE),
+    avg_speed = mean(speed, na.rm = TRUE)
+  ) |>
+  arrange(desc(avg_total))
+
+print(kable(category_stats, caption = "Average Stats by Category", digits = 1))
+```
+
+## 9. Generation Evolution Analysis
+
+### 9.1 Power Creep Over Generations
+
+```{r generation-power-creep}
+gen_stats <- pokemon_df |>
+  group_by(generation) |>
+  summarise(
+    count = n(),
+    avg_total = mean(total, na.rm = TRUE),
+    median_total = median(total, na.rm = TRUE),
+    sd_total = sd(total, na.rm = TRUE)
+  )
+
+ggplot(gen_stats, aes(x = generation)) +
+  geom_line(aes(y = avg_total, group = 1, color = "Average"), size = 1.2) +
+  geom_line(aes(y = median_total, group = 1, color = "Median"), size = 1.2) +
+  geom_point(aes(y = avg_total), size = 3) +
+  geom_point(aes(y = median_total), size = 3) +
+  scale_color_manual(values = c("Average" = "blue", "Median" = "red")) +
+  labs(title = "Average & Median BST by Generation",
+       x = "Generation", y = "BST", color = "Metric") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### 9.2 Type Diversity by Generation
+
+```{r type-diversity}
+pokemon_df |>
+  group_by(generation, type_1) |>
+  summarise(count = n(), .groups = "drop") |>
+  ggplot(aes(x = generation, y = count, fill = type_1)) +
+  geom_col(position = "stack") +
+  labs(title = "Type Distribution by Generation",
+       x = "Generation", y = "Count", fill = "Primary Type") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## 10. Key Findings Summary
+
+```{r findings}
+library(glue)
+
+cat(glue("=== EDA KEY FINDINGS ===
+
+1. Dataset Overview:
+   - Total Pokemon: {nrow(pokemon_df)}
+   - Legendary: {sum(pokemon_df$is_legendary)}
+   - Mythical: {sum(pokemon_df$is_mythical)}
+   - Regular: {sum(!pokemon_df$is_special)}
+
+2. Base Stats:
+   - Mean BST: {round(mean(pokemon_df$total, na.rm = TRUE), 1)}
+   - BST Range: {min(pokemon_df$total, na.rm = TRUE)} - {max(pokemon_df$total, na.rm = TRUE)}
+
+3. Type Distribution:
+   - Unique primary types: {length(unique(pokemon_df$type_1))}
+   - Dual-type Pokemon: {sum(pokemon_df$is_dual_type)} ({round(100 * mean(pokemon_df$is_dual_type), 1)}%)
+
+4. Statistical Tests:
+   - Legendary vs Regular BST p-value: {format(legendary_test$p.value, scientific = TRUE, digits = 3)}
+   - Difference is {if_else(legendary_test$p.value < 0.001, 'highly', '')} significant
+
+5. Correlations:
+   - Total vs Attack: {round(cor(pokemon_df$total, pokemon_df$attack, use = 'complete.obs'), 3)}
+   - Attack vs Defense: {round(cor(pokemon_df$attack, pokemon_df$defense, use = 'complete.obs'), 3)}
+   - Height vs Weight: {round(cor(pokemon_df$height_m, pokemon_df$weight_kgs, use = 'complete.obs'), 3)}
+
+6. Physical Attributes:
+   - BMI Range (excluding outliers): {round(min(pokemon_df$bmi[pokemon_df$bmi < 1000], na.rm = TRUE), 1)} - {round(max(pokemon_df$bmi[pokemon_df$bmi < 1000], na.rm = TRUE), 1)}
+   - Extreme outlier: Cosmoem (BMI = 99,990) due to ultra-dense core
+   - Height range: {min(pokemon_df$height_m, na.rm = TRUE)} - {max(pokemon_df$height_m, na.rm = TRUE)} m
+   - Weight range: {min(pokemon_df$weight_kgs, na.rm = TRUE)} - {max(pokemon_df$weight_kgs, na.rm = TRUE)} kg
+"))
+```
+
+## 11. Export Enhanced Dataset
+
+```{r export}
+# Save enriched dataset with all features
+write_csv(pokemon_df, "data result/pokemon_data_enriched.csv")
+
+cat("\nEnriched dataset saved to: data result/pokemon_data_enriched.csv\n")
+cat("New features added:", 
+    "is_legendary, is_mythical, is_paradox, is_ultra_beast,",
+    "category, generation, type one-hot columns\n")
+```
+
+---
+
+<!-- **Next Steps:**
+1. ✅ Feature engineering complete
+2. ✅ Comprehensive EDA complete
+3. ⏭️ Build classification model for legendary prediction
+4. ⏭️ Perform PCA and clustering
+5. ⏭️ Create interactive dashboard -->

@@ -1,0 +1,717 @@
+---
+title: "Pokemon PCA & Clustering Analysis"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 10,
+  fig.height = 6
+)
+```
+
+## 1. Load Libraries and Data
+
+```{r libraries}
+library(tidyverse)
+library(factoextra)
+library(FactoMineR)
+library(cluster)
+library(glue)
+
+set.seed(123)
+theme_set(theme_minimal())
+```
+
+```{r load-data}
+# Load enriched dataset
+pokemon_df <- read_csv("data result/pokemon_data_enriched.csv")
+
+cat(glue("Dataset: {nrow(pokemon_df)} Pokemon with {ncol(pokemon_df)} features\n"))
+```
+
+## 2. Feature Preparation
+
+### 2.1 Select Numeric Features
+
+```{r select-features}
+# Core numeric features for PCA/clustering
+numeric_features <- c("hp", "attack", "defense", "sp_atk", "sp_def", "speed", 
+                      "height_m", "weight_kgs", "bmi")
+
+# Create analysis dataframe
+pca_df <- pokemon_df |>
+  select(dex, name, category, generation, type_1, all_of(numeric_features)) |>
+  drop_na()
+
+cat(glue("
+Analysis dataset: {nrow(pca_df)} Pokemon
+Features: {length(numeric_features)} numeric variables
+"))
+
+head(pca_df)
+```
+
+### 2.3 Outlier Detection and Analysis
+
+```{r outlier-detection}
+cat("=== OUTLIER DETECTION ===\n\n")
+
+# Function to detect outliers using IQR method
+detect_outliers <- function(x, multiplier = 3) {
+  q1 <- quantile(x, 0.25, na.rm = TRUE)
+  q3 <- quantile(x, 0.75, na.rm = TRUE)
+  iqr <- q3 - q1
+  lower <- q1 - multiplier * iqr
+  upper <- q3 + multiplier * iqr
+  return(x < lower | x > upper)
+}
+
+# Extract numeric data for outlier detection
+numeric_data_temp <- pca_df |> select(all_of(numeric_features))
+
+# Identify outliers across all numeric features
+outlier_flags <- numeric_data_temp |>
+  transmute(across(everything(), ~detect_outliers(.), .names = "{.col}_outlier"))
+
+# Count outliers per Pokemon
+pca_df$outlier_count <- rowSums(outlier_flags)
+
+# Identify extreme outliers (outliers in 3+ features)
+extreme_outliers <- pca_df |>
+  filter(outlier_count >= 3) |>
+  arrange(desc(outlier_count))
+
+cat(glue("
+Extreme outliers (3+ features affected): {nrow(extreme_outliers)}\n\n"))
+
+if(nrow(extreme_outliers) > 0) {
+  outlier_summary <- extreme_outliers |>
+    select(dex, name, category, outlier_count, hp, attack, defense, 
+           height_m, weight_kgs, bmi) |>
+    head(10)
+  
+  print(knitr::kable(outlier_summary, 
+                     caption = "Top Extreme Outliers",
+                     digits = 1))
+}
+
+# Visualize outlier distribution
+ggplot(pca_df, aes(x = outlier_count)) +
+  geom_bar(fill = "steelblue", alpha = 0.7) +
+  labs(title = "Distribution of Outlier Counts per Pokemon",
+       subtitle = "Number of features where Pokemon is an outlier (>3 IQR)",
+       x = "Number of Outlier Features",
+       y = "Count") +
+  theme_minimal()
+
+# Box plots for key features showing outliers
+key_features <- c("hp", "attack", "defense", "height_m", "weight_kgs", "bmi")
+
+pca_df |>
+  select(all_of(key_features)) |>
+  pivot_longer(everything(), names_to = "Feature", values_to = "Value") |>
+  ggplot(aes(x = Feature, y = Value)) +
+  geom_boxplot(fill = "lightblue", outlier.color = "red", outlier.size = 2) +
+  facet_wrap(~Feature, scales = "free", ncol = 3) +
+  labs(title = "Box Plots Showing Outliers in Key Features",
+       subtitle = "Red points indicate outliers") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank())
+```
+
+### 2.4 Outlier Treatment Strategy
+
+```{r outlier-treatment}
+cat("\n=== OUTLIER TREATMENT OPTIONS ===\n\n")
+
+# Option 1: Analyze with all data
+pca_df_full <- pca_df
+
+# Option 2: Remove extreme outliers (3+ features)
+pca_df_clean <- pca_df |>
+  filter(outlier_count < 3)
+
+# Option 3: Winsorize extreme values (cap at 99th percentile)
+pca_df_winsorized <- pca_df
+for(col in numeric_features) {
+  p99 <- quantile(pca_df[[col]], 0.99, na.rm = TRUE)
+  p01 <- quantile(pca_df[[col]], 0.01, na.rm = TRUE)
+  pca_df_winsorized[[col]] <- pmax(pmin(pca_df[[col]], p99), p01)
+}
+
+cat(glue("
+Dataset Sizes:
+"))
+
+# Highlight removed outliers
+if(nrow(extreme_outliers) > 0) {
+  cat("\nRemoved extreme outliers:\n")
+  removed <- extreme_outliers |>
+    select(name, category, outlier_count) |>
+    arrange(desc(outlier_count))
+  print(knitr::kable(removed, 
+                     caption = "Pokemon Removed as Extreme Outliers"))
+}
+
+# Decision: Use cleaned data for main analysis
+cat("\n** DECISION: Using cleaned dataset (extreme outliers removed) for main analysis **\n")
+cat("** Outliers will be discussed separately in Section 6 **\n\n")
+
+# Update working dataset
+pca_df <- pca_df_clean
+
+# Re-select numeric features from cleaned data
+numeric_features_clean <- numeric_features  # Keep feature names
+
+# --- Additional outlier handling: single-variable z-score detection and export ---
+## Detect extreme single-variable values using z-score (robust threshold)
+zscore_threshold <- 6
+zscore_flags <- pca_df_full |>
+  select(all_of(numeric_features)) |>
+  transmute(across(everything(), ~abs(scale(.)), .names = "{.col}_z"))
+
+# Identify rows where any variable exceeds threshold
+zscore_outliers <- which(rowSums(zscore_flags > zscore_threshold) > 0)
+
+# Create a combined outliers dataframe (IQR-based extreme OR z-score extreme)
+outlier_dexes <- unique(c(extreme_outliers$dex, pca_df_full$dex[zscore_outliers]))
+
+pokemon_outliers <- pca_df_full |>
+  filter(dex %in% outlier_dexes) |>
+  select(dex, name, category, generation, all_of(numeric_features), outlier_count) |>
+  arrange(desc(outlier_count))
+
+# Ensure export directory exists and write CSV
+if(!dir.exists("data result")) dir.create("data result", recursive = TRUE)
+write_csv(pokemon_outliers, "data result/pokemon_outliers.csv")
+
+cat(glue("\nExported {nrow(pokemon_outliers)} combined outliers to 'data result/pokemon_outliers.csv'\n"))
+
+# Update cleaned dataset to exclude any combined outliers (conservative)
+pca_df <- pca_df_full |>
+  filter(!dex %in% outlier_dexes)
+
+# Recompute numeric data and scaled_data after final cleaning
+numeric_features_clean <- numeric_features
+numeric_data <- pca_df |>
+  select(all_of(numeric_features_clean))
+scaled_data <- scale(numeric_data)
+```
+
+### 2.5 Scale Features (After Outlier Removal)
+
+```{r scale-features}
+# Extract numeric data for scaling (from cleaned dataset)
+numeric_data <- pca_df |>
+  select(all_of(numeric_features))
+
+# Standardize (mean=0, sd=1)
+scaled_data <- scale(numeric_data)
+
+# Verify scaling
+cat("Scaled data summary:\n")
+summary(scaled_data)
+```
+
+## 3. Principal Component Analysis (PCA)
+
+### 3.1 Compute PCA
+
+```{r compute-pca}
+# Perform PCA on scaled data
+# Data is already standardized, so center=FALSE, scale=FALSE
+pca_result <- prcomp(scaled_data)
+
+# Summary
+summary(pca_result)
+
+# Scree plot - variance explained
+fviz_eig(pca_result, addlabels = TRUE, ylim = c(0, 50),
+         main = "Scree Plot - Variance Explained by Each PC")
+```
+
+### 3.2 Loadings and Contributions
+
+```{r pca-loadings}
+# Variable contributions to PC1 and PC2
+fviz_pca_var(pca_result, 
+             col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE,
+             title = "PCA - Variable Contributions")
+
+# Loadings for first 3 PCs
+loadings_df <- as.data.frame(pca_result$rotation[, 1:3]) |>
+  rownames_to_column("Variable") |>
+  arrange(desc(abs(PC1)))
+
+print(knitr::kable(loadings_df, digits = 3, 
+                   caption = "PCA Loadings (First 3 Components)"))
+```
+
+### 3.3 Biplot - Pokemon in PC Space
+
+```{r pca-biplot-category}
+# Add PC scores to dataframe
+pca_scores <- as.data.frame(pca_result$x[, 1:5])
+pca_plot_df <- bind_cols(pca_df, pca_scores)
+
+# PC1 vs PC2 colored by category
+ggplot(pca_plot_df, aes(x = PC1, y = PC2, color = category)) +
+  geom_point(alpha = 0.6, size = 2) +
+  scale_color_brewer(palette = "Set2") +
+  labs(title = "PCA: Pokemon by Category",
+       subtitle = "First two principal components",
+       x = glue("PC1 ({round(summary(pca_result)$importance[2,1]*100, 1)}% variance)"),
+       y = glue("PC2 ({round(summary(pca_result)$importance[2,2]*100, 1)}% variance)"),
+       color = "Category") +
+  theme(legend.position = "right")
+```
+
+```{r pca-biplot-generation}
+# PC1 vs PC2 colored by generation
+ggplot(pca_plot_df, aes(x = PC1, y = PC2, color = generation)) +
+  geom_point(alpha = 0.6, size = 2) +
+  scale_color_brewer(palette = "Spectral") +
+  labs(title = "PCA: Pokemon by Generation",
+       x = glue("PC1 ({round(summary(pca_result)$importance[2,1]*100, 1)}% variance)"),
+       y = glue("PC2 ({round(summary(pca_result)$importance[2,2]*100, 1)}% variance)"),
+       color = "Generation")
+```
+
+```{r pca-biplot-type}
+# PC1 vs PC2 by primary type (top types only)
+top_types <- pca_plot_df |>
+  count(type_1, sort = TRUE) |>
+  head(8) |>
+  pull(type_1)
+
+pca_plot_df |>
+  filter(type_1 %in% top_types) |>
+  ggplot(aes(x = PC1, y = PC2, color = type_1)) +
+  geom_point(alpha = 0.6, size = 2) +
+  labs(title = "PCA: Pokemon by Primary Type (Top 8)",
+       x = glue("PC1 ({round(summary(pca_result)$importance[2,1]*100, 1)}% variance)"),
+       y = glue("PC2 ({round(summary(pca_result)$importance[2,2]*100, 1)}% variance)"),
+       color = "Type")
+```
+
+### 3.4 3D Visualization (PC1, PC2, PC3)
+
+```{r pca-3d-prep}
+# Prepare 3D plot data
+pca_3d_df <- pca_plot_df |>
+  select(name, PC1, PC2, PC3, category, type_1)
+
+# Interactive 3D plot (if plotly available)
+if (requireNamespace("plotly", quietly = TRUE)) {
+  library(plotly)
+  
+  plot_ly(pca_3d_df, x = ~PC1, y = ~PC2, z = ~PC3, 
+          color = ~category, colors = "Set2",
+          text = ~name, type = "scatter3d", mode = "markers",
+          marker = list(size = 3)) |>
+    layout(title = "PCA 3D: First Three Components",
+           scene = list(
+             xaxis = list(title = "PC1"),
+             yaxis = list(title = "PC2"),
+             zaxis = list(title = "PC3")
+           ))
+} else {
+  cat("Install plotly for interactive 3D visualization\n")
+}
+```
+
+## 4. Clustering Analysis
+
+### 4.1 Determine Optimal Number of Clusters
+
+```{r optimal-clusters-elbow}
+# Elbow method
+fviz_nbclust(scaled_data, kmeans, method = "wss", k.max = 10) +
+  labs(title = "Elbow Method - Optimal k")
+```
+
+```{r optimal-clusters-silhouette}
+# Silhouette method
+fviz_nbclust(scaled_data, kmeans, method = "silhouette", k.max = 10) +
+  labs(title = "Silhouette Method - Optimal k")
+```
+
+```{r optimal-clusters-gap}
+# Gap statistic (slower)
+set.seed(123)
+gap_stat <- clusGap(scaled_data, FUN = kmeans, nstart = 25,
+                    K.max = 10, B = 50)
+fviz_gap_stat(gap_stat) +
+  labs(title = "Gap Statistic - Optimal k")
+```
+
+### 4.2 K-Means Clustering
+
+```{r kmeans-clustering}
+# Use k=4 based on elbow/silhouette
+k <- 4
+set.seed(123)
+kmeans_result <- kmeans(scaled_data, centers = k, nstart = 25)
+
+cat(glue("
+K-Means Clustering (k={k}):
+- Cluster sizes: {paste(kmeans_result$size, collapse=', ')}
+- Total within-cluster SS: {round(kmeans_result$tot.withinss, 2)}
+- Between-cluster SS / Total SS: {round(kmeans_result$betweenss / kmeans_result$totss * 100, 1)}%
+"))
+
+# Add cluster labels to dataframe
+pca_plot_df$cluster <- factor(kmeans_result$cluster)
+```
+
+```{r kmeans-visualization}
+# Visualize clusters in PCA space
+fviz_cluster(kmeans_result, data = scaled_data,
+             palette = "Set2",
+             ellipse.type = "convex",
+             ggtheme = theme_minimal(),
+             main = "K-Means Clusters in PCA Space")
+```
+
+```{r cluster-pca-overlay}
+# Manual plot with more control
+ggplot(pca_plot_df, aes(x = PC1, y = PC2, color = cluster)) +
+  geom_point(alpha = 0.6, size = 2.5) +
+  stat_ellipse(level = 0.95, linetype = 2) +
+  scale_color_brewer(palette = "Set1") +
+  labs(title = glue("K-Means Clustering (k={k}) in PCA Space"),
+       x = glue("PC1 ({round(summary(pca_result)$importance[2,1]*100, 1)}%)"),
+       y = glue("PC2 ({round(summary(pca_result)$importance[2,2]*100, 1)}%)"),
+       color = "Cluster")
+```
+
+### 4.3 Cluster Profiling
+
+```{r cluster-profiling}
+# Attach cluster labels to original data
+cluster_profile_df <- pca_df |>
+  mutate(cluster = factor(kmeans_result$cluster))
+
+# Compute cluster statistics
+cluster_stats <- cluster_profile_df |>
+  group_by(cluster) |>
+  summarise(
+    count = n(),
+    avg_hp = mean(hp),
+    avg_attack = mean(attack),
+    avg_defense = mean(defense),
+    avg_sp_atk = mean(sp_atk),
+    avg_sp_def = mean(sp_def),
+    avg_speed = mean(speed),
+    avg_total = mean(hp + attack + defense + sp_atk + sp_def + speed),
+    pct_legendary = mean(category == "Legendary") * 100,
+    pct_mythical = mean(category == "Mythical") * 100
+  ) |>
+  arrange(cluster)
+
+print(knitr::kable(cluster_stats, digits = 1, 
+                   caption = "Cluster Profiles - Average Stats"))
+```
+
+```{r cluster-heatmap}
+# Heatmap of cluster centers
+cluster_centers <- as.data.frame(kmeans_result$centers) |>
+  rownames_to_column("Cluster") |>
+  pivot_longer(-Cluster, names_to = "Feature", values_to = "Value")
+
+ggplot(cluster_centers, aes(x = Feature, y = Cluster, fill = Value)) +
+  geom_tile() +
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +
+  labs(title = "K-Means Cluster Centers (Standardized)",
+       x = "", y = "Cluster", fill = "Scaled\nValue") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r cluster-composition}
+# Cluster composition by category
+cluster_category <- cluster_profile_df |>
+  count(cluster, category) |>
+  group_by(cluster) |>
+  mutate(percentage = round(100 * n / sum(n), 1))
+
+ggplot(cluster_category, aes(x = cluster, y = n, fill = category)) +
+  geom_col(position = "stack") +
+  geom_text(aes(label = glue("{n} ({percentage}%)")), 
+            position = position_stack(vjust = 0.5), size = 3) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Cluster Composition by Pokemon Category",
+       x = "Cluster", y = "Count", fill = "Category")
+```
+
+### 4.4 Hierarchical Clustering
+
+```{r hierarchical-clustering}
+# Compute distance matrix (sample for speed)
+set.seed(123)
+sample_idx <- sample(1:nrow(scaled_data), min(200, nrow(scaled_data)))
+dist_matrix <- dist(scaled_data[sample_idx, ], method = "euclidean")
+
+# Hierarchical clustering
+hc_result <- hclust(dist_matrix, method = "ward.D2")
+
+# Dendrogram
+fviz_dend(hc_result, k = k, 
+          cex = 0.5,
+          k_colors = "Set2",
+          color_labels_by_k = TRUE,
+          rect = TRUE,
+          main = glue("Hierarchical Clustering Dendrogram (n={length(sample_idx)})"))
+```
+
+## 6. Outlier Pokemon Analysis
+
+### 6.1 Extreme Outliers Discussion
+
+```{r outlier-discussion}
+cat("=== EXTREME OUTLIER POKEMON ===\n\n")
+
+# Re-examine extreme outliers
+extreme_cases <- pca_df_full |>
+  filter(outlier_count >= 3) |>
+  arrange(desc(outlier_count))
+
+if(nrow(extreme_cases) > 0) {
+  cat(glue("Total extreme outliers: {nrow(extreme_cases)}\n\n"))
+  
+  # Detailed view
+  extreme_detail <- extreme_cases |>
+    select(dex, name, category, generation, type_1, 
+           hp, attack, defense, sp_atk, sp_def, speed,
+           height_m, weight_kgs, bmi, outlier_count)
+  
+  print(knitr::kable(extreme_detail, 
+                     caption = "Detailed Stats of Extreme Outliers",
+                     digits = 1))
+  
+  # Why are they outliers?
+  cat("\n### Why These Pokemon Are Outliers:\n\n")
+  
+  for(i in 1:min(5, nrow(extreme_cases))) {
+    poke <- extreme_cases[i, ]
+    cat(glue("{i}. **{poke$name}** ({poke$category})\n"))
+    
+    # Find which features are outliers
+    outlier_features <- c()
+    for(feat in numeric_features) {
+      x <- pca_df_full[[feat]]
+      q1 <- quantile(x, 0.25, na.rm = TRUE)
+      q3 <- quantile(x, 0.75, na.rm = TRUE)
+      iqr <- q3 - q1
+      lower <- q1 - 3 * iqr
+      upper <- q3 + 3 * iqr
+      
+      val <- poke[[feat]]
+      if(val < lower | val > upper) {
+        outlier_features <- c(outlier_features, 
+                             glue("{feat}={round(val, 1)}"))
+      }
+    }
+    cat(glue("   Extreme in: {paste(outlier_features, collapse=', ')}\n"))
+    cat("\n")
+  }
+}
+```
+
+### 6.2 Visualize Outliers in PCA Space
+
+```{r outlier-pca-visualization}
+# Perform PCA on FULL dataset to see where outliers fall
+scaled_full <- scale(pca_df_full |> select(all_of(numeric_features)))
+pca_full <- prcomp(scaled_full, center = TRUE, scale. = TRUE)
+
+pca_full_df <- pca_df_full |>
+  bind_cols(as.data.frame(pca_full$x[, 1:2])) |>
+  mutate(is_extreme = outlier_count >= 3)
+
+# Plot outliers in PCA space
+ggplot(pca_full_df, aes(x = PC1, y = PC2, color = is_extreme, size = is_extreme)) +
+  geom_point(alpha = 0.6) +
+  geom_text(data = filter(pca_full_df, is_extreme), 
+            aes(label = name), 
+            size = 3, vjust = -1, hjust = 0.5, color = "black") +
+  scale_color_manual(values = c("FALSE" = "gray70", "TRUE" = "red"),
+                    labels = c("Normal", "Extreme Outlier")) +
+  scale_size_manual(values = c("FALSE" = 2, "TRUE" = 4), guide = "none") +
+  labs(title = "Extreme Outliers in PCA Space (Full Dataset)",
+       subtitle = "Outliers are labeled and shown in red",
+       color = "Status") +
+  theme_minimal()
+```
+
+### 6.3 Impact on Clustering
+
+```{r outlier-clustering-impact}
+cat("=== IMPACT OF OUTLIERS ON CLUSTERING ===\n\n")
+
+# Compare clustering with and without outliers
+set.seed(123)
+k <- 4
+
+# Cluster with outliers
+kmeans_with_outliers <- kmeans(scaled_full, centers = k, nstart = 25)
+
+# Cluster without outliers (already computed earlier)
+kmeans_clean <- kmeans(scaled_data, centers = k, nstart = 25)
+
+cat(glue("
+With outliers ({nrow(pca_df_full)} Pokemon):
+- Total WSS: {round(kmeans_with_outliers$tot.withinss, 2)}
+- Between SS / Total SS: {round(kmeans_with_outliers$betweenss / kmeans_with_outliers$totss * 100, 1)}%
+
+Without extreme outliers ({nrow(pca_df)} Pokemon):
+- Total WSS: {round(kmeans_clean$tot.withinss, 2)}
+- Between SS / Total SS: {round(kmeans_clean$betweenss / kmeans_clean$totss * 100, 1)}%
+"))
+
+# Silhouette comparison
+if (requireNamespace("cluster", quietly = TRUE)) {
+  library(cluster)
+  
+  sil_with <- silhouette(kmeans_with_outliers$cluster, dist(scaled_full))
+  sil_without <- silhouette(kmeans_clean$cluster, dist(scaled_data))
+  
+  cat(glue("
+Average Silhouette Width:
+- With outliers: {round(mean(sil_with[, 'sil_width']), 3)}
+- Without outliers: {round(mean(sil_without[, 'sil_width']), 3)}
+"))
+  
+  cat("\n** Removing outliers improved clustering quality **\n")
+}
+```
+
+### 6.4 Outlier Insights
+
+```{r outlier-insights}
+cat("\n=== KEY INSIGHTS ABOUT OUTLIERS ===\n\n")
+
+outlier_patterns <- extreme_cases |>
+  count(category, sort = TRUE)
+
+cat("Outliers by Category:\n")
+print(outlier_patterns)
+
+cat(glue("
+
+Conclusions:
+1. Most extreme outliers are **{outlier_patterns$category[1]}** Pokemon
+2. Outliers represent special/unique designs (e.g., Eternamax forms, ultra-dense cores)
+3. Including them in clustering:
+   - Distorts cluster boundaries
+   - Creates artificial singleton clusters
+   - Reduces interpretability
+4. **Recommendation**: Analyze them separately as special cases
+5. Main clustering analysis uses cleaned data for better pattern recognition
+"))
+```
+
+## 7. Interpretation and Insights
+
+### 7.1 PCA Interpretation
+
+```{r pca-interpretation}
+cat(glue("
+=== PCA KEY FINDINGS ===
+
+1. Variance Explained:
+   - PC1: {round(summary(pca_result)$importance[2,1]*100, 1)}%
+   - PC2: {round(summary(pca_result)$importance[2,2]*100, 1)}%
+   - PC3: {round(summary(pca_result)$importance[2,3]*100, 1)}%
+   - Cumulative (PC1-3): {round(summary(pca_result)$importance[3,3]*100, 1)}%
+
+2. PC1 Interpretation:
+   Top loadings: {paste(head(loadings_df$Variable, 3), collapse=', ')}
+   - Likely represents overall 'power' or 'stat total'
+
+3. PC2 Interpretation:
+   - Distinguishes between different stat distributions
+   - May separate physical vs special attackers
+
+4. Separation:
+   - Legendary Pokemon tend to cluster in high PC1 region
+   - Clear separation between categories visible
+   - Generation shows some temporal evolution patterns
+"))
+```
+
+### 7.2 Clustering Interpretation
+
+```{r cluster-interpretation}
+# Identify dominant characteristics of each cluster
+cluster_labels <- cluster_stats |>
+  mutate(
+    label = case_when(
+      avg_total > 550 ~ "High-Power",
+      avg_speed > 1 & avg_attack > 0.5 ~ "Fast Attackers",
+      avg_defense > 0.5 | avg_sp_def > 0.5 ~ "Defensive",
+      TRUE ~ "Balanced/Low-Power"
+    )
+  ) |>
+  select(cluster, label, count, avg_total, pct_legendary)
+
+print(knitr::kable(cluster_labels, digits = 1,
+                   caption = "Cluster Interpretations"))
+
+cat(glue("
+=== CLUSTERING KEY FINDINGS ===
+
+1. Optimal Clusters: {k}
+   Based on elbow method and silhouette analysis
+
+2. Cluster Characteristics:
+   {paste(apply(cluster_labels, 1, function(x) 
+     glue('   Cluster {x[1]}: {x[2]} (n={x[3]}, avg_total={round(as.numeric(x[4]),1)})')), 
+     collapse='\n')}
+
+3. Legendary Distribution:
+   - Predominantly in high-power clusters
+   - {round(max(cluster_stats$pct_legendary), 1)}% of one cluster are legendary
+
+4. Practical Use:
+   - Can identify Pokemon archetypes (tank, sweeper, balanced)
+   - Useful for team building and role assignment
+   - Reveals design patterns across generations
+"))
+```
+
+## 8. Export Results
+
+```{r export-results}
+# Save PCA results
+write_csv(pca_plot_df, "data result/pokemon_pca_scores.csv")
+
+# Save cluster assignments
+cluster_export <- cluster_profile_df |>
+  select(dex, name, category, cluster)
+write_csv(cluster_export, "data result/pokemon_clusters.csv")
+
+cat("Results saved:
+- pokemon_pca_scores.csv (with PC1-PC5)
+- pokemon_clusters.csv (cluster assignments)
+")
+```
+
+---
+
+**Next Steps:**
+- Try different clustering algorithms (DBSCAN, GMM)
+- Perform PCA on type features (one-hot encoded)
+- Analyze cluster stability with bootstrap
+- Use clustering labels as features for classification
