@@ -7,7 +7,12 @@ output:
     toc_float: true
     code_folding: show
     theme: cosmo
-output_dir: "reports"
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_dir = "reports"
+    )
+  })
 ---
 
 ```{r setup, include=FALSE}
@@ -35,7 +40,7 @@ theme_set(theme_minimal())
 
 ```{r load-data}
 # Load enriched dataset
-pokemon_df <- read_csv("data result/pokemon_data_enriched.csv")
+pokemon_df <- read_csv("data/pokemon_data_enriched.csv")
 
 cat(glue("Dataset: {nrow(pokemon_df)} Pokemon with {ncol(pokemon_df)} features\n"))
 ```
@@ -203,10 +208,10 @@ pokemon_outliers <- pca_df_full |>
   arrange(desc(outlier_count))
 
 # Ensure export directory exists and write CSV
-if (!dir.exists("data result")) dir.create("data result", recursive = TRUE)
-write_csv(pokemon_outliers, "data result/pokemon_outliers.csv")
+if (!dir.exists("data")) dir.create("data", recursive = TRUE)
+write_csv(pokemon_outliers, "data/pokemon_outliers.csv")
 
-cat(glue("\nExported {nrow(pokemon_outliers)} combined outliers to 'data result/pokemon_outliers.csv'\n"))
+cat(glue("\nExported {nrow(pokemon_outliers)} combined outliers to 'data/pokemon_outliers.csv'\n"))
 
 # Update cleaned dataset to exclude any combined outliers (conservative)
 pca_df <- pca_df_full |>
@@ -749,12 +754,12 @@ cat(glue("
 
 ```{r export-results}
 # Save PCA results
-write_csv(pca_plot_df, "data result/pokemon_pca_scores.csv")
+write_csv(pca_plot_df, "data/pokemon_pca_scores.csv")
 
 # Save cluster assignments
 cluster_export <- cluster_profile_df |>
   select(dex, name, category, cluster)
-write_csv(cluster_export, "data result/pokemon_clusters.csv")
+write_csv(cluster_export, "data/pokemon_clusters.csv")
 
 cat("Results saved:
 - pokemon_pca_scores.csv (with PC1-PC5)

@@ -7,7 +7,12 @@ output:
     toc_float: true
     code_folding: show
     theme: cosmo
-output_dir: "reports"
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_dir = "reports"
+    )
+  })
 ---
 
 ```{r setup, include=FALSE}
@@ -43,7 +48,7 @@ theme_set(theme_minimal())
 
 ```{r load-data}
 # Load enriched dataset with features
-pokemon_df <- read_csv("data result/pokemon_data_enriched.csv")
+pokemon_df <- read_csv("data/pokemon_data_enriched.csv")
 
 cat(glue("Dataset loaded: {nrow(pokemon_df)} Pokemon
 Features: {ncol(pokemon_df)} columns
