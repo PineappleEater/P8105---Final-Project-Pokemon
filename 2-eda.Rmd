@@ -49,8 +49,8 @@ if (has_patchwork) library(patchwork)
 ```
 
 ```{r load-data}
-# Load cleaned data
-pokemon_df <- read_csv("data/pokemon_data.csv")
+# Load cleaned data - FINAL EVOLUTIONS ONLY to avoid downward bias from unevolved forms
+pokemon_df <- read_csv("data/pokemon_data_final_evolutions.csv")
 
 # Display structure
 glimpse(pokemon_df)
@@ -648,11 +648,12 @@ cat(glue("=== EDA KEY FINDINGS ===
 
 ```{r export}
 # Save enriched dataset with all features
+# This contains FINAL EVOLUTIONS ONLY to avoid statistical bias
 if (!dir.exists("data")) dir.create("data", recursive = TRUE)
 
-write_csv(pokemon_df, "data/pokemon_data_enriched.csv")
+write_csv(pokemon_df, "data/pokemon_data_final_evolutions_enriched.csv")
 
-cat("\nEnriched dataset saved to: data/pokemon_data_enriched.csv\n")
+cat("\nEnriched dataset saved to: data/pokemon_data_final_evolutions_enriched.csv\n")
 cat(
   "New features added:",
   "is_legendary, is_mythical, is_paradox, is_ultra_beast,",

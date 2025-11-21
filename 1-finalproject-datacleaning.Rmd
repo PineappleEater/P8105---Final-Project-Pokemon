@@ -122,19 +122,31 @@ legend_evolved_df <- pokemon_legend |>
 myth_evolved_df <- pokemon_myth |> 
   filter(dex %in% pokemon_evolved_n$dex)
 
+# Export final evolution dataset (primary dataset for all downstream analysis)
+write_csv(pokemon_evolved_df, "data/pokemon_data_final_evolutions.csv")
+
 ```   
 ### Cleaned Datasets   
-#### There are total 8 datasets for future analysis, included:   
-`pokemon_df`: Dataset that included all 9 Generation of Pokémon states, height and weight.   
-`pokemon_evolved_n`: Sub dataset `pokemon_df` for that only included **Fully Evolved Pokémon**.  
 
-`pokemon_legend`: Sub dataset `pokemon_df` for that only included **Legendary Pokémon**  
-`pokemon_myth`: Sub dataset `pokemon_df` for that only included **Mythical Pokémon**  
-`pokemon_para`: Sub dataset `pokemon_df` for that only included **Paradox Pokémon**  
-`pokemon_ub`: Sub dataset `pokemon_df` for that only included **Ultra Beast Pokémon**  
+#### Exported CSV Files:
+`pokemon_data.csv`: Complete dataset with all 1,219 Pokémon (all evolution stages, all forms).  
+`pokemon_data_final_evolutions.csv`: **Recommended for analysis** - Contains only 743 fully evolved Pokémon to eliminate downward bias from unevolved forms.
 
-`legend_evolved_df`: Auxiliary dataset only included *Fully Evolved* **Legendary Pokémon**  
-`myth_evolved_df`: Auxiliary dataset only included *Fully Evolved* **Mythical Pokémon**  
+#### In-Memory R Objects:
+**Primary Datasets:**  
+`pokemon_df`: Complete dataset with all 9 generations (1,219 Pokémon including all evolution stages).  
+`pokemon_evolved_df`: **Final evolutions only** (743 Pokémon) - Use this to avoid statistical bias.
+
+**Special Category Subsets (All Evolution Stages):**  
+`pokemon_legend`: Legendary Pokémon subset.  
+`pokemon_myth`: Mythical Pokémon subset.  
+`pokemon_para`: Paradox Pokémon subset.  
+`pokemon_ub`: Ultra Beast Pokémon subset.
+
+**Auxiliary Objects:**  
+`pokemon_evolved_n`: Lookup table containing dex numbers of all final evolution forms.  
+`legend_evolved_df`: Final evolution Legendary Pokémon (in-memory only).  
+`myth_evolved_df`: Final evolution Mythical Pokémon (in-memory only)  
 
 
 #### The cleaned dataset is tidy, readable and analyzable. It includes the following variables:  

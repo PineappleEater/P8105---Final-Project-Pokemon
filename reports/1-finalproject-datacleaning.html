@@ -353,20 +353,26 @@ display: none;
 </div>
 
 
-<pre class="r"><code>library(rvest)
-library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+<pre class="r"><code>library(rvest)</code></pre>
+<pre><code>## Warning: package &#39;rvest&#39; was built under R version 4.5.2</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.5.2</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.5.2</code></pre>
+<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.5.2</code></pre>
+<pre><code>## Warning: package &#39;lubridate&#39; was built under R version 4.5.2</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.6
 ## ✔ forcats   1.0.1     ✔ stringr   1.5.2
 ## ✔ ggplot2   4.0.0     ✔ tibble    3.3.0
 ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
 ## ✔ purrr     1.1.0     
-## ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter()         masks stats::filter()
 ## ✖ readr::guess_encoding() masks rvest::guess_encoding()
 ## ✖ dplyr::lag()            masks stats::lag()
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <pre class="r"><code>library(janitor)</code></pre>
+<pre><code>## Warning: package &#39;janitor&#39; was built under R version 4.5.2</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;janitor&#39;
 ## 
@@ -387,13 +393,13 @@ data.</p>
 <p>I used <code>read_html()</code>, <code>html_table()</code>, and
 <code>as_tibble()</code> converted web page data into a tabular
 format.</p>
-<pre class="r"><code>raw_state_df &lt;- read_html(&quot;data/Pokemon.html&quot;) |&gt; 
+<pre class="r"><code>raw_state_df &lt;- read_html(&quot;data/raw-data/Pokemon.html&quot;) |&gt; 
   html_table()
 
-raw_wh_df &lt;- read_html(&quot;data/Pokemon by height and weight.html&quot;) |&gt; 
+raw_wh_df &lt;- read_html(&quot;data/raw-data/Pokemon by height and weight.html&quot;) |&gt; 
   html_table()
 
-raw_evolved_df &lt;- read_html(&quot;data/Pokemon fully evolved.html&quot;) |&gt; 
+raw_evolved_df &lt;- read_html(&quot;data/raw-data/Pokemon fully evolved.html&quot;) |&gt; 
   html_table()</code></pre>
 <pre class="r"><code>pokemon_state_df &lt;- as_tibble(raw_state_df[[1]]) |&gt; 
   janitor::clean_names()
@@ -426,7 +432,7 @@ names(pokemon_state_df) </code></pre>
 
 
 
-write_csv(pokemon_df, &quot;data result/pokemon_data.csv&quot;)</code></pre>
+write_csv(pokemon_df, &quot;data/pokemon_data.csv&quot;)</code></pre>
 <p>Note: For “Eternamax” Eternatus, no official height or weight data
 exists. Based on its in-game appearance and the way it is portrayed in
 the anime—as a colossal, rift-like dragon composed of red energy,
@@ -482,7 +488,12 @@ pokemon_evolved_n &lt;- raw_evolved_df[[1]] |&gt;
 legend_evolved_df &lt;- pokemon_legend |&gt; 
   filter(dex %in% pokemon_evolved_n$dex)
 myth_evolved_df &lt;- pokemon_myth |&gt; 
-  filter(dex %in% pokemon_evolved_n$dex)</code></pre>
+  filter(dex %in% pokemon_evolved_n$dex)
+
+# Export final evolution datasets
+write_csv(pokemon_evolved_df, &quot;data/pokemon_data_final_evolutions.csv&quot;)
+write_csv(legend_evolved_df, &quot;data/pokemon_legend_final_evolutions.csv&quot;)
+write_csv(myth_evolved_df, &quot;data/pokemon_myth_final_evolutions.csv&quot;)</code></pre>
 </div>
 <div id="cleaned-datasets" class="section level3">
 <h3>Cleaned Datasets</h3>
@@ -490,8 +501,10 @@ myth_evolved_df &lt;- pokemon_myth |&gt;
 <h4>There are total 8 datasets for future analysis, included:</h4>
 <p><code>pokemon_df</code>: Dataset that included all 9 Generation of
 Pokémon states, height and weight.<br />
-<code>pokemon_evolved_n</code>: Sub dataset <code>pokemon_df</code> for
-that only included <strong>Fully Evolved Pokémon</strong>.</p>
+<code>pokemon_evolved_df</code>: Sub dataset <code>pokemon_df</code> for
+that only included <strong>Fully Evolved Pokémon</strong>. <strong>This
+is the recommended dataset for unbiased statistical analysis and
+modeling.</strong></p>
 <p><code>pokemon_legend</code>: Sub dataset <code>pokemon_df</code> for
 that only included <strong>Legendary Pokémon</strong><br />
 <code>pokemon_myth</code>: Sub dataset <code>pokemon_df</code> for that
