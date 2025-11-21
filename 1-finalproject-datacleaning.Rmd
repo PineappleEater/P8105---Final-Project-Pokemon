@@ -63,9 +63,6 @@ pokemon_df <- as_tibble(raw_wh_df[[1]]) |>
          height_m, weight_kgs, bmi, 
          -height_ft, -weight_lbs, -type_split, -type)
 
-
-
-write_csv(pokemon_df, "data/pokemon_data.csv")
 ```
 
 Note: For "Eternamax" Eternatus, no official height or weight data exists. Based on its in-game appearance and the way it is portrayed in the anime—as a colossal, rift-like dragon composed of red energy, fractures, and crystalline lines—I set its size to 999.9 meters tall and 9999.9 kilograms in weight. The resulting BMI is effectively zero, perfectly matching the idea of a non-physical energy entity. This also aligns with how the anime almost never shows its full body, only fragmented sections of its form.
@@ -173,6 +170,7 @@ Used in this dataset only as a mathematical descriptor—
 does not reflect health/evaluation in Pokémon canon.  
 ```{r}
 #Final dataset
-
+write_csv(pokemon_df, "data/pokemon_data.csv")
+write_csv(pokemon_evolved_df, "data/pokemon_evolved_df.csv")
 
 ```
