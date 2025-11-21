@@ -7,6 +7,7 @@ output:
     toc_float: true
     code_folding: show
     theme: cosmo
+    self_contained: true
 knit: (function(input, ...) {
     rmarkdown::render(
       input,
@@ -643,8 +644,4 @@ cat("All models saved to models/ directory\n")
 
 ---
 
-**Summary of Advanced Techniques:**
-- ✅ Comprehensive hyperparameter tuning (Random Forest & XGBoost)
-- ✅ Grid search with cross-validation
-- ✅ Multi-class classification for all Pokemon categories
-- ✅ Performance comparison across 5 binary models + 1 multi-class model
+

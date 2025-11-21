@@ -7,6 +7,7 @@ output:
     toc_float: true
     code_folding: show
     theme: cosmo
+    self_contained: true
 knit: (function(input, ...) {
     rmarkdown::render(
       input,
@@ -769,8 +770,3 @@ cat("Results saved:
 
 ---
 
-**Next Steps:**
-- Try different clustering algorithms (DBSCAN, GMM)
-- Perform PCA on type features (one-hot encoded)
-- Analyze cluster stability with bootstrap
-- Use clustering labels as features for classification

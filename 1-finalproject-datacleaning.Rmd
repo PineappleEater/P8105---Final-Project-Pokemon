@@ -1,6 +1,8 @@
 ---
 title: "Data Source and Data Cleaning Process"
-output: html_document
+output: 
+  html_document:
+    self_contained: true
 knit: (function(input, ...) {
     rmarkdown::render(
       input,
