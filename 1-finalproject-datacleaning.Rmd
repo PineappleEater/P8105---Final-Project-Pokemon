@@ -112,18 +112,124 @@ pokemon_evolved_n <- raw_evolved_df[[1]] |>
   rename(dex = number) |> 
   select(dex)
 
-pokemon_evolved_df <- pokemon_df |> 
-  filter(dex %in% pokemon_evolved_n$dex)
-legend_evolved_df <- pokemon_legend |> 
-  filter(dex %in% pokemon_evolved_n$dex)
-myth_evolved_df <- pokemon_myth |> 
+
+```  
+```{r}
+#Final dataset
+# Add category columns
+pokemon_df_final <- pokemon_df |>
+  mutate(
+    is_legendary = dex %in% pokemon_legend$dex,
+    is_mythical = dex %in% pokemon_myth$dex,
+    is_paradox = dex %in% pokemon_para$dex,
+    is_ultra_beast = dex %in% pokemon_ub$dex,
+    # Combined special category
+    is_special = is_legendary | is_mythical | is_paradox | is_ultra_beast,
+    # Category label for plotting
+    category = case_when(
+      is_legendary ~ "Legendary",
+      is_mythical ~ "Mythical",
+      is_paradox ~ "Paradox",
+      is_ultra_beast ~ "Ultra Beast",
+      TRUE ~ "Regular"
+    )
+  ) |> 
+  # Generation Assignment
+  mutate(
+    generation = case_when(
+      dex <= 151 ~ "Gen 1",
+      dex <= 251 ~ "Gen 2",
+      dex <= 386 ~ "Gen 3",
+      dex <= 493 ~ "Gen 4",
+      dex <= 649 ~ "Gen 5",
+      dex <= 721 ~ "Gen 6",
+      dex <= 809 ~ "Gen 7",
+      dex <= 905 ~ "Gen 8",
+      TRUE ~ "Gen 9"
+    )
+  )
+
+
+pokemon_evolved_df <- pokemon_df_final |> 
   filter(dex %in% pokemon_evolved_n$dex)
 
-```   
+write_csv(pokemon_df_final, "data/pokemon_data.csv")
+write_csv(pokemon_evolved_df, "data/pokemon_evolved_df.csv")
+
+```
+
+### Retrieve and clean up the type chart.
+```{r}
+raw_type_df <- read_html("data/raw-data/Pokemon Type.html") |> 
+  html_table()
+
+pokemon_type_df <- raw_type_df[[1]] |> 
+  as_tibble(.name_repair = "unique") |> 
+  janitor::clean_names() |> 
+  mutate(across(-1, ~ case_when(
+    .x == "Â½" ~ 0.5,
+    .x == "0" ~ 0,
+    .x == "2" ~ 2,
+    TRUE     ~ 1  
+  ))) |> 
+  rename(
+    atk_type = 1,
+    Normal = nor,
+    Fire = fir,
+    Water = wat,
+    Electric = ele,
+    Grass = gra,
+    Ice = ice,
+    Fighting = fig,
+    Poison = poi,
+    Ground = gro,
+    Flying = fly,
+    Psychic = psy,
+    Bug = bug,
+    Rock = roc,
+    Ghost = gho,
+    Dragon = dra,
+    Dark = dar,
+    Steel = ste,
+    Fairy = fai
+  )
+```
+
+```{r}
+types <- colnames(pokemon_type_df)[-1]
+
+single_def <- pokemon_type_df |> 
+  pivot_longer(
+    cols = -atk_type,          
+    names_to = "def_type",     
+    values_to = "multiplier"   
+  ) |> 
+  mutate(
+    def_type = factor(def_type, levels = unique(atk_type))
+  ) |> 
+  arrange(def_type, atk_type) |> 
+  select(def_type, atk_type, multiplier)
+
+dual_def <- map_dfr(combn(types, 2, simplify = FALSE), \(pair) {
+  combo_name <- paste(pair, collapse = "/")
+  pokemon_type_df |>
+    transmute(
+      atk_type,
+      def_type = combo_name,
+      multiplier = .data[[pair[1]]] * .data[[pair[2]]]
+    )
+}) |> 
+  select(def_type, atk_type, multiplier)
+
+def_type_df <- bind_rows(single_def, dual_def)
+
+write_csv(def_type_df, "data/def_type_df.csv")
+```
+
 ### Cleaned Datasets   
 #### There are total 8 datasets for future analysis, included:   
-`pokemon_df`: Dataset that included all 9 Generation of Pokémon states, height and weight.   
-`pokemon_evolved_n`: Sub dataset `pokemon_df` for that only included **Fully Evolved Pokémon**.  
+`pokemon_df_final`: Dataset that included all 9 Generation of Pokémon states, height and weight.   
+`pokemon_evolved_df`: Sub dataset `pokemon_df` for that only included **Fully Evolved Pokémon**.  
 
 `pokemon_legend`: Sub dataset `pokemon_df` for that only included **Legendary Pokémon**  
 `pokemon_myth`: Sub dataset `pokemon_df` for that only included **Mythical Pokémon**  
@@ -132,6 +238,8 @@ myth_evolved_df <- pokemon_myth |>
 
 `legend_evolved_df`: Auxiliary dataset only included *Fully Evolved* **Legendary Pokémon**  
 `myth_evolved_df`: Auxiliary dataset only included *Fully Evolved* **Mythical Pokémon**  
+
+`def_type_df`: Dataset that included all **Defence Type** possible of Pokémon, and it's efficiency in defending against different **Attack Types** 
 
 
 #### The cleaned dataset is tidy, readable and analyzable. It includes the following variables:  
@@ -168,9 +276,3 @@ A numerical value calculated as:
 $BMI = \frac{weight(kg)}{(height(m))^2}$  
 Used in this dataset only as a mathematical descriptor—  
 does not reflect health/evaluation in Pokémon canon.  
-```{r}
-#Final dataset
-write_csv(pokemon_df, "data/pokemon_data.csv")
-write_csv(pokemon_evolved_df, "data/pokemon_evolved_df.csv")
-
-```

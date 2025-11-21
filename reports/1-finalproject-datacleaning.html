@@ -355,13 +355,13 @@ display: none;
 
 <pre class="r"><code>library(rvest)
 library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.1     ✔ stringr   1.5.2
+## ✔ forcats   1.0.0     ✔ stringr   1.5.2
 ## ✔ ggplot2   4.0.0     ✔ tibble    3.3.0
 ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
 ## ✔ purrr     1.1.0     
-## ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter()         masks stats::filter()
 ## ✖ readr::guess_encoding() masks rvest::guess_encoding()
 ## ✖ dplyr::lag()            masks stats::lag()
@@ -387,13 +387,13 @@ data.</p>
 <p>I used <code>read_html()</code>, <code>html_table()</code>, and
 <code>as_tibble()</code> converted web page data into a tabular
 format.</p>
-<pre class="r"><code>raw_state_df &lt;- read_html(&quot;data/Pokemon.html&quot;) |&gt; 
+<pre class="r"><code>raw_state_df &lt;- read_html(&quot;data/raw-data/Pokemon.html&quot;) |&gt; 
   html_table()
 
-raw_wh_df &lt;- read_html(&quot;data/Pokemon by height and weight.html&quot;) |&gt; 
+raw_wh_df &lt;- read_html(&quot;data/raw-data/Pokemon by height and weight.html&quot;) |&gt; 
   html_table()
 
-raw_evolved_df &lt;- read_html(&quot;data/Pokemon fully evolved.html&quot;) |&gt; 
+raw_evolved_df &lt;- read_html(&quot;data/raw-data/Pokemon fully evolved.html&quot;) |&gt; 
   html_table()</code></pre>
 <pre class="r"><code>pokemon_state_df &lt;- as_tibble(raw_state_df[[1]]) |&gt; 
   janitor::clean_names()
@@ -422,11 +422,7 @@ names(pokemon_state_df) </code></pre>
   select(dex, name, type_1, type_2, 
          total, hp, attack, defense, sp_atk, sp_def, speed, 
          height_m, weight_kgs, bmi, 
-         -height_ft, -weight_lbs, -type_split, -type)
-
-
-
-write_csv(pokemon_df, &quot;data result/pokemon_data.csv&quot;)</code></pre>
+         -height_ft, -weight_lbs, -type_split, -type)</code></pre>
 <p>Note: For “Eternamax” Eternatus, no official height or weight data
 exists. Based on its in-game appearance and the way it is portrayed in
 the anime—as a colossal, rift-like dragon composed of red energy,
@@ -477,20 +473,118 @@ pokemon_evolved_n &lt;- raw_evolved_df[[1]] |&gt;
   select(dex)</code></pre>
 <pre><code>## New names:
 ## • `` -&gt; `...2`</code></pre>
-<pre class="r"><code>pokemon_evolved_df &lt;- pokemon_df |&gt; 
+<pre class="r"><code>#Final dataset
+# Add category columns
+pokemon_df_final &lt;- pokemon_df |&gt;
+  mutate(
+    is_legendary = dex %in% pokemon_legend$dex,
+    is_mythical = dex %in% pokemon_myth$dex,
+    is_paradox = dex %in% pokemon_para$dex,
+    is_ultra_beast = dex %in% pokemon_ub$dex,
+    # Combined special category
+    is_special = is_legendary | is_mythical | is_paradox | is_ultra_beast,
+    # Category label for plotting
+    category = case_when(
+      is_legendary ~ &quot;Legendary&quot;,
+      is_mythical ~ &quot;Mythical&quot;,
+      is_paradox ~ &quot;Paradox&quot;,
+      is_ultra_beast ~ &quot;Ultra Beast&quot;,
+      TRUE ~ &quot;Regular&quot;
+    )
+  ) |&gt; 
+  # Generation Assignment
+  mutate(
+    generation = case_when(
+      dex &lt;= 151 ~ &quot;Gen 1&quot;,
+      dex &lt;= 251 ~ &quot;Gen 2&quot;,
+      dex &lt;= 386 ~ &quot;Gen 3&quot;,
+      dex &lt;= 493 ~ &quot;Gen 4&quot;,
+      dex &lt;= 649 ~ &quot;Gen 5&quot;,
+      dex &lt;= 721 ~ &quot;Gen 6&quot;,
+      dex &lt;= 809 ~ &quot;Gen 7&quot;,
+      dex &lt;= 905 ~ &quot;Gen 8&quot;,
+      TRUE ~ &quot;Gen 9&quot;
+    )
+  )
+
+
+pokemon_evolved_df &lt;- pokemon_df_final |&gt; 
   filter(dex %in% pokemon_evolved_n$dex)
-legend_evolved_df &lt;- pokemon_legend |&gt; 
-  filter(dex %in% pokemon_evolved_n$dex)
-myth_evolved_df &lt;- pokemon_myth |&gt; 
-  filter(dex %in% pokemon_evolved_n$dex)</code></pre>
+
+write_csv(pokemon_df_final, &quot;data/pokemon_data.csv&quot;)
+write_csv(pokemon_evolved_df, &quot;data/pokemon_evolved_df.csv&quot;)</code></pre>
+</div>
+<div id="retrieve-and-clean-up-the-type-chart." class="section level3">
+<h3>Retrieve and clean up the type chart.</h3>
+<pre class="r"><code>raw_type_df &lt;- read_html(&quot;data/raw-data/Pokemon Type.html&quot;) |&gt; 
+  html_table()
+
+pokemon_type_df &lt;- raw_type_df[[1]] |&gt; 
+  as_tibble(.name_repair = &quot;unique&quot;) |&gt; 
+  janitor::clean_names() |&gt; 
+  mutate(across(-1, ~ case_when(
+    .x == &quot;Â½&quot; ~ 0.5,
+    .x == &quot;0&quot; ~ 0,
+    .x == &quot;2&quot; ~ 2,
+    TRUE     ~ 1  
+  ))) |&gt; 
+  rename(
+    atk_type = 1,
+    Normal = nor,
+    Fire = fir,
+    Water = wat,
+    Electric = ele,
+    Grass = gra,
+    Ice = ice,
+    Fighting = fig,
+    Poison = poi,
+    Ground = gro,
+    Flying = fly,
+    Psychic = psy,
+    Bug = bug,
+    Rock = roc,
+    Ghost = gho,
+    Dragon = dra,
+    Dark = dar,
+    Steel = ste,
+    Fairy = fai
+  )</code></pre>
+<pre class="r"><code>types &lt;- colnames(pokemon_type_df)[-1]
+
+single_def &lt;- pokemon_type_df |&gt; 
+  pivot_longer(
+    cols = -atk_type,          
+    names_to = &quot;def_type&quot;,     
+    values_to = &quot;multiplier&quot;   
+  ) |&gt; 
+  mutate(
+    def_type = factor(def_type, levels = unique(atk_type))
+  ) |&gt; 
+  arrange(def_type, atk_type) |&gt; 
+  select(def_type, atk_type, multiplier)
+
+dual_def &lt;- map_dfr(combn(types, 2, simplify = FALSE), \(pair) {
+  combo_name &lt;- paste(pair, collapse = &quot;/&quot;)
+  pokemon_type_df |&gt;
+    transmute(
+      atk_type,
+      def_type = combo_name,
+      multiplier = .data[[pair[1]]] * .data[[pair[2]]]
+    )
+}) |&gt; 
+  select(def_type, atk_type, multiplier)
+
+def_type_df &lt;- bind_rows(single_def, dual_def)
+
+write_csv(def_type_df, &quot;data/def_type_df.csv&quot;)</code></pre>
 </div>
 <div id="cleaned-datasets" class="section level3">
 <h3>Cleaned Datasets</h3>
 <div id="there-are-total-8-datasets-for-future-analysis-included" class="section level4">
 <h4>There are total 8 datasets for future analysis, included:</h4>
-<p><code>pokemon_df</code>: Dataset that included all 9 Generation of
-Pokémon states, height and weight.<br />
-<code>pokemon_evolved_n</code>: Sub dataset <code>pokemon_df</code> for
+<p><code>pokemon_df_final</code>: Dataset that included all 9 Generation
+of Pokémon states, height and weight.<br />
+<code>pokemon_evolved_df</code>: Sub dataset <code>pokemon_df</code> for
 that only included <strong>Fully Evolved Pokémon</strong>.</p>
 <p><code>pokemon_legend</code>: Sub dataset <code>pokemon_df</code> for
 that only included <strong>Legendary Pokémon</strong><br />
@@ -504,6 +598,9 @@ only included <strong>Ultra Beast Pokémon</strong></p>
 <em>Fully Evolved</em> <strong>Legendary Pokémon</strong><br />
 <code>myth_evolved_df</code>: Auxiliary dataset only included <em>Fully
 Evolved</em> <strong>Mythical Pokémon</strong></p>
+<p><code>def_type_df</code>: Dataset that included all <strong>Defence
+Type</strong> possible of Pokémon, and it’s efficiency in defending
+against different <strong>Attack Types</strong></p>
 </div>
 <div id="the-cleaned-dataset-is-tidy-readable-and-analyzable.-it-includes-the-following-variables" class="section level4">
 <h4>The cleaned dataset is tidy, readable and analyzable. It includes
@@ -552,7 +649,6 @@ A numerical value calculated as:<br />
 \frac{weight(kg)}{(height(m))^2}\)</span><br />
 Used in this dataset only as a mathematical descriptor—<br />
 does not reflect health/evaluation in Pokémon canon.</p>
-<pre class="r"><code>#Final dataset</code></pre>
 </div>
 </div>
 
