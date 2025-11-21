@@ -1,6 +1,7 @@
 ---
 title: "Data Source and Data Cleaning Process"
 output: html_document
+output_dir: "reports"
 ---
 ```{r}
 library(rvest)
