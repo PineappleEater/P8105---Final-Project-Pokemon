@@ -366,37 +366,10 @@ if (requireNamespace("plotly", quietly = TRUE)) {
 
 ## 4. Clustering Analysis
 
-### 4.1 Determine Optimal Number of Clusters
-
-```{r optimal-clusters-elbow}
-# Elbow method
-fviz_nbclust(scaled_data, kmeans, method = "wss", k.max = 10) +
-  labs(title = "Elbow Method - Optimal k")
-```
-
-```{r optimal-clusters-silhouette}
-# Silhouette method
-fviz_nbclust(scaled_data, kmeans, method = "silhouette", k.max = 10) +
-  labs(title = "Silhouette Method - Optimal k")
-```
-
-```{r optimal-clusters-gap, eval=FALSE}
-# [COMMENTED OUT - Beyond course scope]
-# Gap statistic - advanced cluster validation method
-# Requires understanding of reference distribution and bootstrap sampling
-# set.seed(123)
-# gap_stat <- clusGap(scaled_data,
-#   FUN = kmeans, nstart = 25,
-#   K.max = 10, B = 50
-# )
-# fviz_gap_stat(gap_stat) +
-#   labs(title = "Gap Statistic - Optimal k")
-```
-
-### 4.2 K-Means Clustering
+### 4.1 K-Means Clustering
 
 ```{r kmeans-clustering}
-# Use k=4 based on elbow/silhouette
+# Use k=4 for clustering (a reasonable choice for Pokemon categorization)
 k <- 4
 set.seed(123)
 kmeans_result <- kmeans(scaled_data, centers = k, nstart = 25)
@@ -502,26 +475,30 @@ ggplot(cluster_category, aes(x = cluster, y = n, fill = category)) +
   )
 ```
 
-### 4.4 Hierarchical Clustering
+### 4.4 Hierarchical Clustering (Beyond Course Scope)
 
-```{r hierarchical-clustering}
-# Compute distance matrix (sample for speed)
-set.seed(123)
-sample_idx <- sample(1:nrow(scaled_data), min(200, nrow(scaled_data)))
-dist_matrix <- dist(scaled_data[sample_idx, ], method = "euclidean")
+```{r hierarchical-clustering, eval=FALSE}
+# [COMMENTED OUT - Beyond course scope]
+# Hierarchical clustering requires understanding of distance metrics,
+# linkage methods, and dendrogram interpretation
 
-# Hierarchical clustering
-hc_result <- hclust(dist_matrix, method = "ward.D2")
-
-# Dendrogram
-fviz_dend(hc_result,
-  k = k,
-  cex = 0.5,
-  k_colors = "Set2",
-  color_labels_by_k = TRUE,
-  rect = TRUE,
-  main = glue("Hierarchical Clustering Dendrogram (n={length(sample_idx)})")
-)
+# # Compute distance matrix (sample for speed)
+# set.seed(123)
+# sample_idx <- sample(1:nrow(scaled_data), min(200, nrow(scaled_data)))
+# dist_matrix <- dist(scaled_data[sample_idx, ], method = "euclidean")
+#
+# # Hierarchical clustering
+# hc_result <- hclust(dist_matrix, method = "ward.D2")
+#
+# # Dendrogram
+# fviz_dend(hc_result,
+#   k = k,
+#   cex = 0.5,
+#   k_colors = "Set2",
+#   color_labels_by_k = TRUE,
+#   rect = TRUE,
+#   main = glue("Hierarchical Clustering Dendrogram (n={length(sample_idx)})")
+# )
 ```
 
 ## 6. Outlier Pokemon Analysis
