@@ -209,10 +209,10 @@ pokemon_outliers <- pca_df_full |>
   arrange(desc(outlier_count))
 
 # Ensure export directory exists and write CSV
-if (!dir.exists("data")) dir.create("data", recursive = TRUE)
-write_csv(pokemon_outliers, "data/pokemon_outliers.csv")
+if (!dir.exists("data/analysis/pca")) dir.create("data/analysis/pca", recursive = TRUE)
+write_csv(pokemon_outliers, "data/analysis/pca/pokemon_outliers.csv")
 
-cat(glue("\nExported {nrow(pokemon_outliers)} combined outliers to 'data/pokemon_outliers.csv'\n"))
+cat(glue("\nExported {nrow(pokemon_outliers)} combined outliers to 'data/analysis/pca/pokemon_outliers.csv'\n"))
 
 # Update cleaned dataset to exclude any combined outliers (conservative)
 pca_df <- pca_df_full |>
@@ -380,15 +380,17 @@ fviz_nbclust(scaled_data, kmeans, method = "silhouette", k.max = 10) +
   labs(title = "Silhouette Method - Optimal k")
 ```
 
-```{r optimal-clusters-gap}
-# Gap statistic (slower)
-set.seed(123)
-gap_stat <- clusGap(scaled_data,
-  FUN = kmeans, nstart = 25,
-  K.max = 10, B = 50
-)
-fviz_gap_stat(gap_stat) +
-  labs(title = "Gap Statistic - Optimal k")
+```{r optimal-clusters-gap, eval=FALSE}
+# [COMMENTED OUT - Beyond course scope]
+# Gap statistic - advanced cluster validation method
+# Requires understanding of reference distribution and bootstrap sampling
+# set.seed(123)
+# gap_stat <- clusGap(scaled_data,
+#   FUN = kmeans, nstart = 25,
+#   K.max = 10, B = 50
+# )
+# fviz_gap_stat(gap_stat) +
+#   labs(title = "Gap Statistic - Optimal k")
 ```
 
 ### 4.2 K-Means Clustering
@@ -754,17 +756,21 @@ cat(glue("
 ## 8. Export Results
 
 ```{r export-results}
+# Ensure output directory exists
+if (!dir.exists("data/analysis/pca")) dir.create("data/analysis/pca", recursive = TRUE)
+
 # Save PCA results
-write_csv(pca_plot_df, "data/pokemon_pca_scores.csv")
+write_csv(pca_plot_df, "data/analysis/pca/pokemon_pca_scores.csv")
 
 # Save cluster assignments
 cluster_export <- cluster_profile_df |>
   select(dex, name, category, cluster)
-write_csv(cluster_export, "data/pokemon_clusters.csv")
+write_csv(cluster_export, "data/analysis/pca/pokemon_clusters.csv")
 
-cat("Results saved:
+cat("Results saved to data/analysis/pca/:
 - pokemon_pca_scores.csv (with PC1-PC5)
 - pokemon_clusters.csv (cluster assignments)
+- pokemon_outliers.csv (extreme outliers)
 ")
 ```
 

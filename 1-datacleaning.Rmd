@@ -1,0 +1,338 @@
+---
+title: "Data Source and Data Cleaning Process"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+    theme: cosmo
+    self_contained: true
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_file = "1-datacleaning.html",
+      output_dir = "reports"
+    )
+  })
+---
+```{r}
+library(rvest)
+library(tidyverse)
+library(janitor)
+```
+
+
+### Data Source  
+The data used in this project were scraped from pokemondb.net, a resource that maintains one of the most complete collections of Pokémon information to date, encompassing all nine generations (1,025 Pokémon species including alternate forms).  
+The dataset includes variables such as base statistics, physical dimensions (height and weight), and type attributes.  
+A portion of the metadata is sourced from the Veekun database, with additional details compiled by community contributors based on in-game data.
+
+I used `read_html()`, `html_table()`, and `as_tibble()` converted web page data into a tabular format.  
+```{r}
+raw_state_df <- read_html("data/raw-data/Pokemon.html") |>
+  html_table()
+
+raw_wh_df <- read_html("data/raw-data/Pokemon by height and weight.html") |>
+  html_table()
+
+raw_evolved_df <- read_html("data/raw-data/Pokemon fully evolved.html") |>
+  html_table()
+```
+
+```{r}
+pokemon_state_df <- as_tibble(raw_state_df[[1]]) |>
+  janitor::clean_names()
+
+names(pokemon_state_df)
+
+pokemon_df <- as_tibble(raw_wh_df[[1]]) |>
+  janitor::clean_names() |>
+  right_join(pokemon_state_df, by = c("name", "type", "number")) |>
+  mutate(type_split = str_extract_all(type, "[A-Z][a-z]+")) |>
+  mutate(
+    type_1 = map_chr(type_split, ~ .x[1] %||% NA_character_),
+    type_2 = map_chr(type_split, ~ .x[2] %||% NA_character_)
+  ) |>
+  rename(
+    dex = number
+  ) |>
+  mutate(
+    weight_kgs = ifelse(name == "EternatusEternamax", 9999.9, weight_kgs),
+    height_m = ifelse(name == "EternatusEternamax", 999.9, height_m),
+    bmi = ifelse(name == "EternatusEternamax", round(9999.9 / (999.9^2), 1), bmi)
+  ) |>
+  select(
+    dex, name, type_1, type_2,
+    total, hp, attack, defense, sp_atk, sp_def, speed,
+    height_m, weight_kgs, bmi,
+    -height_ft, -weight_lbs, -type_split, -type
+  )
+
+# Export raw dataset (before category labeling, for reference only)
+write_csv(pokemon_df, "data/pokemon_data_raw.csv")
+```
+
+Note: For "Eternamax" Eternatus, no official height or weight data exists. Based on its in-game appearance and the way it is portrayed in the anime—as a colossal, rift-like dragon composed of red energy, fractures, and crystalline lines—I set its size to 999.9 meters tall and 9999.9 kilograms in weight. The resulting BMI is effectively zero, perfectly matching the idea of a non-physical energy entity. This also aligns with how the anime almost never shows its full body, only fragmented sections of its form.
+
+```{r}
+# About Legendary of Pokémon:
+pokemon_legend <- pokemon_df |>
+  filter(dex %in% c(
+    144, 145, 146, 150,
+    243, 244, 245, 249, 250,
+    377, 378, 379, 380, 381, 382, 383, 384,
+    480, 481, 482, 483, 484, 485, 486, 487, 488,
+    638, 639, 640, 641, 642, 643, 644, 645, 646,
+    716, 717, 718,
+    772, 773, 785, 786, 787, 788, 789, 790, 791, 792,
+    800, 888, 889, 890, 891, 892, 894, 895, 896, 897, 898, 905,
+    1001, 1002, 1003, 1004, 1007, 1008, 1014, 1015, 1016, 1017, 1024
+  ))
+
+
+# About Mythical of Pokémon:
+pokemon_myth <- pokemon_df |>
+  filter(dex %in% c(
+    151,
+    251,
+    385, 386,
+    489, 490, 491, 492, 493,
+    494, 647, 684, 689,
+    719, 720, 721,
+    801, 802, 807, 808, 809,
+    893,
+    1025
+  ))
+
+
+# About Paradox of Pokémon:
+pokemon_para <- pokemon_df |>
+  filter(dex %in% c(984:995, 1005:1010, 1020:1023))
+
+
+# About Ultra Beast of Pokémon:
+pokemon_ub <- pokemon_df |>
+  filter(dex %in% c(793:799, 803:806))
+```
+
+```{r}
+# About Final form list of Pokémon:
+pokemon_evolved_n <- raw_evolved_df[[1]] |>
+  as_tibble(.name_repair = "unique") |>
+  janitor::clean_names() |>
+  rename(dex = number) |>
+  select(dex)
+
+
+```  
+
+```{r}
+#Final dataset
+# Add category columns
+pokemon_df_final <- pokemon_df |>
+  mutate(
+    is_legendary = dex %in% pokemon_legend$dex,
+    is_mythical = dex %in% pokemon_myth$dex,
+    is_paradox = dex %in% pokemon_para$dex,
+    is_ultra_beast = dex %in% pokemon_ub$dex,
+    # Combined special category
+    is_special = is_legendary | is_mythical | is_paradox | is_ultra_beast,
+    # Category label for plotting
+    category = case_when(
+      is_legendary ~ "Legendary",
+      is_mythical ~ "Mythical",
+      is_paradox ~ "Paradox",
+      is_ultra_beast ~ "Ultra Beast",
+      TRUE ~ "Regular"
+    )
+  ) |> 
+  # Generation Assignment
+  mutate(
+    generation = case_when(
+      dex <= 151 ~ "Gen 1",
+      dex <= 251 ~ "Gen 2",
+      dex <= 386 ~ "Gen 3",
+      dex <= 493 ~ "Gen 4",
+      dex <= 649 ~ "Gen 5",
+      dex <= 721 ~ "Gen 6",
+      dex <= 809 ~ "Gen 7",
+      dex <= 905 ~ "Gen 8",
+      TRUE ~ "Gen 9"
+    )
+  )
+
+
+pokemon_evolved_df <- pokemon_df_final |>
+  filter(dex %in% pokemon_evolved_n$dex)
+
+# Type One-Hot Encoding
+all_types <- sort(unique(na.omit(c(pokemon_evolved_df$type_1, pokemon_evolved_df$type_2))))
+
+for (type in all_types) {
+  col_name <- paste0("has_", tolower(type))
+  pokemon_evolved_df[[col_name]] <- (pokemon_evolved_df$type_1 == type |
+                                      pokemon_evolved_df$type_2 == type)
+}
+
+# Add dual-type indicator
+pokemon_evolved_df <- pokemon_evolved_df |>
+  mutate(is_dual_type = !is.na(type_2))
+
+# Set factor order
+pokemon_evolved_df$generation <- factor(pokemon_evolved_df$generation,
+  levels = paste0("Gen ", 1:9)
+)
+pokemon_evolved_df$category <- factor(pokemon_evolved_df$category,
+  levels = c("Regular", "Legendary", "Mythical", "Paradox", "Ultra Beast")
+)
+
+# Export complete dataset (all evolution stages, for reference only)
+write_csv(pokemon_df_final, "data/pokemon_data_all.csv")
+```
+
+### Retrieve and clean up the type chart.
+```{r}
+raw_type_df <- read_html("data/raw-data/Pokemon Type.html") |> 
+  html_table()
+
+pokemon_type_df <- raw_type_df[[1]] |> 
+  as_tibble(.name_repair = "unique") |> 
+  rename(atk_type = 1) |> 
+  janitor::clean_names() |> 
+  mutate(across(-1, ~ case_when(
+    .x == "0" ~ 0,
+    .x == "2" ~ 2,
+    .x == ""  ~ 1,
+    is.na(.x) ~ 1,
+    TRUE      ~ 0.5
+  ))) |> 
+  rename(
+    atk_type = 1,
+    Normal = nor,
+    Fire = fir,
+    Water = wat,
+    Electric = ele,
+    Grass = gra,
+    Ice = ice,
+    Fighting = fig,
+    Poison = poi,
+    Ground = gro,
+    Flying = fly,
+    Psychic = psy,
+    Bug = bug,
+    Rock = roc,
+    Ghost = gho,
+    Dragon = dra,
+    Dark = dar,
+    Steel = ste,
+    Fairy = fai
+  )
+```
+
+```{r}
+types <- colnames(pokemon_type_df)[-1]
+
+single_def <- pokemon_type_df |> 
+  pivot_longer(
+    cols = -atk_type,          
+    names_to = "def_type",     
+    values_to = "multiplier"   
+  ) |> 
+  mutate(
+    def_type = factor(def_type, levels = unique(atk_type))
+  ) |> 
+  arrange(def_type, atk_type) |> 
+  select(def_type, atk_type, multiplier)
+
+dual_def <- map_dfr(combn(types, 2, simplify = FALSE), \(pair) {
+  combo_name <- paste(pair, collapse = "/")
+  pokemon_type_df |>
+    transmute(
+      atk_type,
+      def_type = combo_name,
+      multiplier = .data[[pair[1]]] * .data[[pair[2]]]
+    )
+}) |> 
+  select(def_type, atk_type, multiplier)
+
+def_type_df <- bind_rows(single_def, dual_def)
+
+write_csv(def_type_df, "data/def_type_df.csv")
+```
+
+```{r}
+# Export final evolution dataset with all enrichments (primary dataset for all downstream analysis)
+write_csv(pokemon_evolved_df, "data/pokemon_data_final_evolutions_enriched.csv")
+```
+---
+
+## Cleaned Datasets Summary
+
+### Exported CSV Files
+
+| File Name | Pokémon Count | Description | Recommended Use |
+|-----------|---------------|-------------|----------------|
+| `pokemon_data_raw.csv` | 1,219 | Raw dataset (basic stats only) | Reference |
+| `pokemon_data_all.csv` | 1,219 | Complete dataset with category labels | Reference, comprehensive analysis |
+| `pokemon_data_final_evolutions_enriched.csv` | 743 | **Final evolutions with all features** | Statistical analysis & ML modeling |
+
+`def_type_df`: Dataset that included all **Defence Type** possible of Pokémon, and it's efficiency in defending against different **Attack Types** 
+
+---
+
+### In-Memory R Objects
+
+| Object Name | Count | Type | Description |
+|-------------|-------|------|-------------|
+| **`pokemon_df`** | 1,219 | Primary | Complete dataset (all evolution stages) |
+| **`pokemon_evolved_df`** | 743 | Primary | Final evolutions only (recommended) |
+| `pokemon_legend` | varies | Subset | Legendary Pokemon (all stages) |
+| `pokemon_myth` | varies | Subset | Mythical Pokemon (all stages) |
+| `pokemon_para` | varies | Subset | Paradox Pokemon (all stages) |
+| `pokemon_ub` | varies | Subset | Ultra Beast Pokemon (all stages) |
+| `pokemon_evolved_n` | 743 | Lookup | Dex numbers of final evolution forms |
+| `legend_evolved_df` | varies | Auxiliary | Final evolution Legendary (in-memory) |
+| `myth_evolved_df` | varies | Auxiliary | Final evolution Mythical (in-memory) |
+
+---
+
+## Data Dictionary
+
+All datasets share the same **14-variable tidy structure**, organized into four categories:
+
+### Identification Variables
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `dex` | Integer | National Pokedex number (unique identifier) |
+| `name` | Character | Official English species name |
+
+### Type Classification
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `type_1` | Character | Primary elemental type (Fire, Water, Grass, etc.) |
+| `type_2` | Character | Secondary type (NA if monotype) |
+
+### Battle Statistics (Base Stats)
+
+| Variable | Type | Typical Range | Description |
+|----------|------|---------------|-------------|
+| `total` | Integer | 180-1125 | Base Stat Total (BST) - sum of all 6 stats |
+| `hp` | Integer | 1-255 | Hit Points - damage capacity before fainting |
+| `attack` | Integer | 5-190 | Physical move power |
+| `defense` | Integer | 5-250 | Physical damage reduction |
+| `sp_atk` | Integer | 10-194 | Special move power |
+| `sp_def` | Integer | 20-250 | Special damage reduction |
+| `speed` | Integer | 5-200 | Turn order determinant (higher = faster) |
+
+### Physical Attributes
+
+| Variable | Type | Units | Description |
+|----------|------|-------|-------------|
+| `height_m` | Numeric | meters | Official Pokedex height |
+| `weight_kgs` | Numeric | kilograms | Official Pokedex weight |
+| `bmi` | Numeric | kg/m^2 | Body Mass Index: weight / (height^2) |
+
+---

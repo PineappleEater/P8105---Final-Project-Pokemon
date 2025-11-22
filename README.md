@@ -20,12 +20,27 @@ This repository presents a comprehensive data science investigation into the Pok
 
 ### 🎯 Project Goals
 
-1. **Data Collection & Cleaning**: Scrape and harmonize Pokémon data from multiple sources
-2. **Exploratory Analysis**: Investigate distributions, correlations, and evolutionary patterns
-3. **Dimensionality Reduction**: Apply PCA to understand variance in Pokémon attributes
-4. **Unsupervised Learning**: Cluster Pokémon into archetypes based on stats and characteristics
-5. **Supervised Learning**: Build predictive models to classify legendary Pokémon
-6. **Reproducible Research**: Document all analyses with reproducible R Markdown workflows
+#### Core Research Questions
+
+1. **Legendary Classification**: Can we build a classifier to identify legendary Pokémon based on their stats?
+2. **Physical Attributes Analysis**: How do height and weight correlate with base stats?
+3. **Type Effectiveness**: Which type (or type combination) is the strongest/weakest overall?
+4. **Type-Legendary Relationship**: Which types are most likely to be legendary Pokémon?
+5. **Rating System Development**: Can we create a Pokémon rating system for beginners based on type and stats?
+
+#### Extended Goals
+
+1. **System Validation**: Does the "best" team from our rating system match competitive standards?
+2. **Team Building Utility**: Is the rating system reliable and useful as a practical reference?
+
+#### Technical Objectives
+
+- **Data Collection & Cleaning**: Scrape and harmonize Pokémon data from multiple sources
+- **Exploratory Analysis**: Investigate distributions, correlations, and evolutionary patterns
+- **Dimensionality Reduction**: Apply PCA to understand variance in Pokémon attributes
+- **Unsupervised Learning**: Cluster Pokémon into archetypes based on stats and characteristics
+- **Supervised Learning**: Build predictive models to classify legendary Pokémon
+- **Reproducible Research**: Document all analyses with reproducible R Markdown workflows
 
 ### 🎓 Academic Context
 

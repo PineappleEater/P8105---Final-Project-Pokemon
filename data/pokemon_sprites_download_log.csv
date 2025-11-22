@@ -1,0 +1,1220 @@
+dex,name,filename,source,success,message
+0001,Bulbasaur,bulbasaur.gif,showdown,TRUE,Downloaded
+0002,Ivysaur,ivysaur.gif,showdown,TRUE,Downloaded
+0003,Venusaur,venusaur.gif,showdown,TRUE,Downloaded
+0003,Venusaur (Mega Venusaur),venusaur-mega-venusaur.gif,showdown,TRUE,Downloaded
+0004,Charmander,charmander.gif,showdown,TRUE,Downloaded
+0005,Charmeleon,charmeleon.gif,showdown,TRUE,Downloaded
+0006,Charizard,charizard.gif,showdown,TRUE,Downloaded
+0006,Charizard (Mega Charizard X),charizard-mega-charizard-x.gif,showdown,TRUE,Downloaded
+0006,Charizard (Mega Charizard Y),charizard-mega-charizard-y.gif,showdown,TRUE,Downloaded
+0007,Squirtle,squirtle.gif,showdown,TRUE,Downloaded
+0008,Wartortle,wartortle.gif,showdown,TRUE,Downloaded
+0009,Blastoise,blastoise.gif,showdown,TRUE,Downloaded
+0009,Blastoise (Mega Blastoise),blastoise-mega-blastoise.gif,showdown,TRUE,Downloaded
+0010,Caterpie,caterpie.gif,showdown,TRUE,Downloaded
+0011,Metapod,metapod.gif,showdown,TRUE,Downloaded
+0012,Butterfree,butterfree.gif,showdown,TRUE,Downloaded
+0013,Weedle,weedle.gif,showdown,TRUE,Downloaded
+0014,Kakuna,kakuna.gif,showdown,TRUE,Downloaded
+0015,Beedrill,beedrill.gif,showdown,TRUE,Downloaded
+0015,Beedrill (Mega Beedrill),beedrill-mega-beedrill.gif,showdown,TRUE,Downloaded
+0016,Pidgey,pidgey.gif,showdown,TRUE,Downloaded
+0017,Pidgeotto,pidgeotto.gif,showdown,TRUE,Downloaded
+0018,Pidgeot,pidgeot.gif,showdown,TRUE,Downloaded
+0018,Pidgeot (Mega Pidgeot),pidgeot-mega-pidgeot.gif,showdown,TRUE,Downloaded
+0019,Rattata,rattata.gif,showdown,TRUE,Downloaded
+0019,Rattata (Alolan Rattata),rattata-alolan-rattata.gif,showdown,TRUE,Downloaded
+0020,Raticate,raticate.gif,showdown,TRUE,Downloaded
+0020,Raticate (Alolan Raticate),raticate-alolan-raticate.gif,showdown,TRUE,Downloaded
+0021,Spearow,spearow.gif,showdown,TRUE,Downloaded
+0022,Fearow,fearow.gif,showdown,TRUE,Downloaded
+0023,Ekans,ekans.gif,showdown,TRUE,Downloaded
+0024,Arbok,arbok.gif,showdown,TRUE,Downloaded
+0025,Pikachu,pikachu.gif,showdown,TRUE,Downloaded
+0025,Pikachu (Partner Pikachu),pikachu-partner-pikachu.gif,showdown,TRUE,Downloaded
+0026,Raichu,raichu.gif,showdown,TRUE,Downloaded
+0026,Raichu (Alolan Raichu),raichu-alolan-raichu.gif,showdown,TRUE,Downloaded
+0027,Sandshrew,sandshrew.gif,showdown,TRUE,Downloaded
+0027,Sandshrew (Alolan Sandshrew),sandshrew-alolan-sandshrew.gif,showdown,TRUE,Downloaded
+0028,Sandslash,sandslash.gif,showdown,TRUE,Downloaded
+0028,Sandslash (Alolan Sandslash),sandslash-alolan-sandslash.gif,showdown,TRUE,Downloaded
+0029,Nidoranâ,nidoran.gif,none,FALSE,All sources failed
+0030,Nidorina,nidorina.gif,showdown,TRUE,Downloaded
+0031,Nidoqueen,nidoqueen.gif,showdown,TRUE,Downloaded
+0032,Nidoranâ,nidoran.gif,none,FALSE,All sources failed
+0033,Nidorino,nidorino.gif,showdown,TRUE,Downloaded
+0034,Nidoking,nidoking.gif,showdown,TRUE,Downloaded
+0035,Clefairy,clefairy.gif,showdown,TRUE,Downloaded
+0036,Clefable,clefable.gif,showdown,TRUE,Downloaded
+0037,Vulpix,vulpix.gif,showdown,TRUE,Downloaded
+0037,Vulpix (Alolan Vulpix),vulpix-alolan-vulpix.gif,showdown,TRUE,Downloaded
+0038,Ninetales,ninetales.gif,showdown,TRUE,Downloaded
+0038,Ninetales (Alolan Ninetales),ninetales-alolan-ninetales.gif,showdown,TRUE,Downloaded
+0039,Jigglypuff,jigglypuff.gif,showdown,TRUE,Downloaded
+0040,Wigglytuff,wigglytuff.gif,showdown,TRUE,Downloaded
+0041,Zubat,zubat.gif,showdown,TRUE,Downloaded
+0042,Golbat,golbat.gif,showdown,TRUE,Downloaded
+0043,Oddish,oddish.gif,showdown,TRUE,Downloaded
+0044,Gloom,gloom.gif,showdown,TRUE,Downloaded
+0045,Vileplume,vileplume.gif,showdown,TRUE,Downloaded
+0046,Paras,paras.gif,showdown,TRUE,Downloaded
+0047,Parasect,parasect.gif,showdown,TRUE,Downloaded
+0048,Venonat,venonat.gif,showdown,TRUE,Downloaded
+0049,Venomoth,venomoth.gif,showdown,TRUE,Downloaded
+0050,Diglett,diglett.gif,showdown,TRUE,Downloaded
+0050,Diglett (Alolan Diglett),diglett-alolan-diglett.gif,showdown,TRUE,Downloaded
+0051,Dugtrio,dugtrio.gif,showdown,TRUE,Downloaded
+0051,Dugtrio (Alolan Dugtrio),dugtrio-alolan-dugtrio.gif,showdown,TRUE,Downloaded
+0052,Meowth,meowth.gif,showdown,TRUE,Downloaded
+0052,Meowth (Alolan Meowth),meowth-alolan-meowth.gif,showdown,TRUE,Downloaded
+0052,Meowth (Galarian Meowth),meowth-galarian-meowth.gif,showdown,TRUE,Downloaded
+0053,Persian,persian.gif,showdown,TRUE,Downloaded
+0053,Persian (Alolan Persian),persian-alolan-persian.gif,showdown,TRUE,Downloaded
+0054,Psyduck,psyduck.gif,showdown,TRUE,Downloaded
+0055,Golduck,golduck.gif,showdown,TRUE,Downloaded
+0056,Mankey,mankey.gif,showdown,TRUE,Downloaded
+0057,Primeape,primeape.gif,showdown,TRUE,Downloaded
+0058,Growlithe,growlithe.gif,showdown,TRUE,Downloaded
+0058,Growlithe (Hisuian Growlithe),growlithe-hisuian-growlithe.gif,showdown,TRUE,Downloaded
+0059,Arcanine,arcanine.gif,showdown,TRUE,Downloaded
+0059,Arcanine (Hisuian Arcanine),arcanine-hisuian-arcanine.gif,showdown,TRUE,Downloaded
+0060,Poliwag,poliwag.gif,showdown,TRUE,Downloaded
+0061,Poliwhirl,poliwhirl.gif,showdown,TRUE,Downloaded
+0062,Poliwrath,poliwrath.gif,showdown,TRUE,Downloaded
+0063,Abra,abra.gif,showdown,TRUE,Downloaded
+0064,Kadabra,kadabra.gif,showdown,TRUE,Downloaded
+0065,Alakazam,alakazam.gif,showdown,TRUE,Downloaded
+0065,Alakazam (Mega Alakazam),alakazam-mega-alakazam.gif,showdown,TRUE,Downloaded
+0066,Machop,machop.gif,showdown,TRUE,Downloaded
+0067,Machoke,machoke.gif,showdown,TRUE,Downloaded
+0068,Machamp,machamp.gif,showdown,TRUE,Downloaded
+0069,Bellsprout,bellsprout.gif,showdown,TRUE,Downloaded
+0070,Weepinbell,weepinbell.gif,showdown,TRUE,Downloaded
+0071,Victreebel,victreebel.gif,showdown,TRUE,Downloaded
+0071,Victreebel (Mega Victreebel),victreebel-mega-victreebel.gif,showdown,TRUE,Downloaded
+0072,Tentacool,tentacool.gif,showdown,TRUE,Downloaded
+0073,Tentacruel,tentacruel.gif,showdown,TRUE,Downloaded
+0074,Geodude,geodude.gif,showdown,TRUE,Downloaded
+0074,Geodude (Alolan Geodude),geodude-alolan-geodude.gif,showdown,TRUE,Downloaded
+0075,Graveler,graveler.gif,showdown,TRUE,Downloaded
+0075,Graveler (Alolan Graveler),graveler-alolan-graveler.gif,showdown,TRUE,Downloaded
+0076,Golem,golem.gif,showdown,TRUE,Downloaded
+0076,Golem (Alolan Golem),golem-alolan-golem.gif,showdown,TRUE,Downloaded
+0077,Ponyta,ponyta.gif,showdown,TRUE,Downloaded
+0077,Ponyta (Galarian Ponyta),ponyta-galarian-ponyta.gif,showdown,TRUE,Downloaded
+0078,Rapidash,rapidash.gif,showdown,TRUE,Downloaded
+0078,Rapidash (Galarian Rapidash),rapidash-galarian-rapidash.gif,showdown,TRUE,Downloaded
+0079,Slowpoke,slowpoke.gif,showdown,TRUE,Downloaded
+0079,Slowpoke (Galarian Slowpoke),slowpoke-galarian-slowpoke.gif,showdown,TRUE,Downloaded
+0080,Slowbro,slowbro.gif,showdown,TRUE,Downloaded
+0080,Slowbro (Mega Slowbro),slowbro-mega-slowbro.gif,showdown,TRUE,Downloaded
+0080,Slowbro (Galarian Slowbro),slowbro-galarian-slowbro.gif,showdown,TRUE,Downloaded
+0081,Magnemite,magnemite.gif,showdown,TRUE,Downloaded
+0082,Magneton,magneton.gif,showdown,TRUE,Downloaded
+0083,Farfetch'd,farfetchd.gif,showdown,TRUE,Downloaded
+0083,Farfetch'd (Galarian Farfetch'd),farfetchd-galarian-farfetchd.gif,showdown,TRUE,Downloaded
+0084,Doduo,doduo.gif,showdown,TRUE,Downloaded
+0085,Dodrio,dodrio.gif,showdown,TRUE,Downloaded
+0086,Seel,seel.gif,showdown,TRUE,Downloaded
+0087,Dewgong,dewgong.gif,showdown,TRUE,Downloaded
+0088,Grimer,grimer.gif,showdown,TRUE,Downloaded
+0088,Grimer (Alolan Grimer),grimer-alolan-grimer.gif,showdown,TRUE,Downloaded
+0089,Muk,muk.gif,showdown,TRUE,Downloaded
+0089,Muk (Alolan Muk),muk-alolan-muk.gif,showdown,TRUE,Downloaded
+0090,Shellder,shellder.gif,showdown,TRUE,Downloaded
+0091,Cloyster,cloyster.gif,showdown,TRUE,Downloaded
+0092,Gastly,gastly.gif,showdown,TRUE,Downloaded
+0093,Haunter,haunter.gif,showdown,TRUE,Downloaded
+0094,Gengar,gengar.gif,showdown,TRUE,Downloaded
+0094,Gengar (Mega Gengar),gengar-mega-gengar.gif,showdown,TRUE,Downloaded
+0095,Onix,onix.gif,showdown,TRUE,Downloaded
+0096,Drowzee,drowzee.gif,showdown,TRUE,Downloaded
+0097,Hypno,hypno.gif,showdown,TRUE,Downloaded
+0098,Krabby,krabby.gif,showdown,TRUE,Downloaded
+0099,Kingler,kingler.gif,showdown,TRUE,Downloaded
+0100,Voltorb,voltorb.gif,showdown,TRUE,Downloaded
+0100,Voltorb (Hisuian Voltorb),voltorb-hisuian-voltorb.gif,showdown,TRUE,Downloaded
+0101,Electrode,electrode.gif,showdown,TRUE,Downloaded
+0101,Electrode (Hisuian Electrode),electrode-hisuian-electrode.gif,showdown,TRUE,Downloaded
+0102,Exeggcute,exeggcute.gif,showdown,TRUE,Downloaded
+0103,Exeggutor,exeggutor.gif,showdown,TRUE,Downloaded
+0103,Exeggutor (Alolan Exeggutor),exeggutor-alolan-exeggutor.gif,showdown,TRUE,Downloaded
+0104,Cubone,cubone.gif,showdown,TRUE,Downloaded
+0105,Marowak,marowak.gif,showdown,TRUE,Downloaded
+0105,Marowak (Alolan Marowak),marowak-alolan-marowak.gif,showdown,TRUE,Downloaded
+0106,Hitmonlee,hitmonlee.gif,showdown,TRUE,Downloaded
+0107,Hitmonchan,hitmonchan.gif,showdown,TRUE,Downloaded
+0108,Lickitung,lickitung.gif,showdown,TRUE,Downloaded
+0109,Koffing,koffing.gif,showdown,TRUE,Downloaded
+0110,Weezing,weezing.gif,showdown,TRUE,Downloaded
+0110,Weezing (Galarian Weezing),weezing-galarian-weezing.gif,showdown,TRUE,Downloaded
+0111,Rhyhorn,rhyhorn.gif,showdown,TRUE,Downloaded
+0112,Rhydon,rhydon.gif,showdown,TRUE,Downloaded
+0113,Chansey,chansey.gif,showdown,TRUE,Downloaded
+0114,Tangela,tangela.gif,showdown,TRUE,Downloaded
+0115,Kangaskhan,kangaskhan.gif,showdown,TRUE,Downloaded
+0115,Kangaskhan (Mega Kangaskhan),kangaskhan-mega-kangaskhan.gif,showdown,TRUE,Downloaded
+0116,Horsea,horsea.gif,showdown,TRUE,Downloaded
+0117,Seadra,seadra.gif,showdown,TRUE,Downloaded
+0118,Goldeen,goldeen.gif,showdown,TRUE,Downloaded
+0119,Seaking,seaking.gif,showdown,TRUE,Downloaded
+0120,Staryu,staryu.gif,showdown,TRUE,Downloaded
+0121,Starmie,starmie.gif,showdown,TRUE,Downloaded
+0122,Mr. Mime,mr-mime.gif,showdown,TRUE,Downloaded
+0122,Mr. Mime (Galarian Mr. Mime),mr-mime-galarian-mr-mime.gif,showdown,TRUE,Downloaded
+0123,Scyther,scyther.gif,showdown,TRUE,Downloaded
+0124,Jynx,jynx.gif,showdown,TRUE,Downloaded
+0125,Electabuzz,electabuzz.gif,showdown,TRUE,Downloaded
+0126,Magmar,magmar.gif,showdown,TRUE,Downloaded
+0127,Pinsir,pinsir.gif,showdown,TRUE,Downloaded
+0127,Pinsir (Mega Pinsir),pinsir-mega-pinsir.gif,showdown,TRUE,Downloaded
+0128,Tauros,tauros.gif,showdown,TRUE,Downloaded
+0128,Tauros (Combat Breed),tauros-combat-breed.gif,showdown,TRUE,Downloaded
+0128,Tauros (Blaze Breed),tauros-blaze-breed.gif,showdown,TRUE,Downloaded
+0128,Tauros (Aqua Breed),tauros-aqua-breed.gif,showdown,TRUE,Downloaded
+0129,Magikarp,magikarp.gif,showdown,TRUE,Downloaded
+0130,Gyarados,gyarados.gif,showdown,TRUE,Downloaded
+0130,Gyarados (Mega Gyarados),gyarados-mega-gyarados.gif,showdown,TRUE,Downloaded
+0131,Lapras,lapras.gif,showdown,TRUE,Downloaded
+0132,Ditto,ditto.gif,showdown,TRUE,Downloaded
+0133,Eevee,eevee.gif,showdown,TRUE,Downloaded
+0133,Eevee (Partner Eevee),eevee-partner-eevee.gif,showdown,TRUE,Downloaded
+0134,Vaporeon,vaporeon.gif,showdown,TRUE,Downloaded
+0135,Jolteon,jolteon.gif,showdown,TRUE,Downloaded
+0136,Flareon,flareon.gif,showdown,TRUE,Downloaded
+0137,Porygon,porygon.gif,showdown,TRUE,Downloaded
+0138,Omanyte,omanyte.gif,showdown,TRUE,Downloaded
+0139,Omastar,omastar.gif,showdown,TRUE,Downloaded
+0140,Kabuto,kabuto.gif,showdown,TRUE,Downloaded
+0141,Kabutops,kabutops.gif,showdown,TRUE,Downloaded
+0142,Aerodactyl,aerodactyl.gif,showdown,TRUE,Downloaded
+0142,Aerodactyl (Mega Aerodactyl),aerodactyl-mega-aerodactyl.gif,showdown,TRUE,Downloaded
+0143,Snorlax,snorlax.gif,showdown,TRUE,Downloaded
+0144,Articuno,articuno.gif,showdown,TRUE,Downloaded
+0144,Articuno (Galarian Articuno),articuno-galarian-articuno.gif,showdown,TRUE,Downloaded
+0145,Zapdos,zapdos.gif,showdown,TRUE,Downloaded
+0145,Zapdos (Galarian Zapdos),zapdos-galarian-zapdos.gif,showdown,TRUE,Downloaded
+0146,Moltres,moltres.gif,showdown,TRUE,Downloaded
+0146,Moltres (Galarian Moltres),moltres-galarian-moltres.gif,showdown,TRUE,Downloaded
+0147,Dratini,dratini.gif,showdown,TRUE,Downloaded
+0148,Dragonair,dragonair.gif,showdown,TRUE,Downloaded
+0149,Dragonite,dragonite.gif,showdown,TRUE,Downloaded
+0149,Dragonite (Mega Dragonite),dragonite-mega-dragonite.gif,showdown,TRUE,Downloaded
+0150,Mewtwo,mewtwo.gif,showdown,TRUE,Downloaded
+0150,Mewtwo (Mega Mewtwo X),mewtwo-mega-mewtwo-x.gif,showdown,TRUE,Downloaded
+0150,Mewtwo (Mega Mewtwo Y),mewtwo-mega-mewtwo-y.gif,showdown,TRUE,Downloaded
+0151,Mew,mew.gif,showdown,TRUE,Downloaded
+0152,Chikorita,chikorita.gif,showdown,TRUE,Downloaded
+0153,Bayleef,bayleef.gif,showdown,TRUE,Downloaded
+0154,Meganium,meganium.gif,showdown,TRUE,Downloaded
+0155,Cyndaquil,cyndaquil.gif,showdown,TRUE,Downloaded
+0156,Quilava,quilava.gif,showdown,TRUE,Downloaded
+0157,Typhlosion,typhlosion.gif,showdown,TRUE,Downloaded
+0157,Typhlosion (Hisuian Typhlosion),typhlosion-hisuian-typhlosion.gif,showdown,TRUE,Downloaded
+0158,Totodile,totodile.gif,showdown,TRUE,Downloaded
+0159,Croconaw,croconaw.gif,showdown,TRUE,Downloaded
+0160,Feraligatr,feraligatr.gif,showdown,TRUE,Downloaded
+0161,Sentret,sentret.gif,showdown,TRUE,Downloaded
+0162,Furret,furret.gif,showdown,TRUE,Downloaded
+0163,Hoothoot,hoothoot.gif,showdown,TRUE,Downloaded
+0164,Noctowl,noctowl.gif,showdown,TRUE,Downloaded
+0165,Ledyba,ledyba.gif,showdown,TRUE,Downloaded
+0166,Ledian,ledian.gif,showdown,TRUE,Downloaded
+0167,Spinarak,spinarak.gif,showdown,TRUE,Downloaded
+0168,Ariados,ariados.gif,showdown,TRUE,Downloaded
+0169,Crobat,crobat.gif,showdown,TRUE,Downloaded
+0170,Chinchou,chinchou.gif,showdown,TRUE,Downloaded
+0171,Lanturn,lanturn.gif,showdown,TRUE,Downloaded
+0172,Pichu,pichu.gif,showdown,TRUE,Downloaded
+0173,Cleffa,cleffa.gif,showdown,TRUE,Downloaded
+0174,Igglybuff,igglybuff.gif,showdown,TRUE,Downloaded
+0175,Togepi,togepi.gif,showdown,TRUE,Downloaded
+0176,Togetic,togetic.gif,showdown,TRUE,Downloaded
+0177,Natu,natu.gif,showdown,TRUE,Downloaded
+0178,Xatu,xatu.gif,showdown,TRUE,Downloaded
+0179,Mareep,mareep.gif,showdown,TRUE,Downloaded
+0180,Flaaffy,flaaffy.gif,showdown,TRUE,Downloaded
+0181,Ampharos,ampharos.gif,showdown,TRUE,Downloaded
+0181,Ampharos (Mega Ampharos),ampharos-mega-ampharos.gif,showdown,TRUE,Downloaded
+0182,Bellossom,bellossom.gif,showdown,TRUE,Downloaded
+0183,Marill,marill.gif,showdown,TRUE,Downloaded
+0184,Azumarill,azumarill.gif,showdown,TRUE,Downloaded
+0185,Sudowoodo,sudowoodo.gif,showdown,TRUE,Downloaded
+0186,Politoed,politoed.gif,showdown,TRUE,Downloaded
+0187,Hoppip,hoppip.gif,showdown,TRUE,Downloaded
+0188,Skiploom,skiploom.gif,showdown,TRUE,Downloaded
+0189,Jumpluff,jumpluff.gif,showdown,TRUE,Downloaded
+0190,Aipom,aipom.gif,showdown,TRUE,Downloaded
+0191,Sunkern,sunkern.gif,showdown,TRUE,Downloaded
+0192,Sunflora,sunflora.gif,showdown,TRUE,Downloaded
+0193,Yanma,yanma.gif,showdown,TRUE,Downloaded
+0194,Wooper,wooper.gif,showdown,TRUE,Downloaded
+0194,Wooper (Paldean Wooper),wooper-paldean-wooper.gif,showdown,TRUE,Downloaded
+0195,Quagsire,quagsire.gif,showdown,TRUE,Downloaded
+0196,Espeon,espeon.gif,showdown,TRUE,Downloaded
+0197,Umbreon,umbreon.gif,showdown,TRUE,Downloaded
+0198,Murkrow,murkrow.gif,showdown,TRUE,Downloaded
+0199,Slowking,slowking.gif,showdown,TRUE,Downloaded
+0199,Slowking (Galarian Slowking),slowking-galarian-slowking.gif,showdown,TRUE,Downloaded
+0200,Misdreavus,misdreavus.gif,showdown,TRUE,Downloaded
+0201,Unown,unown.gif,showdown,TRUE,Downloaded
+0202,Wobbuffet,wobbuffet.gif,showdown,TRUE,Downloaded
+0203,Girafarig,girafarig.gif,showdown,TRUE,Downloaded
+0204,Pineco,pineco.gif,showdown,TRUE,Downloaded
+0205,Forretress,forretress.gif,showdown,TRUE,Downloaded
+0206,Dunsparce,dunsparce.gif,showdown,TRUE,Downloaded
+0207,Gligar,gligar.gif,showdown,TRUE,Downloaded
+0208,Steelix,steelix.gif,showdown,TRUE,Downloaded
+0208,Steelix (Mega Steelix),steelix-mega-steelix.gif,showdown,TRUE,Downloaded
+0209,Snubbull,snubbull.gif,showdown,TRUE,Downloaded
+0210,Granbull,granbull.gif,showdown,TRUE,Downloaded
+0211,Qwilfish,qwilfish.gif,showdown,TRUE,Downloaded
+0211,Qwilfish (Hisuian Qwilfish),qwilfish-hisuian-qwilfish.gif,showdown,TRUE,Downloaded
+0212,Scizor,scizor.gif,showdown,TRUE,Downloaded
+0212,Scizor (Mega Scizor),scizor-mega-scizor.gif,showdown,TRUE,Downloaded
+0213,Shuckle,shuckle.gif,showdown,TRUE,Downloaded
+0214,Heracross,heracross.gif,showdown,TRUE,Downloaded
+0214,Heracross (Mega Heracross),heracross-mega-heracross.gif,showdown,TRUE,Downloaded
+0215,Sneasel,sneasel.gif,showdown,TRUE,Downloaded
+0215,Sneasel (Hisuian Sneasel),sneasel-hisuian-sneasel.gif,showdown,TRUE,Downloaded
+0216,Teddiursa,teddiursa.gif,showdown,TRUE,Downloaded
+0217,Ursaring,ursaring.gif,showdown,TRUE,Downloaded
+0218,Slugma,slugma.gif,showdown,TRUE,Downloaded
+0219,Magcargo,magcargo.gif,showdown,TRUE,Downloaded
+0220,Swinub,swinub.gif,showdown,TRUE,Downloaded
+0221,Piloswine,piloswine.gif,showdown,TRUE,Downloaded
+0222,Corsola,corsola.gif,showdown,TRUE,Downloaded
+0222,Corsola (Galarian Corsola),corsola-galarian-corsola.gif,showdown,TRUE,Downloaded
+0223,Remoraid,remoraid.gif,showdown,TRUE,Downloaded
+0224,Octillery,octillery.gif,showdown,TRUE,Downloaded
+0225,Delibird,delibird.gif,showdown,TRUE,Downloaded
+0226,Mantine,mantine.gif,showdown,TRUE,Downloaded
+0227,Skarmory,skarmory.gif,showdown,TRUE,Downloaded
+0228,Houndour,houndour.gif,showdown,TRUE,Downloaded
+0229,Houndoom,houndoom.gif,showdown,TRUE,Downloaded
+0229,Houndoom (Mega Houndoom),houndoom-mega-houndoom.gif,showdown,TRUE,Downloaded
+0230,Kingdra,kingdra.gif,showdown,TRUE,Downloaded
+0231,Phanpy,phanpy.gif,showdown,TRUE,Downloaded
+0232,Donphan,donphan.gif,showdown,TRUE,Downloaded
+0233,Porygon2,porygon2.gif,showdown,TRUE,Downloaded
+0234,Stantler,stantler.gif,showdown,TRUE,Downloaded
+0235,Smeargle,smeargle.gif,showdown,TRUE,Downloaded
+0236,Tyrogue,tyrogue.gif,showdown,TRUE,Downloaded
+0237,Hitmontop,hitmontop.gif,showdown,TRUE,Downloaded
+0238,Smoochum,smoochum.gif,showdown,TRUE,Downloaded
+0239,Elekid,elekid.gif,showdown,TRUE,Downloaded
+0240,Magby,magby.gif,showdown,TRUE,Downloaded
+0241,Miltank,miltank.gif,showdown,TRUE,Downloaded
+0242,Blissey,blissey.gif,showdown,TRUE,Downloaded
+0243,Raikou,raikou.gif,showdown,TRUE,Downloaded
+0244,Entei,entei.gif,showdown,TRUE,Downloaded
+0245,Suicune,suicune.gif,showdown,TRUE,Downloaded
+0246,Larvitar,larvitar.gif,showdown,TRUE,Downloaded
+0247,Pupitar,pupitar.gif,showdown,TRUE,Downloaded
+0248,Tyranitar,tyranitar.gif,showdown,TRUE,Downloaded
+0248,Tyranitar (Mega Tyranitar),tyranitar-mega-tyranitar.gif,showdown,TRUE,Downloaded
+0249,Lugia,lugia.gif,showdown,TRUE,Downloaded
+0250,Ho-oh,ho-oh.gif,showdown,TRUE,Downloaded
+0251,Celebi,celebi.gif,showdown,TRUE,Downloaded
+0252,Treecko,treecko.gif,showdown,TRUE,Downloaded
+0253,Grovyle,grovyle.gif,showdown,TRUE,Downloaded
+0254,Sceptile,sceptile.gif,showdown,TRUE,Downloaded
+0254,Sceptile (Mega Sceptile),sceptile-mega-sceptile.gif,showdown,TRUE,Downloaded
+0255,Torchic,torchic.gif,showdown,TRUE,Downloaded
+0256,Combusken,combusken.gif,showdown,TRUE,Downloaded
+0257,Blaziken,blaziken.gif,showdown,TRUE,Downloaded
+0257,Blaziken (Mega Blaziken),blaziken-mega-blaziken.gif,showdown,TRUE,Downloaded
+0258,Mudkip,mudkip.gif,showdown,TRUE,Downloaded
+0259,Marshtomp,marshtomp.gif,showdown,TRUE,Downloaded
+0260,Swampert,swampert.gif,showdown,TRUE,Downloaded
+0260,Swampert (Mega Swampert),swampert-mega-swampert.gif,showdown,TRUE,Downloaded
+0261,Poochyena,poochyena.gif,showdown,TRUE,Downloaded
+0262,Mightyena,mightyena.gif,showdown,TRUE,Downloaded
+0263,Zigzagoon,zigzagoon.gif,showdown,TRUE,Downloaded
+0263,Zigzagoon (Galarian Zigzagoon),zigzagoon-galarian-zigzagoon.gif,showdown,TRUE,Downloaded
+0264,Linoone,linoone.gif,showdown,TRUE,Downloaded
+0264,Linoone (Galarian Linoone),linoone-galarian-linoone.gif,showdown,TRUE,Downloaded
+0265,Wurmple,wurmple.gif,showdown,TRUE,Downloaded
+0266,Silcoon,silcoon.gif,showdown,TRUE,Downloaded
+0267,Beautifly,beautifly.gif,showdown,TRUE,Downloaded
+0268,Cascoon,cascoon.gif,showdown,TRUE,Downloaded
+0269,Dustox,dustox.gif,showdown,TRUE,Downloaded
+0270,Lotad,lotad.gif,showdown,TRUE,Downloaded
+0271,Lombre,lombre.gif,showdown,TRUE,Downloaded
+0272,Ludicolo,ludicolo.gif,showdown,TRUE,Downloaded
+0273,Seedot,seedot.gif,showdown,TRUE,Downloaded
+0274,Nuzleaf,nuzleaf.gif,showdown,TRUE,Downloaded
+0275,Shiftry,shiftry.gif,showdown,TRUE,Downloaded
+0276,Taillow,taillow.gif,showdown,TRUE,Downloaded
+0277,Swellow,swellow.gif,showdown,TRUE,Downloaded
+0278,Wingull,wingull.gif,showdown,TRUE,Downloaded
+0279,Pelipper,pelipper.gif,showdown,TRUE,Downloaded
+0280,Ralts,ralts.gif,showdown,TRUE,Downloaded
+0281,Kirlia,kirlia.gif,showdown,TRUE,Downloaded
+0282,Gardevoir,gardevoir.gif,showdown,TRUE,Downloaded
+0282,Gardevoir (Mega Gardevoir),gardevoir-mega-gardevoir.gif,showdown,TRUE,Downloaded
+0283,Surskit,surskit.gif,showdown,TRUE,Downloaded
+0284,Masquerain,masquerain.gif,showdown,TRUE,Downloaded
+0285,Shroomish,shroomish.gif,showdown,TRUE,Downloaded
+0286,Breloom,breloom.gif,showdown,TRUE,Downloaded
+0287,Slakoth,slakoth.gif,showdown,TRUE,Downloaded
+0288,Vigoroth,vigoroth.gif,showdown,TRUE,Downloaded
+0289,Slaking,slaking.gif,showdown,TRUE,Downloaded
+0290,Nincada,nincada.gif,showdown,TRUE,Downloaded
+0291,Ninjask,ninjask.gif,showdown,TRUE,Downloaded
+0292,Shedinja,shedinja.gif,showdown,TRUE,Downloaded
+0293,Whismur,whismur.gif,showdown,TRUE,Downloaded
+0294,Loudred,loudred.gif,showdown,TRUE,Downloaded
+0295,Exploud,exploud.gif,showdown,TRUE,Downloaded
+0296,Makuhita,makuhita.gif,showdown,TRUE,Downloaded
+0297,Hariyama,hariyama.gif,showdown,TRUE,Downloaded
+0298,Azurill,azurill.gif,showdown,TRUE,Downloaded
+0299,Nosepass,nosepass.gif,showdown,TRUE,Downloaded
+0300,Skitty,skitty.gif,showdown,TRUE,Downloaded
+0301,Delcatty,delcatty.gif,showdown,TRUE,Downloaded
+0302,Sableye,sableye.gif,showdown,TRUE,Downloaded
+0302,Sableye (Mega Sableye),sableye-mega-sableye.gif,showdown,TRUE,Downloaded
+0303,Mawile,mawile.gif,showdown,TRUE,Downloaded
+0303,Mawile (Mega Mawile),mawile-mega-mawile.gif,showdown,TRUE,Downloaded
+0304,Aron,aron.gif,showdown,TRUE,Downloaded
+0305,Lairon,lairon.gif,showdown,TRUE,Downloaded
+0306,Aggron,aggron.gif,showdown,TRUE,Downloaded
+0306,Aggron (Mega Aggron),aggron-mega-aggron.gif,showdown,TRUE,Downloaded
+0307,Meditite,meditite.gif,showdown,TRUE,Downloaded
+0308,Medicham,medicham.gif,showdown,TRUE,Downloaded
+0308,Medicham (Mega Medicham),medicham-mega-medicham.gif,showdown,TRUE,Downloaded
+0309,Electrike,electrike.gif,showdown,TRUE,Downloaded
+0310,Manectric,manectric.gif,showdown,TRUE,Downloaded
+0310,Manectric (Mega Manectric),manectric-mega-manectric.gif,showdown,TRUE,Downloaded
+0311,Plusle,plusle.gif,showdown,TRUE,Downloaded
+0312,Minun,minun.gif,showdown,TRUE,Downloaded
+0313,Volbeat,volbeat.gif,showdown,TRUE,Downloaded
+0314,Illumise,illumise.gif,showdown,TRUE,Downloaded
+0315,Roselia,roselia.gif,showdown,TRUE,Downloaded
+0316,Gulpin,gulpin.gif,showdown,TRUE,Downloaded
+0317,Swalot,swalot.gif,showdown,TRUE,Downloaded
+0318,Carvanha,carvanha.gif,showdown,TRUE,Downloaded
+0319,Sharpedo,sharpedo.gif,showdown,TRUE,Downloaded
+0319,Sharpedo (Mega Sharpedo),sharpedo-mega-sharpedo.gif,showdown,TRUE,Downloaded
+0320,Wailmer,wailmer.gif,showdown,TRUE,Downloaded
+0321,Wailord,wailord.gif,showdown,TRUE,Downloaded
+0322,Numel,numel.gif,showdown,TRUE,Downloaded
+0323,Camerupt,camerupt.gif,showdown,TRUE,Downloaded
+0323,Camerupt (Mega Camerupt),camerupt-mega-camerupt.gif,showdown,TRUE,Downloaded
+0324,Torkoal,torkoal.gif,showdown,TRUE,Downloaded
+0325,Spoink,spoink.gif,showdown,TRUE,Downloaded
+0326,Grumpig,grumpig.gif,showdown,TRUE,Downloaded
+0327,Spinda,spinda.gif,showdown,TRUE,Downloaded
+0328,Trapinch,trapinch.gif,showdown,TRUE,Downloaded
+0329,Vibrava,vibrava.gif,showdown,TRUE,Downloaded
+0330,Flygon,flygon.gif,showdown,TRUE,Downloaded
+0331,Cacnea,cacnea.gif,showdown,TRUE,Downloaded
+0332,Cacturne,cacturne.gif,showdown,TRUE,Downloaded
+0333,Swablu,swablu.gif,showdown,TRUE,Downloaded
+0334,Altaria,altaria.gif,showdown,TRUE,Downloaded
+0334,Altaria (Mega Altaria),altaria-mega-altaria.gif,showdown,TRUE,Downloaded
+0335,Zangoose,zangoose.gif,showdown,TRUE,Downloaded
+0336,Seviper,seviper.gif,showdown,TRUE,Downloaded
+0337,Lunatone,lunatone.gif,showdown,TRUE,Downloaded
+0338,Solrock,solrock.gif,showdown,TRUE,Downloaded
+0339,Barboach,barboach.gif,showdown,TRUE,Downloaded
+0340,Whiscash,whiscash.gif,showdown,TRUE,Downloaded
+0341,Corphish,corphish.gif,showdown,TRUE,Downloaded
+0342,Crawdaunt,crawdaunt.gif,showdown,TRUE,Downloaded
+0343,Baltoy,baltoy.gif,showdown,TRUE,Downloaded
+0344,Claydol,claydol.gif,showdown,TRUE,Downloaded
+0345,Lileep,lileep.gif,showdown,TRUE,Downloaded
+0346,Cradily,cradily.gif,showdown,TRUE,Downloaded
+0347,Anorith,anorith.gif,showdown,TRUE,Downloaded
+0348,Armaldo,armaldo.gif,showdown,TRUE,Downloaded
+0349,Feebas,feebas.gif,showdown,TRUE,Downloaded
+0350,Milotic,milotic.gif,showdown,TRUE,Downloaded
+0351,Castform,castform.gif,showdown,TRUE,Downloaded
+0351,Castform (Sunny Form),castform-sunny-form.gif,showdown,TRUE,Downloaded
+0351,Castform (Rainy Form),castform-rainy-form.gif,showdown,TRUE,Downloaded
+0351,Castform (Snowy Form),castform-snowy-form.gif,showdown,TRUE,Downloaded
+0352,Kecleon,kecleon.gif,showdown,TRUE,Downloaded
+0353,Shuppet,shuppet.gif,showdown,TRUE,Downloaded
+0354,Banette,banette.gif,showdown,TRUE,Downloaded
+0354,Banette (Mega Banette),banette-mega-banette.gif,showdown,TRUE,Downloaded
+0355,Duskull,duskull.gif,showdown,TRUE,Downloaded
+0356,Dusclops,dusclops.gif,showdown,TRUE,Downloaded
+0357,Tropius,tropius.gif,showdown,TRUE,Downloaded
+0358,Chimecho,chimecho.gif,showdown,TRUE,Downloaded
+0359,Absol,absol.gif,showdown,TRUE,Downloaded
+0359,Absol (Mega Absol),absol-mega-absol.gif,showdown,TRUE,Downloaded
+0360,Wynaut,wynaut.gif,showdown,TRUE,Downloaded
+0361,Snorunt,snorunt.gif,showdown,TRUE,Downloaded
+0362,Glalie,glalie.gif,showdown,TRUE,Downloaded
+0362,Glalie (Mega Glalie),glalie-mega-glalie.gif,showdown,TRUE,Downloaded
+0363,Spheal,spheal.gif,showdown,TRUE,Downloaded
+0364,Sealeo,sealeo.gif,showdown,TRUE,Downloaded
+0365,Walrein,walrein.gif,showdown,TRUE,Downloaded
+0366,Clamperl,clamperl.gif,showdown,TRUE,Downloaded
+0367,Huntail,huntail.gif,showdown,TRUE,Downloaded
+0368,Gorebyss,gorebyss.gif,showdown,TRUE,Downloaded
+0369,Relicanth,relicanth.gif,showdown,TRUE,Downloaded
+0370,Luvdisc,luvdisc.gif,showdown,TRUE,Downloaded
+0371,Bagon,bagon.gif,showdown,TRUE,Downloaded
+0372,Shelgon,shelgon.gif,showdown,TRUE,Downloaded
+0373,Salamence,salamence.gif,showdown,TRUE,Downloaded
+0373,Salamence (Mega Salamence),salamence-mega-salamence.gif,showdown,TRUE,Downloaded
+0374,Beldum,beldum.gif,showdown,TRUE,Downloaded
+0375,Metang,metang.gif,showdown,TRUE,Downloaded
+0376,Metagross,metagross.gif,showdown,TRUE,Downloaded
+0376,Metagross (Mega Metagross),metagross-mega-metagross.gif,showdown,TRUE,Downloaded
+0377,Regirock,regirock.gif,showdown,TRUE,Downloaded
+0378,Regice,regice.gif,showdown,TRUE,Downloaded
+0379,Registeel,registeel.gif,showdown,TRUE,Downloaded
+0380,Latias,latias.gif,showdown,TRUE,Downloaded
+0380,Latias (Mega Latias),latias-mega-latias.gif,showdown,TRUE,Downloaded
+0381,Latios,latios.gif,showdown,TRUE,Downloaded
+0381,Latios (Mega Latios),latios-mega-latios.gif,showdown,TRUE,Downloaded
+0382,Kyogre,kyogre.gif,showdown,TRUE,Downloaded
+0382,Kyogre (Primal Kyogre),kyogre-primal-kyogre.gif,showdown,TRUE,Downloaded
+0383,Groudon,groudon.gif,showdown,TRUE,Downloaded
+0383,Groudon (Primal Groudon),groudon-primal-groudon.gif,showdown,TRUE,Downloaded
+0384,Rayquaza,rayquaza.gif,showdown,TRUE,Downloaded
+0384,Rayquaza (Mega Rayquaza),rayquaza-mega-rayquaza.gif,showdown,TRUE,Downloaded
+0385,Jirachi,jirachi.gif,showdown,TRUE,Downloaded
+0386,Deoxys (Normal Forme),deoxys-normal-forme.gif,showdown,TRUE,Downloaded
+0386,Deoxys (Attack Forme),deoxys-attack-forme.gif,showdown,TRUE,Downloaded
+0386,Deoxys (Defense Forme),deoxys-defense-forme.gif,showdown,TRUE,Downloaded
+0386,Deoxys (Speed Forme),deoxys-speed-forme.gif,showdown,TRUE,Downloaded
+0387,Turtwig,turtwig.gif,showdown,TRUE,Downloaded
+0388,Grotle,grotle.gif,showdown,TRUE,Downloaded
+0389,Torterra,torterra.gif,showdown,TRUE,Downloaded
+0390,Chimchar,chimchar.gif,showdown,TRUE,Downloaded
+0391,Monferno,monferno.gif,showdown,TRUE,Downloaded
+0392,Infernape,infernape.gif,showdown,TRUE,Downloaded
+0393,Piplup,piplup.gif,showdown,TRUE,Downloaded
+0394,Prinplup,prinplup.gif,showdown,TRUE,Downloaded
+0395,Empoleon,empoleon.gif,showdown,TRUE,Downloaded
+0396,Starly,starly.gif,showdown,TRUE,Downloaded
+0397,Staravia,staravia.gif,showdown,TRUE,Downloaded
+0398,Staraptor,staraptor.gif,showdown,TRUE,Downloaded
+0399,Bidoof,bidoof.gif,showdown,TRUE,Downloaded
+0400,Bibarel,bibarel.gif,showdown,TRUE,Downloaded
+0401,Kricketot,kricketot.gif,showdown,TRUE,Downloaded
+0402,Kricketune,kricketune.gif,showdown,TRUE,Downloaded
+0403,Shinx,shinx.gif,showdown,TRUE,Downloaded
+0404,Luxio,luxio.gif,showdown,TRUE,Downloaded
+0405,Luxray,luxray.gif,showdown,TRUE,Downloaded
+0406,Budew,budew.gif,showdown,TRUE,Downloaded
+0407,Roserade,roserade.gif,showdown,TRUE,Downloaded
+0408,Cranidos,cranidos.gif,showdown,TRUE,Downloaded
+0409,Rampardos,rampardos.gif,showdown,TRUE,Downloaded
+0410,Shieldon,shieldon.gif,showdown,TRUE,Downloaded
+0411,Bastiodon,bastiodon.gif,showdown,TRUE,Downloaded
+0412,Burmy (Plant Cloak),burmy-plant-cloak.gif,showdown,TRUE,Downloaded
+0412,Burmy (Sandy Cloak),burmy-sandy-cloak.gif,showdown,TRUE,Downloaded
+0412,Burmy (Trash Cloak),burmy-trash-cloak.gif,showdown,TRUE,Downloaded
+0413,Wormadam (Plant Cloak),wormadam-plant-cloak.gif,showdown,TRUE,Downloaded
+0413,Wormadam (Sandy Cloak),wormadam-sandy-cloak.gif,showdown,TRUE,Downloaded
+0413,Wormadam (Trash Cloak),wormadam-trash-cloak.gif,showdown,TRUE,Downloaded
+0414,Mothim,mothim.gif,showdown,TRUE,Downloaded
+0415,Combee,combee.gif,showdown,TRUE,Downloaded
+0416,Vespiquen,vespiquen.gif,showdown,TRUE,Downloaded
+0417,Pachirisu,pachirisu.gif,showdown,TRUE,Downloaded
+0418,Buizel,buizel.gif,showdown,TRUE,Downloaded
+0419,Floatzel,floatzel.gif,showdown,TRUE,Downloaded
+0420,Cherubi,cherubi.gif,showdown,TRUE,Downloaded
+0421,Cherrim,cherrim.gif,showdown,TRUE,Downloaded
+0422,Shellos,shellos.gif,showdown,TRUE,Downloaded
+0423,Gastrodon,gastrodon.gif,showdown,TRUE,Downloaded
+0424,Ambipom,ambipom.gif,showdown,TRUE,Downloaded
+0425,Drifloon,drifloon.gif,showdown,TRUE,Downloaded
+0426,Drifblim,drifblim.gif,showdown,TRUE,Downloaded
+0427,Buneary,buneary.gif,showdown,TRUE,Downloaded
+0428,Lopunny,lopunny.gif,showdown,TRUE,Downloaded
+0428,Lopunny (Mega Lopunny),lopunny-mega-lopunny.gif,showdown,TRUE,Downloaded
+0429,Mismagius,mismagius.gif,showdown,TRUE,Downloaded
+0430,Honchkrow,honchkrow.gif,showdown,TRUE,Downloaded
+0431,Glameow,glameow.gif,showdown,TRUE,Downloaded
+0432,Purugly,purugly.gif,showdown,TRUE,Downloaded
+0433,Chingling,chingling.gif,showdown,TRUE,Downloaded
+0434,Stunky,stunky.gif,showdown,TRUE,Downloaded
+0435,Skuntank,skuntank.gif,showdown,TRUE,Downloaded
+0436,Bronzor,bronzor.gif,showdown,TRUE,Downloaded
+0437,Bronzong,bronzong.gif,showdown,TRUE,Downloaded
+0438,Bonsly,bonsly.gif,showdown,TRUE,Downloaded
+0439,Mime Jr.,mime-jr.gif,showdown,TRUE,Downloaded
+0440,Happiny,happiny.gif,showdown,TRUE,Downloaded
+0441,Chatot,chatot.gif,showdown,TRUE,Downloaded
+0442,Spiritomb,spiritomb.gif,showdown,TRUE,Downloaded
+0443,Gible,gible.gif,showdown,TRUE,Downloaded
+0444,Gabite,gabite.gif,showdown,TRUE,Downloaded
+0445,Garchomp,garchomp.gif,showdown,TRUE,Downloaded
+0445,Garchomp (Mega Garchomp),garchomp-mega-garchomp.gif,showdown,TRUE,Downloaded
+0446,Munchlax,munchlax.gif,showdown,TRUE,Downloaded
+0447,Riolu,riolu.gif,showdown,TRUE,Downloaded
+0448,Lucario,lucario.gif,showdown,TRUE,Downloaded
+0448,Lucario (Mega Lucario),lucario-mega-lucario.gif,showdown,TRUE,Downloaded
+0449,Hippopotas,hippopotas.gif,showdown,TRUE,Downloaded
+0450,Hippowdon,hippowdon.gif,showdown,TRUE,Downloaded
+0451,Skorupi,skorupi.gif,showdown,TRUE,Downloaded
+0452,Drapion,drapion.gif,showdown,TRUE,Downloaded
+0453,Croagunk,croagunk.gif,showdown,TRUE,Downloaded
+0454,Toxicroak,toxicroak.gif,showdown,TRUE,Downloaded
+0455,Carnivine,carnivine.gif,showdown,TRUE,Downloaded
+0456,Finneon,finneon.gif,showdown,TRUE,Downloaded
+0457,Lumineon,lumineon.gif,showdown,TRUE,Downloaded
+0458,Mantyke,mantyke.gif,showdown,TRUE,Downloaded
+0459,Snover,snover.gif,showdown,TRUE,Downloaded
+0460,Abomasnow,abomasnow.gif,showdown,TRUE,Downloaded
+0460,Abomasnow (Mega Abomasnow),abomasnow-mega-abomasnow.gif,showdown,TRUE,Downloaded
+0461,Weavile,weavile.gif,showdown,TRUE,Downloaded
+0462,Magnezone,magnezone.gif,showdown,TRUE,Downloaded
+0463,Lickilicky,lickilicky.gif,showdown,TRUE,Downloaded
+0464,Rhyperior,rhyperior.gif,showdown,TRUE,Downloaded
+0465,Tangrowth,tangrowth.gif,showdown,TRUE,Downloaded
+0466,Electivire,electivire.gif,showdown,TRUE,Downloaded
+0467,Magmortar,magmortar.gif,showdown,TRUE,Downloaded
+0468,Togekiss,togekiss.gif,showdown,TRUE,Downloaded
+0469,Yanmega,yanmega.gif,showdown,TRUE,Downloaded
+0470,Leafeon,leafeon.gif,showdown,TRUE,Downloaded
+0471,Glaceon,glaceon.gif,showdown,TRUE,Downloaded
+0472,Gliscor,gliscor.gif,showdown,TRUE,Downloaded
+0473,Mamoswine,mamoswine.gif,showdown,TRUE,Downloaded
+0474,Porygon-Z,porygon-z.gif,showdown,TRUE,Downloaded
+0475,Gallade,gallade.gif,showdown,TRUE,Downloaded
+0475,Gallade (Mega Gallade),gallade-mega-gallade.gif,showdown,TRUE,Downloaded
+0476,Probopass,probopass.gif,showdown,TRUE,Downloaded
+0477,Dusknoir,dusknoir.gif,showdown,TRUE,Downloaded
+0478,Froslass,froslass.gif,showdown,TRUE,Downloaded
+0479,Rotom,rotom.gif,showdown,TRUE,Downloaded
+0479,Rotom (Heat Rotom),rotom-heat-rotom.gif,showdown,TRUE,Downloaded
+0479,Rotom (Wash Rotom),rotom-wash-rotom.gif,showdown,TRUE,Downloaded
+0479,Rotom (Frost Rotom),rotom-frost-rotom.gif,showdown,TRUE,Downloaded
+0479,Rotom (Fan Rotom),rotom-fan-rotom.gif,showdown,TRUE,Downloaded
+0479,Rotom (Mow Rotom),rotom-mow-rotom.gif,showdown,TRUE,Downloaded
+0480,Uxie,uxie.gif,showdown,TRUE,Downloaded
+0481,Mesprit,mesprit.gif,showdown,TRUE,Downloaded
+0482,Azelf,azelf.gif,showdown,TRUE,Downloaded
+0483,Dialga,dialga.gif,showdown,TRUE,Downloaded
+0483,Dialga (Origin Forme),dialga-origin-forme.gif,showdown,TRUE,Downloaded
+0484,Palkia,palkia.gif,showdown,TRUE,Downloaded
+0484,Palkia (Origin Forme),palkia-origin-forme.gif,showdown,TRUE,Downloaded
+0485,Heatran,heatran.gif,showdown,TRUE,Downloaded
+0486,Regigigas,regigigas.gif,showdown,TRUE,Downloaded
+0487,Giratina (Altered Forme),giratina-altered-forme.gif,showdown,TRUE,Downloaded
+0487,Giratina (Origin Forme),giratina-origin-forme.gif,showdown,TRUE,Downloaded
+0488,Cresselia,cresselia.gif,showdown,TRUE,Downloaded
+0489,Phione,phione.gif,showdown,TRUE,Downloaded
+0490,Manaphy,manaphy.gif,showdown,TRUE,Downloaded
+0491,Darkrai,darkrai.gif,showdown,TRUE,Downloaded
+0492,Shaymin (Land Forme),shaymin-land-forme.gif,showdown,TRUE,Downloaded
+0492,Shaymin (Sky Forme),shaymin-sky-forme.gif,showdown,TRUE,Downloaded
+0493,Arceus,arceus.gif,showdown,TRUE,Downloaded
+0494,Victini,victini.gif,showdown,TRUE,Downloaded
+0495,Snivy,snivy.gif,showdown,TRUE,Downloaded
+0496,Servine,servine.gif,showdown,TRUE,Downloaded
+0497,Serperior,serperior.gif,showdown,TRUE,Downloaded
+0498,Tepig,tepig.gif,showdown,TRUE,Downloaded
+0499,Pignite,pignite.gif,showdown,TRUE,Downloaded
+0500,Emboar,emboar.gif,showdown,TRUE,Downloaded
+0501,Oshawott,oshawott.gif,showdown,TRUE,Downloaded
+0502,Dewott,dewott.gif,showdown,TRUE,Downloaded
+0503,Samurott,samurott.gif,showdown,TRUE,Downloaded
+0503,Samurott (Hisuian Samurott),samurott-hisuian-samurott.gif,showdown,TRUE,Downloaded
+0504,Patrat,patrat.gif,showdown,TRUE,Downloaded
+0505,Watchog,watchog.gif,showdown,TRUE,Downloaded
+0506,Lillipup,lillipup.gif,showdown,TRUE,Downloaded
+0507,Herdier,herdier.gif,showdown,TRUE,Downloaded
+0508,Stoutland,stoutland.gif,showdown,TRUE,Downloaded
+0509,Purrloin,purrloin.gif,showdown,TRUE,Downloaded
+0510,Liepard,liepard.gif,showdown,TRUE,Downloaded
+0511,Pansage,pansage.gif,showdown,TRUE,Downloaded
+0512,Simisage,simisage.gif,showdown,TRUE,Downloaded
+0513,Pansear,pansear.gif,showdown,TRUE,Downloaded
+0514,Simisear,simisear.gif,showdown,TRUE,Downloaded
+0515,Panpour,panpour.gif,showdown,TRUE,Downloaded
+0516,Simipour,simipour.gif,showdown,TRUE,Downloaded
+0517,Munna,munna.gif,showdown,TRUE,Downloaded
+0518,Musharna,musharna.gif,showdown,TRUE,Downloaded
+0519,Pidove,pidove.gif,showdown,TRUE,Downloaded
+0520,Tranquill,tranquill.gif,showdown,TRUE,Downloaded
+0521,Unfezant,unfezant.gif,showdown,TRUE,Downloaded
+0522,Blitzle,blitzle.gif,showdown,TRUE,Downloaded
+0523,Zebstrika,zebstrika.gif,showdown,TRUE,Downloaded
+0524,Roggenrola,roggenrola.gif,showdown,TRUE,Downloaded
+0525,Boldore,boldore.gif,showdown,TRUE,Downloaded
+0526,Gigalith,gigalith.gif,showdown,TRUE,Downloaded
+0527,Woobat,woobat.gif,showdown,TRUE,Downloaded
+0528,Swoobat,swoobat.gif,showdown,TRUE,Downloaded
+0529,Drilbur,drilbur.gif,showdown,TRUE,Downloaded
+0530,Excadrill,excadrill.gif,showdown,TRUE,Downloaded
+0531,Audino,audino.gif,showdown,TRUE,Downloaded
+0531,Audino (Mega Audino),audino-mega-audino.gif,showdown,TRUE,Downloaded
+0532,Timburr,timburr.gif,showdown,TRUE,Downloaded
+0533,Gurdurr,gurdurr.gif,showdown,TRUE,Downloaded
+0534,Conkeldurr,conkeldurr.gif,showdown,TRUE,Downloaded
+0535,Tympole,tympole.gif,showdown,TRUE,Downloaded
+0536,Palpitoad,palpitoad.gif,showdown,TRUE,Downloaded
+0537,Seismitoad,seismitoad.gif,showdown,TRUE,Downloaded
+0538,Throh,throh.gif,showdown,TRUE,Downloaded
+0539,Sawk,sawk.gif,showdown,TRUE,Downloaded
+0540,Sewaddle,sewaddle.gif,showdown,TRUE,Downloaded
+0541,Swadloon,swadloon.gif,showdown,TRUE,Downloaded
+0542,Leavanny,leavanny.gif,showdown,TRUE,Downloaded
+0543,Venipede,venipede.gif,showdown,TRUE,Downloaded
+0544,Whirlipede,whirlipede.gif,showdown,TRUE,Downloaded
+0545,Scolipede,scolipede.gif,showdown,TRUE,Downloaded
+0546,Cottonee,cottonee.gif,showdown,TRUE,Downloaded
+0547,Whimsicott,whimsicott.gif,showdown,TRUE,Downloaded
+0548,Petilil,petilil.gif,showdown,TRUE,Downloaded
+0549,Lilligant,lilligant.gif,showdown,TRUE,Downloaded
+0549,Lilligant (Hisuian Lilligant),lilligant-hisuian-lilligant.gif,showdown,TRUE,Downloaded
+0550,Basculin (Red-Striped Form),basculin-red-striped-form.gif,showdown,TRUE,Downloaded
+0550,Basculin (Blue-Striped Form),basculin-blue-striped-form.gif,showdown,TRUE,Downloaded
+0550,Basculin (White-Striped Form),basculin-white-striped-form.gif,showdown,TRUE,Downloaded
+0551,Sandile,sandile.gif,showdown,TRUE,Downloaded
+0552,Krokorok,krokorok.gif,showdown,TRUE,Downloaded
+0553,Krookodile,krookodile.gif,showdown,TRUE,Downloaded
+0554,Darumaka,darumaka.gif,showdown,TRUE,Downloaded
+0554,Darumaka (Galarian Darumaka),darumaka-galarian-darumaka.gif,showdown,TRUE,Downloaded
+0555,Darmanitan (Standard Mode),darmanitan-standard-mode.gif,showdown,TRUE,Downloaded
+0555,Darmanitan (Zen Mode),darmanitan-zen-mode.gif,showdown,TRUE,Downloaded
+0555,Darmanitan (Galarian Standard Mode),darmanitan-galarian-standard-mode.gif,showdown,TRUE,Downloaded
+0555,Darmanitan (Galarian Zen Mode),darmanitan-galarian-zen-mode.gif,showdown,TRUE,Downloaded
+0556,Maractus,maractus.gif,showdown,TRUE,Downloaded
+0557,Dwebble,dwebble.gif,showdown,TRUE,Downloaded
+0558,Crustle,crustle.gif,showdown,TRUE,Downloaded
+0559,Scraggy,scraggy.gif,showdown,TRUE,Downloaded
+0560,Scrafty,scrafty.gif,showdown,TRUE,Downloaded
+0561,Sigilyph,sigilyph.gif,showdown,TRUE,Downloaded
+0562,Yamask,yamask.gif,showdown,TRUE,Downloaded
+0562,Yamask (Galarian Yamask),yamask-galarian-yamask.gif,showdown,TRUE,Downloaded
+0563,Cofagrigus,cofagrigus.gif,showdown,TRUE,Downloaded
+0564,Tirtouga,tirtouga.gif,showdown,TRUE,Downloaded
+0565,Carracosta,carracosta.gif,showdown,TRUE,Downloaded
+0566,Archen,archen.gif,showdown,TRUE,Downloaded
+0567,Archeops,archeops.gif,showdown,TRUE,Downloaded
+0568,Trubbish,trubbish.gif,showdown,TRUE,Downloaded
+0569,Garbodor,garbodor.gif,showdown,TRUE,Downloaded
+0570,Zorua,zorua.gif,showdown,TRUE,Downloaded
+0570,Zorua (Hisuian Zorua),zorua-hisuian-zorua.gif,showdown,TRUE,Downloaded
+0571,Zoroark,zoroark.gif,showdown,TRUE,Downloaded
+0571,Zoroark (Hisuian Zoroark),zoroark-hisuian-zoroark.gif,showdown,TRUE,Downloaded
+0572,Minccino,minccino.gif,showdown,TRUE,Downloaded
+0573,Cinccino,cinccino.gif,showdown,TRUE,Downloaded
+0574,Gothita,gothita.gif,showdown,TRUE,Downloaded
+0575,Gothorita,gothorita.gif,showdown,TRUE,Downloaded
+0576,Gothitelle,gothitelle.gif,showdown,TRUE,Downloaded
+0577,Solosis,solosis.gif,showdown,TRUE,Downloaded
+0578,Duosion,duosion.gif,showdown,TRUE,Downloaded
+0579,Reuniclus,reuniclus.gif,showdown,TRUE,Downloaded
+0580,Ducklett,ducklett.gif,showdown,TRUE,Downloaded
+0581,Swanna,swanna.gif,showdown,TRUE,Downloaded
+0582,Vanillite,vanillite.gif,showdown,TRUE,Downloaded
+0583,Vanillish,vanillish.gif,showdown,TRUE,Downloaded
+0584,Vanilluxe,vanilluxe.gif,showdown,TRUE,Downloaded
+0585,Deerling,deerling.gif,showdown,TRUE,Downloaded
+0586,Sawsbuck,sawsbuck.gif,showdown,TRUE,Downloaded
+0587,Emolga,emolga.gif,showdown,TRUE,Downloaded
+0588,Karrablast,karrablast.gif,showdown,TRUE,Downloaded
+0589,Escavalier,escavalier.gif,showdown,TRUE,Downloaded
+0590,Foongus,foongus.gif,showdown,TRUE,Downloaded
+0591,Amoonguss,amoonguss.gif,showdown,TRUE,Downloaded
+0592,Frillish,frillish.gif,showdown,TRUE,Downloaded
+0593,Jellicent,jellicent.gif,showdown,TRUE,Downloaded
+0594,Alomomola,alomomola.gif,showdown,TRUE,Downloaded
+0595,Joltik,joltik.gif,showdown,TRUE,Downloaded
+0596,Galvantula,galvantula.gif,showdown,TRUE,Downloaded
+0597,Ferroseed,ferroseed.gif,showdown,TRUE,Downloaded
+0598,Ferrothorn,ferrothorn.gif,showdown,TRUE,Downloaded
+0599,Klink,klink.gif,showdown,TRUE,Downloaded
+0600,Klang,klang.gif,showdown,TRUE,Downloaded
+0601,Klinklang,klinklang.gif,showdown,TRUE,Downloaded
+0602,Tynamo,tynamo.gif,showdown,TRUE,Downloaded
+0603,Eelektrik,eelektrik.gif,showdown,TRUE,Downloaded
+0604,Eelektross,eelektross.gif,showdown,TRUE,Downloaded
+0605,Elgyem,elgyem.gif,showdown,TRUE,Downloaded
+0606,Beheeyem,beheeyem.gif,showdown,TRUE,Downloaded
+0607,Litwick,litwick.gif,showdown,TRUE,Downloaded
+0608,Lampent,lampent.gif,showdown,TRUE,Downloaded
+0609,Chandelure,chandelure.gif,showdown,TRUE,Downloaded
+0610,Axew,axew.gif,showdown,TRUE,Downloaded
+0611,Fraxure,fraxure.gif,showdown,TRUE,Downloaded
+0612,Haxorus,haxorus.gif,showdown,TRUE,Downloaded
+0613,Cubchoo,cubchoo.gif,showdown,TRUE,Downloaded
+0614,Beartic,beartic.gif,showdown,TRUE,Downloaded
+0615,Cryogonal,cryogonal.gif,showdown,TRUE,Downloaded
+0616,Shelmet,shelmet.gif,showdown,TRUE,Downloaded
+0617,Accelgor,accelgor.gif,showdown,TRUE,Downloaded
+0618,Stunfisk,stunfisk.gif,showdown,TRUE,Downloaded
+0618,Stunfisk (Galarian Stunfisk),stunfisk-galarian-stunfisk.gif,showdown,TRUE,Downloaded
+0619,Mienfoo,mienfoo.gif,showdown,TRUE,Downloaded
+0620,Mienshao,mienshao.gif,showdown,TRUE,Downloaded
+0621,Druddigon,druddigon.gif,showdown,TRUE,Downloaded
+0622,Golett,golett.gif,showdown,TRUE,Downloaded
+0623,Golurk,golurk.gif,showdown,TRUE,Downloaded
+0624,Pawniard,pawniard.gif,showdown,TRUE,Downloaded
+0625,Bisharp,bisharp.gif,showdown,TRUE,Downloaded
+0626,Bouffalant,bouffalant.gif,showdown,TRUE,Downloaded
+0627,Rufflet,rufflet.gif,showdown,TRUE,Downloaded
+0628,Braviary,braviary.gif,showdown,TRUE,Downloaded
+0628,Braviary (Hisuian Braviary),braviary-hisuian-braviary.gif,showdown,TRUE,Downloaded
+0629,Vullaby,vullaby.gif,showdown,TRUE,Downloaded
+0630,Mandibuzz,mandibuzz.gif,showdown,TRUE,Downloaded
+0631,Heatmor,heatmor.gif,showdown,TRUE,Downloaded
+0632,Durant,durant.gif,showdown,TRUE,Downloaded
+0633,Deino,deino.gif,showdown,TRUE,Downloaded
+0634,Zweilous,zweilous.gif,showdown,TRUE,Downloaded
+0635,Hydreigon,hydreigon.gif,showdown,TRUE,Downloaded
+0636,Larvesta,larvesta.gif,showdown,TRUE,Downloaded
+0637,Volcarona,volcarona.gif,showdown,TRUE,Downloaded
+0638,Cobalion,cobalion.gif,showdown,TRUE,Downloaded
+0639,Terrakion,terrakion.gif,showdown,TRUE,Downloaded
+0640,Virizion,virizion.gif,showdown,TRUE,Downloaded
+0641,Tornadus (Incarnate Forme),tornadus-incarnate-forme.gif,showdown,TRUE,Downloaded
+0641,Tornadus (Therian Forme),tornadus-therian-forme.gif,showdown,TRUE,Downloaded
+0642,Thundurus (Incarnate Forme),thundurus-incarnate-forme.gif,showdown,TRUE,Downloaded
+0642,Thundurus (Therian Forme),thundurus-therian-forme.gif,showdown,TRUE,Downloaded
+0643,Reshiram,reshiram.gif,showdown,TRUE,Downloaded
+0644,Zekrom,zekrom.gif,showdown,TRUE,Downloaded
+0645,Landorus (Incarnate Forme),landorus-incarnate-forme.gif,showdown,TRUE,Downloaded
+0645,Landorus (Therian Forme),landorus-therian-forme.gif,showdown,TRUE,Downloaded
+0646,Kyurem,kyurem.gif,showdown,TRUE,Downloaded
+0646,Kyurem (White Kyurem),kyurem-white-kyurem.gif,showdown,TRUE,Downloaded
+0646,Kyurem (Black Kyurem),kyurem-black-kyurem.gif,showdown,TRUE,Downloaded
+0647,Keldeo (Ordinary Form),keldeo-ordinary-form.gif,showdown,TRUE,Downloaded
+0647,Keldeo (Resolute Form),keldeo-resolute-form.gif,showdown,TRUE,Downloaded
+0648,Meloetta (Aria Forme),meloetta-aria-forme.gif,showdown,TRUE,Downloaded
+0648,Meloetta (Pirouette Forme),meloetta-pirouette-forme.gif,showdown,TRUE,Downloaded
+0649,Genesect,genesect.gif,showdown,TRUE,Downloaded
+0650,Chespin,chespin.gif,showdown,TRUE,Downloaded
+0651,Quilladin,quilladin.gif,showdown,TRUE,Downloaded
+0652,Chesnaught,chesnaught.gif,showdown,TRUE,Downloaded
+0653,Fennekin,fennekin.gif,showdown,TRUE,Downloaded
+0654,Braixen,braixen.gif,showdown,TRUE,Downloaded
+0655,Delphox,delphox.gif,showdown,TRUE,Downloaded
+0656,Froakie,froakie.gif,showdown,TRUE,Downloaded
+0657,Frogadier,frogadier.gif,showdown,TRUE,Downloaded
+0658,Greninja,greninja.gif,showdown,TRUE,Downloaded
+0658,Greninja (Ash-Greninja),greninja-ash-greninja.gif,showdown,TRUE,Downloaded
+0659,Bunnelby,bunnelby.gif,showdown,TRUE,Downloaded
+0660,Diggersby,diggersby.gif,showdown,TRUE,Downloaded
+0661,Fletchling,fletchling.gif,showdown,TRUE,Downloaded
+0662,Fletchinder,fletchinder.gif,showdown,TRUE,Downloaded
+0663,Talonflame,talonflame.gif,showdown,TRUE,Downloaded
+0664,Scatterbug,scatterbug.gif,showdown,TRUE,Downloaded
+0665,Spewpa,spewpa.gif,showdown,TRUE,Downloaded
+0666,Vivillon,vivillon.gif,showdown,TRUE,Downloaded
+0667,Litleo,litleo.gif,showdown,TRUE,Downloaded
+0668,Pyroar,pyroar.gif,showdown,TRUE,Downloaded
+0669,FlabÃ©bÃ©,flabb.gif,none,FALSE,All sources failed
+0670,Floette,floette.gif,showdown,TRUE,Downloaded
+0671,Florges,florges.gif,showdown,TRUE,Downloaded
+0672,Skiddo,skiddo.gif,showdown,TRUE,Downloaded
+0673,Gogoat,gogoat.gif,showdown,TRUE,Downloaded
+0674,Pancham,pancham.gif,showdown,TRUE,Downloaded
+0675,Pangoro,pangoro.gif,showdown,TRUE,Downloaded
+0676,Furfrou,furfrou.gif,showdown,TRUE,Downloaded
+0677,Espurr,espurr.gif,showdown,TRUE,Downloaded
+0678,Meowstic (Male),meowstic-male.gif,showdown,TRUE,Downloaded
+0678,Meowstic (Female),meowstic-female.gif,showdown,TRUE,Downloaded
+0679,Honedge,honedge.gif,showdown,TRUE,Downloaded
+0680,Doublade,doublade.gif,showdown,TRUE,Downloaded
+0681,Aegislash (Shield Forme),aegislash-shield-forme.gif,showdown,TRUE,Downloaded
+0681,Aegislash (Blade Forme),aegislash-blade-forme.gif,showdown,TRUE,Downloaded
+0682,Spritzee,spritzee.gif,showdown,TRUE,Downloaded
+0683,Aromatisse,aromatisse.gif,showdown,TRUE,Downloaded
+0684,Swirlix,swirlix.gif,showdown,TRUE,Downloaded
+0685,Slurpuff,slurpuff.gif,showdown,TRUE,Downloaded
+0686,Inkay,inkay.gif,showdown,TRUE,Downloaded
+0687,Malamar,malamar.gif,showdown,TRUE,Downloaded
+0687,Malamar (Mega Malamar),malamar-mega-malamar.gif,none,FALSE,All sources failed
+0688,Binacle,binacle.gif,showdown,TRUE,Downloaded
+0689,Barbaracle,barbaracle.gif,showdown,TRUE,Downloaded
+0690,Skrelp,skrelp.gif,showdown,TRUE,Downloaded
+0691,Dragalge,dragalge.gif,showdown,TRUE,Downloaded
+0692,Clauncher,clauncher.gif,showdown,TRUE,Downloaded
+0693,Clawitzer,clawitzer.gif,showdown,TRUE,Downloaded
+0694,Helioptile,helioptile.gif,showdown,TRUE,Downloaded
+0695,Heliolisk,heliolisk.gif,showdown,TRUE,Downloaded
+0696,Tyrunt,tyrunt.gif,showdown,TRUE,Downloaded
+0697,Tyrantrum,tyrantrum.gif,showdown,TRUE,Downloaded
+0698,Amaura,amaura.gif,showdown,TRUE,Downloaded
+0699,Aurorus,aurorus.gif,showdown,TRUE,Downloaded
+0700,Sylveon,sylveon.gif,showdown,TRUE,Downloaded
+0701,Hawlucha,hawlucha.gif,showdown,TRUE,Downloaded
+0701,Hawlucha (Mega Hawlucha),hawlucha-mega-hawlucha.gif,none,FALSE,All sources failed
+0702,Dedenne,dedenne.gif,showdown,TRUE,Downloaded
+0703,Carbink,carbink.gif,showdown,TRUE,Downloaded
+0704,Goomy,goomy.gif,showdown,TRUE,Downloaded
+0705,Sliggoo,sliggoo.gif,showdown,TRUE,Downloaded
+0705,Sliggoo (Hisuian Sliggoo),sliggoo-hisuian-sliggoo.gif,showdown,TRUE,Downloaded
+0706,Goodra,goodra.gif,showdown,TRUE,Downloaded
+0706,Goodra (Hisuian Goodra),goodra-hisuian-goodra.gif,showdown,TRUE,Downloaded
+0707,Klefki,klefki.gif,showdown,TRUE,Downloaded
+0708,Phantump,phantump.gif,showdown,TRUE,Downloaded
+0709,Trevenant,trevenant.gif,showdown,TRUE,Downloaded
+0710,Pumpkaboo (Average Size),pumpkaboo-average-size.gif,showdown,TRUE,Downloaded
+0710,Pumpkaboo (Small Size),pumpkaboo-small-size.gif,showdown,TRUE,Downloaded
+0710,Pumpkaboo (Large Size),pumpkaboo-large-size.gif,showdown,TRUE,Downloaded
+0710,Pumpkaboo (Super Size),pumpkaboo-super-size.gif,showdown,TRUE,Downloaded
+0711,Gourgeist (Average Size),gourgeist-average-size.gif,showdown,TRUE,Downloaded
+0711,Gourgeist (Small Size),gourgeist-small-size.gif,showdown,TRUE,Downloaded
+0711,Gourgeist (Large Size),gourgeist-large-size.gif,showdown,TRUE,Downloaded
+0711,Gourgeist (Super Size),gourgeist-super-size.gif,showdown,TRUE,Downloaded
+0712,Bergmite,bergmite.gif,showdown,TRUE,Downloaded
+0713,Avalugg,avalugg.gif,showdown,TRUE,Downloaded
+0713,Avalugg (Hisuian Avalugg),avalugg-hisuian-avalugg.gif,showdown,TRUE,Downloaded
+0714,Noibat,noibat.gif,showdown,TRUE,Downloaded
+0715,Noivern,noivern.gif,showdown,TRUE,Downloaded
+0716,Xerneas,xerneas.gif,showdown,TRUE,Downloaded
+0717,Yveltal,yveltal.gif,showdown,TRUE,Downloaded
+0718,Zygarde (50% Forme),zygarde-50-forme.gif,showdown,TRUE,Downloaded
+0718,Zygarde (10% Forme),zygarde-10-forme.gif,showdown,TRUE,Downloaded
+0718,Zygarde (Complete Forme),zygarde-complete-forme.gif,showdown,TRUE,Downloaded
+0719,Diancie,diancie.gif,showdown,TRUE,Downloaded
+0719,Diancie (Mega Diancie),diancie-mega-diancie.gif,showdown,TRUE,Downloaded
+0720,Hoopa (Hoopa Confined),hoopa-hoopa-confined.gif,showdown,TRUE,Downloaded
+0720,Hoopa (Hoopa Unbound),hoopa-hoopa-unbound.gif,showdown,TRUE,Downloaded
+0721,Volcanion,volcanion.gif,showdown,TRUE,Downloaded
+0722,Rowlet,rowlet.gif,showdown,TRUE,Downloaded
+0723,Dartrix,dartrix.gif,showdown,TRUE,Downloaded
+0724,Decidueye,decidueye.gif,showdown,TRUE,Downloaded
+0724,Decidueye (Hisuian Decidueye),decidueye-hisuian-decidueye.gif,showdown,TRUE,Downloaded
+0725,Litten,litten.gif,showdown,TRUE,Downloaded
+0726,Torracat,torracat.gif,showdown,TRUE,Downloaded
+0727,Incineroar,incineroar.gif,showdown,TRUE,Downloaded
+0728,Popplio,popplio.gif,showdown,TRUE,Downloaded
+0729,Brionne,brionne.gif,showdown,TRUE,Downloaded
+0730,Primarina,primarina.gif,showdown,TRUE,Downloaded
+0731,Pikipek,pikipek.gif,showdown,TRUE,Downloaded
+0732,Trumbeak,trumbeak.gif,showdown,TRUE,Downloaded
+0733,Toucannon,toucannon.gif,showdown,TRUE,Downloaded
+0734,Yungoos,yungoos.gif,showdown,TRUE,Downloaded
+0735,Gumshoos,gumshoos.gif,showdown,TRUE,Downloaded
+0736,Grubbin,grubbin.gif,showdown,TRUE,Downloaded
+0737,Charjabug,charjabug.gif,showdown,TRUE,Downloaded
+0738,Vikavolt,vikavolt.gif,showdown,TRUE,Downloaded
+0739,Crabrawler,crabrawler.gif,showdown,TRUE,Downloaded
+0740,Crabominable,crabominable.gif,showdown,TRUE,Downloaded
+0741,Oricorio (Baile Style),oricorio-baile-style.gif,showdown,TRUE,Downloaded
+0741,Oricorio (Pom-Pom Style),oricorio-pom-pom-style.gif,showdown,TRUE,Downloaded
+0741,Oricorio (Pa'u Style),oricorio-pau-style.gif,showdown,TRUE,Downloaded
+0741,Oricorio (Sensu Style),oricorio-sensu-style.gif,showdown,TRUE,Downloaded
+0742,Cutiefly,cutiefly.gif,showdown,TRUE,Downloaded
+0743,Ribombee,ribombee.gif,showdown,TRUE,Downloaded
+0744,Rockruff,rockruff.gif,showdown,TRUE,Downloaded
+0744,Rockruff (Own Tempo Rockruff),rockruff-own-tempo-rockruff.gif,showdown,TRUE,Downloaded
+0745,Lycanroc (Midday Form),lycanroc-midday-form.gif,showdown,TRUE,Downloaded
+0745,Lycanroc (Midnight Form),lycanroc-midnight-form.gif,showdown,TRUE,Downloaded
+0745,Lycanroc (Dusk Form),lycanroc-dusk-form.gif,showdown,TRUE,Downloaded
+0746,Wishiwashi (Solo Form),wishiwashi-solo-form.gif,showdown,TRUE,Downloaded
+0746,Wishiwashi (School Form),wishiwashi-school-form.gif,showdown,TRUE,Downloaded
+0747,Mareanie,mareanie.gif,showdown,TRUE,Downloaded
+0748,Toxapex,toxapex.gif,showdown,TRUE,Downloaded
+0749,Mudbray,mudbray.gif,showdown,TRUE,Downloaded
+0750,Mudsdale,mudsdale.gif,showdown,TRUE,Downloaded
+0751,Dewpider,dewpider.gif,showdown,TRUE,Downloaded
+0752,Araquanid,araquanid.gif,showdown,TRUE,Downloaded
+0753,Fomantis,fomantis.gif,showdown,TRUE,Downloaded
+0754,Lurantis,lurantis.gif,showdown,TRUE,Downloaded
+0755,Morelull,morelull.gif,showdown,TRUE,Downloaded
+0756,Shiinotic,shiinotic.gif,showdown,TRUE,Downloaded
+0757,Salandit,salandit.gif,showdown,TRUE,Downloaded
+0758,Salazzle,salazzle.gif,showdown,TRUE,Downloaded
+0759,Stufful,stufful.gif,showdown,TRUE,Downloaded
+0760,Bewear,bewear.gif,showdown,TRUE,Downloaded
+0761,Bounsweet,bounsweet.gif,showdown,TRUE,Downloaded
+0762,Steenee,steenee.gif,showdown,TRUE,Downloaded
+0763,Tsareena,tsareena.gif,showdown,TRUE,Downloaded
+0764,Comfey,comfey.gif,showdown,TRUE,Downloaded
+0765,Oranguru,oranguru.gif,showdown,TRUE,Downloaded
+0766,Passimian,passimian.gif,showdown,TRUE,Downloaded
+0767,Wimpod,wimpod.gif,showdown,TRUE,Downloaded
+0768,Golisopod,golisopod.gif,showdown,TRUE,Downloaded
+0769,Sandygast,sandygast.gif,showdown,TRUE,Downloaded
+0770,Palossand,palossand.gif,showdown,TRUE,Downloaded
+0771,Pyukumuku,pyukumuku.gif,showdown,TRUE,Downloaded
+0772,Type: Null,type-null.gif,none,FALSE,All sources failed
+0773,Silvally,silvally.gif,showdown,TRUE,Downloaded
+0774,Minior (Meteor Form),minior-meteor-form.gif,showdown,TRUE,Downloaded
+0774,Minior (Core Form),minior-core-form.gif,showdown,TRUE,Downloaded
+0775,Komala,komala.gif,showdown,TRUE,Downloaded
+0776,Turtonator,turtonator.gif,showdown,TRUE,Downloaded
+0777,Togedemaru,togedemaru.gif,showdown,TRUE,Downloaded
+0778,Mimikyu,mimikyu.gif,showdown,TRUE,Downloaded
+0779,Bruxish,bruxish.gif,showdown,TRUE,Downloaded
+0780,Drampa,drampa.gif,showdown,TRUE,Downloaded
+0781,Dhelmise,dhelmise.gif,showdown,TRUE,Downloaded
+0782,Jangmo-o,jangmo-o.gif,showdown,TRUE,Downloaded
+0783,Hakamo-o,hakamo-o.gif,showdown,TRUE,Downloaded
+0784,Kommo-o,kommo-o.gif,showdown,TRUE,Downloaded
+0785,Tapu Koko,tapu-koko.gif,showdown,TRUE,Downloaded
+0786,Tapu Lele,tapu-lele.gif,showdown,TRUE,Downloaded
+0787,Tapu Bulu,tapu-bulu.gif,showdown,TRUE,Downloaded
+0788,Tapu Fini,tapu-fini.gif,showdown,TRUE,Downloaded
+0789,Cosmog,cosmog.gif,showdown,TRUE,Downloaded
+0790,Cosmoem,cosmoem.gif,showdown,TRUE,Downloaded
+0791,Solgaleo,solgaleo.gif,showdown,TRUE,Downloaded
+0792,Lunala,lunala.gif,showdown,TRUE,Downloaded
+0793,Nihilego,nihilego.gif,showdown,TRUE,Downloaded
+0794,Buzzwole,buzzwole.gif,showdown,TRUE,Downloaded
+0795,Pheromosa,pheromosa.gif,showdown,TRUE,Downloaded
+0796,Xurkitree,xurkitree.gif,showdown,TRUE,Downloaded
+0797,Celesteela,celesteela.gif,showdown,TRUE,Downloaded
+0798,Kartana,kartana.gif,showdown,TRUE,Downloaded
+0799,Guzzlord,guzzlord.gif,showdown,TRUE,Downloaded
+0800,Necrozma,necrozma.gif,showdown,TRUE,Downloaded
+0800,Necrozma (Dusk Mane Necrozma),necrozma-dusk-mane-necrozma.gif,showdown,TRUE,Downloaded
+0800,Necrozma (Dawn Wings Necrozma),necrozma-dawn-wings-necrozma.gif,showdown,TRUE,Downloaded
+0800,Necrozma (Ultra Necrozma),necrozma-ultra-necrozma.gif,showdown,TRUE,Downloaded
+0801,Magearna,magearna.gif,showdown,TRUE,Downloaded
+0802,Marshadow,marshadow.gif,showdown,TRUE,Downloaded
+0803,Poipole,poipole.gif,showdown,TRUE,Downloaded
+0804,Naganadel,naganadel.gif,showdown,TRUE,Downloaded
+0805,Stakataka,stakataka.gif,showdown,TRUE,Downloaded
+0806,Blacephalon,blacephalon.gif,showdown,TRUE,Downloaded
+0807,Zeraora,zeraora.gif,showdown,TRUE,Downloaded
+0808,Meltan,meltan.gif,showdown,TRUE,Downloaded
+0809,Melmetal,melmetal.gif,showdown,TRUE,Downloaded
+0810,Grookey,grookey.gif,showdown,TRUE,Downloaded
+0811,Thwackey,thwackey.gif,showdown,TRUE,Downloaded
+0812,Rillaboom,rillaboom.gif,showdown,TRUE,Downloaded
+0813,Scorbunny,scorbunny.gif,showdown,TRUE,Downloaded
+0814,Raboot,raboot.gif,showdown,TRUE,Downloaded
+0815,Cinderace,cinderace.gif,showdown,TRUE,Downloaded
+0816,Sobble,sobble.gif,showdown,TRUE,Downloaded
+0817,Drizzile,drizzile.gif,showdown,TRUE,Downloaded
+0818,Inteleon,inteleon.gif,showdown,TRUE,Downloaded
+0819,Skwovet,skwovet.gif,showdown,TRUE,Downloaded
+0820,Greedent,greedent.gif,showdown,TRUE,Downloaded
+0821,Rookidee,rookidee.gif,showdown,TRUE,Downloaded
+0822,Corvisquire,corvisquire.gif,showdown,TRUE,Downloaded
+0823,Corviknight,corviknight.gif,showdown,TRUE,Downloaded
+0824,Blipbug,blipbug.gif,showdown,TRUE,Downloaded
+0825,Dottler,dottler.gif,showdown,TRUE,Downloaded
+0826,Orbeetle,orbeetle.gif,showdown,TRUE,Downloaded
+0827,Nickit,nickit.gif,showdown,TRUE,Downloaded
+0828,Thievul,thievul.gif,showdown,TRUE,Downloaded
+0829,Gossifleur,gossifleur.gif,showdown,TRUE,Downloaded
+0830,Eldegoss,eldegoss.gif,showdown,TRUE,Downloaded
+0831,Wooloo,wooloo.gif,showdown,TRUE,Downloaded
+0832,Dubwool,dubwool.gif,showdown,TRUE,Downloaded
+0833,Chewtle,chewtle.gif,showdown,TRUE,Downloaded
+0834,Drednaw,drednaw.gif,showdown,TRUE,Downloaded
+0835,Yamper,yamper.gif,showdown,TRUE,Downloaded
+0836,Boltund,boltund.gif,showdown,TRUE,Downloaded
+0837,Rolycoly,rolycoly.gif,showdown,TRUE,Downloaded
+0838,Carkol,carkol.gif,showdown,TRUE,Downloaded
+0839,Coalossal,coalossal.gif,showdown,TRUE,Downloaded
+0840,Applin,applin.gif,showdown,TRUE,Downloaded
+0841,Flapple,flapple.gif,showdown,TRUE,Downloaded
+0842,Appletun,appletun.gif,showdown,TRUE,Downloaded
+0843,Silicobra,silicobra.gif,showdown,TRUE,Downloaded
+0844,Sandaconda,sandaconda.gif,showdown,TRUE,Downloaded
+0845,Cramorant,cramorant.gif,showdown,TRUE,Downloaded
+0846,Arrokuda,arrokuda.gif,showdown,TRUE,Downloaded
+0847,Barraskewda,barraskewda.gif,showdown,TRUE,Downloaded
+0848,Toxel,toxel.gif,showdown,TRUE,Downloaded
+0849,Toxtricity (Amped Form),toxtricity-amped-form.gif,showdown,TRUE,Downloaded
+0849,Toxtricity (Low Key Form),toxtricity-low-key-form.gif,showdown,TRUE,Downloaded
+0850,Sizzlipede,sizzlipede.gif,showdown,TRUE,Downloaded
+0851,Centiskorch,centiskorch.gif,showdown,TRUE,Downloaded
+0852,Clobbopus,clobbopus.gif,showdown,TRUE,Downloaded
+0853,Grapploct,grapploct.gif,showdown,TRUE,Downloaded
+0854,Sinistea,sinistea.gif,showdown,TRUE,Downloaded
+0855,Polteageist,polteageist.gif,showdown,TRUE,Downloaded
+0856,Hatenna,hatenna.gif,showdown,TRUE,Downloaded
+0857,Hattrem,hattrem.gif,showdown,TRUE,Downloaded
+0858,Hatterene,hatterene.gif,showdown,TRUE,Downloaded
+0859,Impidimp,impidimp.gif,showdown,TRUE,Downloaded
+0860,Morgrem,morgrem.gif,showdown,TRUE,Downloaded
+0861,Grimmsnarl,grimmsnarl.gif,showdown,TRUE,Downloaded
+0862,Obstagoon,obstagoon.gif,showdown,TRUE,Downloaded
+0863,Perrserker,perrserker.gif,showdown,TRUE,Downloaded
+0864,Cursola,cursola.gif,showdown,TRUE,Downloaded
+0865,Sirfetch'd,sirfetchd.gif,showdown,TRUE,Downloaded
+0866,Mr. Rime,mr-rime.gif,showdown,TRUE,Downloaded
+0867,Runerigus,runerigus.gif,showdown,TRUE,Downloaded
+0868,Milcery,milcery.gif,showdown,TRUE,Downloaded
+0869,Alcremie,alcremie.gif,showdown,TRUE,Downloaded
+0870,Falinks,falinks.gif,showdown,TRUE,Downloaded
+0871,Pincurchin,pincurchin.gif,showdown,TRUE,Downloaded
+0872,Snom,snom.gif,showdown,TRUE,Downloaded
+0873,Frosmoth,frosmoth.gif,showdown,TRUE,Downloaded
+0874,Stonjourner,stonjourner.gif,showdown,TRUE,Downloaded
+0875,Eiscue (Ice Face),eiscue-ice-face.gif,showdown,TRUE,Downloaded
+0875,Eiscue (Noice Face),eiscue-noice-face.gif,showdown,TRUE,Downloaded
+0876,Indeedee (Male),indeedee-male.gif,showdown,TRUE,Downloaded
+0876,Indeedee (Female),indeedee-female.gif,showdown,TRUE,Downloaded
+0877,Morpeko (Full Belly Mode),morpeko-full-belly-mode.gif,showdown,TRUE,Downloaded
+0877,Morpeko (Hangry Mode),morpeko-hangry-mode.gif,showdown,TRUE,Downloaded
+0878,Cufant,cufant.gif,showdown,TRUE,Downloaded
+0879,Copperajah,copperajah.gif,showdown,TRUE,Downloaded
+0880,Dracozolt,dracozolt.gif,showdown,TRUE,Downloaded
+0881,Arctozolt,arctozolt.gif,showdown,TRUE,Downloaded
+0882,Dracovish,dracovish.gif,showdown,TRUE,Downloaded
+0883,Arctovish,arctovish.gif,showdown,TRUE,Downloaded
+0884,Duraludon,duraludon.gif,showdown,TRUE,Downloaded
+0885,Dreepy,dreepy.gif,showdown,TRUE,Downloaded
+0886,Drakloak,drakloak.gif,showdown,TRUE,Downloaded
+0887,Dragapult,dragapult.gif,showdown,TRUE,Downloaded
+0888,Zacian (Hero of Many Battles),zacian-hero-of-many-battles.gif,showdown,TRUE,Downloaded
+0888,Zacian (Crowned Sword),zacian-crowned-sword.gif,showdown,TRUE,Downloaded
+0889,Zamazenta (Hero of Many Battles),zamazenta-hero-of-many-battles.gif,showdown,TRUE,Downloaded
+0889,Zamazenta (Crowned Shield),zamazenta-crowned-shield.gif,showdown,TRUE,Downloaded
+0890,Eternatus,eternatus.gif,showdown,TRUE,Downloaded
+0890,Eternatus (Eternamax),eternatus-eternamax.gif,showdown,TRUE,Downloaded
+0891,Kubfu,kubfu.gif,showdown,TRUE,Downloaded
+0892,Urshifu (Single Strike Style),urshifu-single-strike-style.gif,showdown,TRUE,Downloaded
+0892,Urshifu (Rapid Strike Style),urshifu-rapid-strike-style.gif,showdown,TRUE,Downloaded
+0893,Zarude,zarude.gif,showdown,TRUE,Downloaded
+0894,Regieleki,regieleki.gif,showdown,TRUE,Downloaded
+0895,Regidrago,regidrago.gif,showdown,TRUE,Downloaded
+0896,Glastrier,glastrier.gif,showdown,TRUE,Downloaded
+0897,Spectrier,spectrier.gif,showdown,TRUE,Downloaded
+0898,Calyrex,calyrex.gif,showdown,TRUE,Downloaded
+0898,Calyrex (Ice Rider),calyrex-ice-rider.gif,showdown,TRUE,Downloaded
+0898,Calyrex (Shadow Rider),calyrex-shadow-rider.gif,showdown,TRUE,Downloaded
+0899,Wyrdeer,wyrdeer.gif,showdown,TRUE,Downloaded
+0900,Kleavor,kleavor.gif,showdown,TRUE,Downloaded
+0901,Ursaluna,ursaluna.gif,showdown,TRUE,Downloaded
+0901,Ursaluna (Bloodmoon),ursaluna-bloodmoon.gif,showdown,TRUE,Downloaded
+0902,Basculegion (Male),basculegion-male.gif,showdown,TRUE,Downloaded
+0902,Basculegion (Female),basculegion-female.gif,showdown,TRUE,Downloaded
+0903,Sneasler,sneasler.gif,showdown,TRUE,Downloaded
+0904,Overqwil,overqwil.gif,showdown,TRUE,Downloaded
+0905,Enamorus (Incarnate Forme),enamorus-incarnate-forme.gif,showdown,TRUE,Downloaded
+0905,Enamorus (Therian Forme),enamorus-therian-forme.gif,showdown,TRUE,Downloaded
+0906,Sprigatito,sprigatito.gif,showdown,TRUE,Downloaded
+0907,Floragato,floragato.gif,showdown,TRUE,Downloaded
+0908,Meowscarada,meowscarada.gif,showdown,TRUE,Downloaded
+0909,Fuecoco,fuecoco.gif,showdown,TRUE,Downloaded
+0910,Crocalor,crocalor.gif,showdown,TRUE,Downloaded
+0911,Skeledirge,skeledirge.gif,showdown,TRUE,Downloaded
+0912,Quaxly,quaxly.gif,showdown,TRUE,Downloaded
+0913,Quaxwell,quaxwell.gif,showdown,TRUE,Downloaded
+0914,Quaquaval,quaquaval.gif,showdown,TRUE,Downloaded
+0915,Lechonk,lechonk.gif,showdown,TRUE,Downloaded
+0916,Oinkologne (Male),oinkologne-male.gif,showdown,TRUE,Downloaded
+0916,Oinkologne (Female),oinkologne-female.gif,showdown,TRUE,Downloaded
+0917,Tarountula,tarountula.gif,showdown,TRUE,Downloaded
+0918,Spidops,spidops.gif,showdown,TRUE,Downloaded
+0919,Nymble,nymble.gif,showdown,TRUE,Downloaded
+0920,Lokix,lokix.gif,showdown,TRUE,Downloaded
+0921,Pawmi,pawmi.gif,showdown,TRUE,Downloaded
+0922,Pawmo,pawmo.gif,showdown,TRUE,Downloaded
+0923,Pawmot,pawmot.gif,showdown,TRUE,Downloaded
+0924,Tandemaus,tandemaus.gif,showdown,TRUE,Downloaded
+0925,Maushold (Family of Four),maushold-family-of-four.gif,showdown,TRUE,Downloaded
+0925,Maushold (Family of Three),maushold-family-of-three.gif,showdown,TRUE,Downloaded
+0926,Fidough,fidough.gif,showdown,TRUE,Downloaded
+0927,Dachsbun,dachsbun.gif,showdown,TRUE,Downloaded
+0928,Smoliv,smoliv.gif,showdown,TRUE,Downloaded
+0929,Dolliv,dolliv.gif,showdown,TRUE,Downloaded
+0930,Arboliva,arboliva.gif,showdown,TRUE,Downloaded
+0931,Squawkabilly (Green Plumage),squawkabilly-green-plumage.gif,showdown,TRUE,Downloaded
+0931,Squawkabilly (Blue Plumage),squawkabilly-blue-plumage.gif,showdown,TRUE,Downloaded
+0931,Squawkabilly (Yellow Plumage),squawkabilly-yellow-plumage.gif,showdown,TRUE,Downloaded
+0931,Squawkabilly (White Plumage),squawkabilly-white-plumage.gif,showdown,TRUE,Downloaded
+0932,Nacli,nacli.gif,showdown,TRUE,Downloaded
+0933,Naclstack,naclstack.gif,showdown,TRUE,Downloaded
+0934,Garganacl,garganacl.gif,showdown,TRUE,Downloaded
+0935,Charcadet,charcadet.gif,showdown,TRUE,Downloaded
+0936,Armarouge,armarouge.gif,showdown,TRUE,Downloaded
+0937,Ceruledge,ceruledge.gif,showdown,TRUE,Downloaded
+0938,Tadbulb,tadbulb.gif,showdown,TRUE,Downloaded
+0939,Bellibolt,bellibolt.gif,showdown,TRUE,Downloaded
+0940,Wattrel,wattrel.gif,showdown,TRUE,Downloaded
+0941,Kilowattrel,kilowattrel.gif,showdown,TRUE,Downloaded
+0942,Maschiff,maschiff.gif,showdown,TRUE,Downloaded
+0943,Mabosstiff,mabosstiff.gif,showdown,TRUE,Downloaded
+0944,Shroodle,shroodle.gif,showdown,TRUE,Downloaded
+0945,Grafaiai,grafaiai.gif,showdown,TRUE,Downloaded
+0946,Bramblin,bramblin.gif,showdown,TRUE,Downloaded
+0947,Brambleghast,brambleghast.gif,showdown,TRUE,Downloaded
+0948,Toedscool,toedscool.gif,showdown,TRUE,Downloaded
+0949,Toedscruel,toedscruel.gif,showdown,TRUE,Downloaded
+0950,Klawf,klawf.gif,showdown,TRUE,Downloaded
+0951,Capsakid,capsakid.gif,showdown,TRUE,Downloaded
+0952,Scovillain,scovillain.gif,showdown,TRUE,Downloaded
+0953,Rellor,rellor.gif,showdown,TRUE,Downloaded
+0954,Rabsca,rabsca.gif,showdown,TRUE,Downloaded
+0955,Flittle,flittle.gif,showdown,TRUE,Downloaded
+0956,Espathra,espathra.gif,showdown,TRUE,Downloaded
+0957,Tinkatink,tinkatink.gif,showdown,TRUE,Downloaded
+0958,Tinkatuff,tinkatuff.gif,showdown,TRUE,Downloaded
+0959,Tinkaton,tinkaton.gif,showdown,TRUE,Downloaded
+0960,Wiglett,wiglett.gif,showdown,TRUE,Downloaded
+0961,Wugtrio,wugtrio.gif,showdown,TRUE,Downloaded
+0962,Bombirdier,bombirdier.gif,showdown,TRUE,Downloaded
+0963,Finizen,finizen.gif,showdown,TRUE,Downloaded
+0964,Palafin (Zero Form),palafin-zero-form.gif,showdown,TRUE,Downloaded
+0964,Palafin (Hero Form),palafin-hero-form.gif,showdown,TRUE,Downloaded
+0965,Varoom,varoom.gif,showdown,TRUE,Downloaded
+0966,Revavroom,revavroom.gif,showdown,TRUE,Downloaded
+0967,Cyclizar,cyclizar.gif,showdown,TRUE,Downloaded
+0968,Orthworm,orthworm.gif,showdown,TRUE,Downloaded
+0969,Glimmet,glimmet.gif,showdown,TRUE,Downloaded
+0970,Glimmora,glimmora.gif,showdown,TRUE,Downloaded
+0971,Greavard,greavard.gif,showdown,TRUE,Downloaded
+0972,Houndstone,houndstone.gif,showdown,TRUE,Downloaded
+0973,Flamigo,flamigo.gif,showdown,TRUE,Downloaded
+0974,Cetoddle,cetoddle.gif,showdown,TRUE,Downloaded
+0975,Cetitan,cetitan.gif,showdown,TRUE,Downloaded
+0976,Veluza,veluza.gif,showdown,TRUE,Downloaded
+0977,Dondozo,dondozo.gif,showdown,TRUE,Downloaded
+0978,Tatsugiri (Curly Form),tatsugiri-curly-form.gif,showdown,TRUE,Downloaded
+0978,Tatsugiri (Droopy Form),tatsugiri-droopy-form.gif,showdown,TRUE,Downloaded
+0978,Tatsugiri (Stretchy Form),tatsugiri-stretchy-form.gif,showdown,TRUE,Downloaded
+0979,Annihilape,annihilape.gif,showdown,TRUE,Downloaded
+0980,Clodsire,clodsire.gif,showdown,TRUE,Downloaded
+0981,Farigiraf,farigiraf.gif,showdown,TRUE,Downloaded
+0982,Dudunsparce (Two-Segment Form),dudunsparce-two-segment-form.gif,showdown,TRUE,Downloaded
+0982,Dudunsparce (Three-Segment Form),dudunsparce-three-segment-form.gif,showdown,TRUE,Downloaded
+0983,Kingambit,kingambit.gif,showdown,TRUE,Downloaded
+0984,Great Tusk,great-tusk.gif,none,FALSE,All sources failed
+0985,Scream Tail,scream-tail.gif,none,FALSE,All sources failed
+0986,Brute Bonnet,brute-bonnet.gif,none,FALSE,All sources failed
+0987,Flutter Mane,flutter-mane.gif,none,FALSE,All sources failed
+0988,Slither Wing,slither-wing.gif,none,FALSE,All sources failed
+0989,Sandy Shocks,sandy-shocks.gif,none,FALSE,All sources failed
+0990,Iron Treads,iron-treads.gif,none,FALSE,All sources failed
+0991,Iron Bundle,iron-bundle.gif,none,FALSE,All sources failed
+0992,Iron Hands,iron-hands.gif,none,FALSE,All sources failed
+0993,Iron Jugulis,iron-jugulis.gif,none,FALSE,All sources failed
+0994,Iron Moth,iron-moth.gif,none,FALSE,All sources failed
+0995,Iron Thorns,iron-thorns.gif,none,FALSE,All sources failed
+0996,Frigibax,frigibax.gif,showdown,TRUE,Downloaded
+0997,Arctibax,arctibax.gif,showdown,TRUE,Downloaded
+0998,Baxcalibur,baxcalibur.gif,showdown,TRUE,Downloaded
+0999,Gimmighoul (Chest Form),gimmighoul-chest-form.gif,showdown,TRUE,Downloaded
+0999,Gimmighoul (Roaming Form),gimmighoul-roaming-form.gif,showdown,TRUE,Downloaded
+1000,Gholdengo,gholdengo.gif,showdown,TRUE,Downloaded
+1001,Wo-Chien,wo-chien.gif,none,FALSE,All sources failed
+1002,Chien-Pao,chien-pao.gif,none,FALSE,All sources failed
+1003,Ting-Lu,ting-lu.gif,none,FALSE,All sources failed
+1004,Chi-Yu,chi-yu.gif,none,FALSE,All sources failed
+1005,Roaring Moon,roaring-moon.gif,none,FALSE,All sources failed
+1006,Iron Valiant,iron-valiant.gif,none,FALSE,All sources failed
+1007,Koraidon,koraidon.gif,none,FALSE,All sources failed
+1008,Miraidon,miraidon.gif,none,FALSE,All sources failed
+1009,Walking Wake,walking-wake.gif,none,FALSE,All sources failed
+1010,Iron Leaves,iron-leaves.gif,none,FALSE,All sources failed
+1011,Dipplin,dipplin.gif,showdown,TRUE,Downloaded
+1012,Poltchageist,poltchageist.gif,showdown,TRUE,Downloaded
+1013,Sinistcha,sinistcha.gif,showdown,TRUE,Downloaded
+1014,Okidogi,okidogi.gif,none,FALSE,All sources failed
+1015,Munkidori,munkidori.gif,none,FALSE,All sources failed
+1016,Fezandipiti,fezandipiti.gif,none,FALSE,All sources failed
+1017,Ogerpon (Teal Mask),ogerpon-teal-mask.gif,none,FALSE,All sources failed
+1017,Ogerpon (Wellspring Mask),ogerpon-wellspring-mask.gif,none,FALSE,All sources failed
+1017,Ogerpon (Hearthflame Mask),ogerpon-hearthflame-mask.gif,none,FALSE,All sources failed
+1017,Ogerpon (Cornerstone Mask),ogerpon-cornerstone-mask.gif,none,FALSE,All sources failed
+1018,Archaludon,archaludon.gif,showdown,TRUE,Downloaded
+1019,Hydrapple,hydrapple.gif,showdown,TRUE,Downloaded
+1020,Gouging Fire,gouging-fire.gif,none,FALSE,All sources failed
+1021,Raging Bolt,raging-bolt.gif,none,FALSE,All sources failed
+1022,Iron Boulder,iron-boulder.gif,none,FALSE,All sources failed
+1023,Iron Crown,iron-crown.gif,none,FALSE,All sources failed
+1024,Terapagos (Normal Form),terapagos-normal-form.gif,none,FALSE,All sources failed
+1024,Terapagos (Terastal Form),terapagos-terastal-form.gif,none,FALSE,All sources failed
+1024,Terapagos (Stellar Form),terapagos-stellar-form.gif,none,FALSE,All sources failed
+1025,Pecharunt,pecharunt.gif,none,FALSE,All sources failed
