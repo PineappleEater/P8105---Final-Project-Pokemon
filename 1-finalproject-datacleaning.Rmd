@@ -68,8 +68,8 @@ pokemon_df <- as_tibble(raw_wh_df[[1]]) |>
     -height_ft, -weight_lbs, -type_split, -type
   )
 
-# Export complete dataset
-write_csv(pokemon_df, "data/pokemon_data.csv")
+# Export raw dataset (before category labeling, for reference only)
+write_csv(pokemon_df, "data/pokemon_data_raw.csv")
 ```
 
 Note: For "Eternamax" Eternatus, no official height or weight data exists. Based on its in-game appearance and the way it is portrayed in the anime—as a colossal, rift-like dragon composed of red energy, fractures, and crystalline lines—I set its size to 999.9 meters tall and 9999.9 kilograms in weight. The resulting BMI is effectively zero, perfectly matching the idea of a non-physical energy entity. This also aligns with how the anime almost never shows its full body, only fragmented sections of its form.
@@ -162,11 +162,32 @@ pokemon_df_final <- pokemon_df |>
   )
 
 
-pokemon_evolved_df <- pokemon_df_final |> 
+pokemon_evolved_df <- pokemon_df_final |>
   filter(dex %in% pokemon_evolved_n$dex)
 
+# Type One-Hot Encoding
+all_types <- sort(unique(na.omit(c(pokemon_evolved_df$type_1, pokemon_evolved_df$type_2))))
 
-write_csv(pokemon_df_final, "data/pokemon_data.csv")
+for (type in all_types) {
+  col_name <- paste0("has_", tolower(type))
+  pokemon_evolved_df[[col_name]] <- (pokemon_evolved_df$type_1 == type |
+                                      pokemon_evolved_df$type_2 == type)
+}
+
+# Add dual-type indicator
+pokemon_evolved_df <- pokemon_evolved_df |>
+  mutate(is_dual_type = !is.na(type_2))
+
+# Set factor order
+pokemon_evolved_df$generation <- factor(pokemon_evolved_df$generation,
+  levels = paste0("Gen ", 1:9)
+)
+pokemon_evolved_df$category <- factor(pokemon_evolved_df$category,
+  levels = c("Regular", "Legendary", "Mythical", "Paradox", "Ultra Beast")
+)
+
+# Export complete dataset (all evolution stages, for reference only)
+write_csv(pokemon_df_final, "data/pokemon_data_all.csv")
 ```
 
 ### Retrieve and clean up the type chart.
@@ -240,8 +261,8 @@ write_csv(def_type_df, "data/def_type_df.csv")
 ```
 
 ```{r}
-# Export final evolution dataset (primary dataset for all downstream analysis)
-write_csv(pokemon_evolved_df, "data/pokemon_data_final_evolutions.csv")
+# Export final evolution dataset with all enrichments (primary dataset for all downstream analysis)
+write_csv(pokemon_evolved_df, "data/pokemon_data_final_evolutions_enriched.csv")
 ```
 ---
 
@@ -251,8 +272,9 @@ write_csv(pokemon_evolved_df, "data/pokemon_data_final_evolutions.csv")
 
 | File Name | Pokémon Count | Description | Recommended Use |
 |-----------|---------------|-------------|----------------|
-| `pokemon_data.csv` | 1,219 | Complete dataset (all evolution stages) | Reference, comprehensive analysis |
-| `pokemon_data_final_evolutions.csv` | 743 | **Final evolutions only** | Statistical analysis & ML modeling |
+| `pokemon_data_raw.csv` | 1,219 | Raw dataset (basic stats only) | Reference |
+| `pokemon_data_all.csv` | 1,219 | Complete dataset with category labels | Reference, comprehensive analysis |
+| `pokemon_data_final_evolutions_enriched.csv` | 743 | **Final evolutions with all features** | Statistical analysis & ML modeling |
 
 `def_type_df`: Dataset that included all **Defence Type** possible of Pokémon, and it's efficiency in defending against different **Attack Types** 
 

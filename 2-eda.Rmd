@@ -49,116 +49,25 @@ if (has_patchwork) library(patchwork)
 ```
 
 ```{r load-data}
-# Load cleaned data - FINAL EVOLUTIONS ONLY to avoid downward bias from unevolved forms
-pokemon_df <- read_csv("data/pokemon_data_final_evolutions.csv")
+# Load enriched dataset - FINAL EVOLUTIONS ONLY with all features pre-computed
+# Features include: category labels, generation, type one-hot encoding, is_dual_type
+pokemon_df <- read_csv("data/pokemon_data_final_evolutions_enriched.csv")
+
+# Restore factor levels (lost during CSV export)
+pokemon_df$generation <- factor(pokemon_df$generation,
+  levels = paste0("Gen ", 1:9)
+)
+pokemon_df$category <- factor(pokemon_df$category,
+  levels = c("Regular", "Legendary", "Mythical", "Paradox", "Ultra Beast")
+)
 
 # Display structure
 glimpse(pokemon_df)
 ```
 
-## 2. Feature Engineering: Labels & Categories
+## 2. Data Overview
 
-### 2.1 Category Labels
-
-```{r add-labels}
-# Legendary Pokemon
-legend_dex <- c(
-  144, 145, 146, 150,
-  243, 244, 245, 249, 250,
-  377, 378, 379, 380, 381, 382, 383, 384,
-  480, 481, 482, 483, 484, 485, 486, 487, 488,
-  638, 639, 640, 641, 642, 643, 644, 645, 646,
-  716, 717, 718,
-  772, 773, 785, 786, 787, 788, 789, 790, 791, 792,
-  800, 888, 889, 890, 891, 892, 894, 895, 896, 897, 898, 905,
-  1001, 1002, 1003, 1004, 1007, 1008, 1014, 1015, 1016, 1017, 1024
-)
-
-# Mythical Pokemon
-myth_dex <- c(
-  151, 251, 385, 386, 489, 490, 491, 492, 493,
-  494, 647, 684, 689, 719, 720, 721,
-  801, 802, 807, 808, 809, 893, 1025
-)
-
-# Paradox Pokemon
-paradox_dex <- c(984:995, 1005:1010, 1020:1023)
-
-# Ultra Beast Pokemon
-ub_dex <- c(793:799, 803:806)
-
-# Add category columns
-pokemon_df <- pokemon_df |>
-  mutate(
-    is_legendary = dex %in% legend_dex,
-    is_mythical = dex %in% myth_dex,
-    is_paradox = dex %in% paradox_dex,
-    is_ultra_beast = dex %in% ub_dex,
-    # Combined special category
-    is_special = is_legendary | is_mythical | is_paradox | is_ultra_beast,
-    # Category label for plotting
-    category = case_when(
-      is_legendary ~ "Legendary",
-      is_mythical ~ "Mythical",
-      is_paradox ~ "Paradox",
-      is_ultra_beast ~ "Ultra Beast",
-      TRUE ~ "Regular"
-    )
-  )
-```
-
-### 2.2 Generation Assignment
-
-```{r add-generation}
-pokemon_df <- pokemon_df |>
-  mutate(
-    generation = case_when(
-      dex <= 151 ~ "Gen 1",
-      dex <= 251 ~ "Gen 2",
-      dex <= 386 ~ "Gen 3",
-      dex <= 493 ~ "Gen 4",
-      dex <= 649 ~ "Gen 5",
-      dex <= 721 ~ "Gen 6",
-      dex <= 809 ~ "Gen 7",
-      dex <= 905 ~ "Gen 8",
-      TRUE ~ "Gen 9"
-    )
-  )
-
-# Set factor order
-pokemon_df$generation <- factor(pokemon_df$generation,
-  levels = paste0("Gen ", 1:9)
-)
-pokemon_df$category <- factor(pokemon_df$category,
-  levels = c(
-    "Regular", "Legendary", "Mythical",
-    "Paradox", "Ultra Beast"
-  )
-)
-```
-
-### 2.3 Type One-Hot Encoding
-
-```{r type-encoding}
-# Get all unique types
-all_types <- sort(unique(na.omit(c(pokemon_df$type_1, pokemon_df$type_2))))
-
-cat("Unique types:", paste(all_types, collapse = ", "), "\n")
-
-# Create one-hot encoding for each type
-for (type in all_types) {
-  col_name <- paste0("has_", tolower(type))
-  pokemon_df[[col_name]] <- (pokemon_df$type_1 == type | pokemon_df$type_2 == type)
-}
-
-# Count dual-type Pokemon
-pokemon_df <- pokemon_df |>
-  mutate(is_dual_type = !is.na(type_2))
-```
-
-## 3. Data Overview
-
-### 3.1 Basic Statistics
+### 2.1 Basic Statistics
 
 ```{r summary-stats}
 # Numeric columns
@@ -175,7 +84,7 @@ summary_stats <- pokemon_df |>
 print(summary_stats)
 ```
 
-### 3.2 Category Counts
+### 2.2 Category Counts
 
 ```{r category-counts}
 # Count by category
@@ -201,9 +110,9 @@ type_summary <- pokemon_df |>
 print(kable(head(type_summary, 10), caption = "Pokemon by Primary Type (Top 10)"))
 ```
 
-## 4. Univariate Analysis
+## 3. Univariate Analysis
 
-### 4.1 Base Stat Total Distribution
+### 3.1 Base Stat Total Distribution
 
 ```{r total-dist}
 # Overall distribution
@@ -235,7 +144,7 @@ if (has_patchwork) {
 }
 ```
 
-### 4.2 Individual Stat Distributions
+### 3.2 Individual Stat Distributions
 
 ```{r stat-distributions}
 stat_cols <- c("hp", "attack", "defense", "sp_atk", "sp_def", "speed")
@@ -259,7 +168,7 @@ ggplot(pokemon_long, aes(x = value, fill = stat)) +
   theme(legend.position = "none")
 ```
 
-### 4.3 Physical Attributes
+### 3.3 Physical Attributes
 
 ```{r physical-dist}
 p1 <- ggplot(pokemon_df, aes(x = height_m)) +
@@ -298,9 +207,9 @@ if (has_patchwork) {
 }
 ```
 
-## 5. Bivariate Analysis
+## 4. Bivariate Analysis
 
-### 5.1 Correlation Matrix
+### 4.1 Correlation Matrix
 
 ```{r correlation}
 # Compute correlation
@@ -334,7 +243,7 @@ if (has_corrplot) {
 }
 ```
 
-### 5.2 Attack vs Defense
+### 4.2 Attack vs Defense
 
 ```{r attack-defense}
 ggplot(pokemon_df, aes(x = attack, y = defense, color = category)) +
@@ -347,7 +256,7 @@ ggplot(pokemon_df, aes(x = attack, y = defense, color = category)) +
   )
 ```
 
-### 5.3 Special Attack vs Special Defense
+### 4.3 Special Attack vs Special Defense
 
 ```{r sp-attack-defense}
 ggplot(pokemon_df, aes(x = sp_atk, y = sp_def, color = category)) +
@@ -360,7 +269,7 @@ ggplot(pokemon_df, aes(x = sp_atk, y = sp_def, color = category)) +
   )
 ```
 
-### 5.4 Height vs Weight
+### 4.4 Height vs Weight
 
 ```{r height-weight}
 ggplot(pokemon_df, aes(x = height_m, y = weight_kgs, color = type_1)) +
@@ -375,9 +284,9 @@ ggplot(pokemon_df, aes(x = height_m, y = weight_kgs, color = type_1)) +
   theme(legend.position = "right")
 ```
 
-## 6. Group Comparisons
+## 5. Group Comparisons
 
-### 6.1 Stats by Category
+### 5.1 Stats by Category
 
 ```{r stats-by-category}
 # Box plots for each stat
@@ -396,7 +305,7 @@ pokemon_long |>
   )
 ```
 
-### 6.2 BST by Generation
+### 5.2 BST by Generation
 
 ```{r bst-generation}
 ggplot(pokemon_df, aes(x = generation, y = total, fill = generation)) +
@@ -413,7 +322,7 @@ ggplot(pokemon_df, aes(x = generation, y = total, fill = generation)) +
   )
 ```
 
-### 6.3 Stats by Primary Type (Top Types)
+### 5.3 Stats by Primary Type (Top Types)
 
 ```{r stats-by-type}
 # Get top 10 types
@@ -434,9 +343,9 @@ pokemon_df |>
   theme(legend.position = "none")
 ```
 
-## 7. Type Analysis
+## 6. Type Analysis
 
-### 7.1 Type Distribution
+### 6.1 Type Distribution
 
 ```{r type-counts}
 # Primary type
@@ -467,7 +376,7 @@ if (has_patchwork) {
 }
 ```
 
-### 7.2 Type Combinations
+### 6.2 Type Combinations
 
 ```{r type-combos}
 # Top type combinations
@@ -485,7 +394,7 @@ pokemon_df |>
   )
 ```
 
-### 7.3 Average Stats by Type
+### 6.3 Average Stats by Type
 
 ```{r avg-stats-type}
 # Calculate average stats per type
@@ -517,9 +426,9 @@ type_stats |>
   )
 ```
 
-## 8. Special Categories Deep Dive
+## 7. Special Categories Deep Dive
 
-### 8.1 Legendary vs Regular Stats
+### 7.1 Legendary vs Regular Stats
 
 ```{r legendary-comparison}
 # Statistical test
@@ -544,7 +453,7 @@ pokemon_df |>
   theme(legend.position = "none")
 ```
 
-### 8.2 All Special Categories
+### 7.2 All Special Categories
 
 ```{r special-categories}
 category_stats <- pokemon_df |>
@@ -564,9 +473,9 @@ category_stats <- pokemon_df |>
 print(kable(category_stats, caption = "Average Stats by Category", digits = 1))
 ```
 
-## 9. Generation Evolution Analysis
+## 8. Generation Evolution Analysis
 
-### 9.1 Power Creep Over Generations
+### 8.1 Power Creep Over Generations
 
 ```{r generation-power-creep}
 gen_stats <- pokemon_df |>
@@ -591,7 +500,7 @@ ggplot(gen_stats, aes(x = generation)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-### 9.2 Type Diversity by Generation
+### 8.2 Type Diversity by Generation
 
 ```{r type-diversity}
 pokemon_df |>
@@ -606,7 +515,7 @@ pokemon_df |>
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-## 10. Key Findings Summary
+## 9. Key Findings Summary
 
 ```{r findings}
 library(glue)
@@ -642,23 +551,6 @@ cat(glue("=== EDA KEY FINDINGS ===
    - Height range: {min(pokemon_df$height_m, na.rm = TRUE)} - {max(pokemon_df$height_m, na.rm = TRUE)} m
    - Weight range: {min(pokemon_df$weight_kgs, na.rm = TRUE)} - {max(pokemon_df$weight_kgs, na.rm = TRUE)} kg
 "))
-```
-
-## 11. Export Enhanced Dataset
-
-```{r export}
-# Save enriched dataset with all features
-# This contains FINAL EVOLUTIONS ONLY to avoid statistical bias
-if (!dir.exists("data")) dir.create("data", recursive = TRUE)
-
-write_csv(pokemon_df, "data/pokemon_data_final_evolutions_enriched.csv")
-
-cat("\nEnriched dataset saved to: data/pokemon_data_final_evolutions_enriched.csv\n")
-cat(
-  "New features added:",
-  "is_legendary, is_mythical, is_paradox, is_ultra_beast,",
-  "category, generation, type one-hot columns\n"
-)
 ```
 
 ---

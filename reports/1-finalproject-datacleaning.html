@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2025-11-21" />
+<meta name="date" content="2025-11-22" />
 
 <title>Data Source and Data Cleaning Process</title>
 
@@ -1585,16 +1585,21 @@ border-radius: 0px;
 
 
 <h1 class="title toc-ignore">Data Source and Data Cleaning Process</h1>
-<h4 class="date">2025-11-21</h4>
+<h4 class="date">2025-11-22</h4>
 
 </div>
 
 
-<pre class="r"><code>library(rvest)
-library(tidyverse)</code></pre>
+<pre class="r"><code>library(rvest)</code></pre>
+<pre><code>## Warning: package &#39;rvest&#39; was built under R version 4.5.2</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.5.2</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.5.2</code></pre>
+<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.5.2</code></pre>
+<pre><code>## Warning: package &#39;lubridate&#39; was built under R version 4.5.2</code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.0     ✔ stringr   1.5.2
+## ✔ dplyr     1.1.4     ✔ readr     2.1.6
+## ✔ forcats   1.0.1     ✔ stringr   1.5.2
 ## ✔ ggplot2   4.0.0     ✔ tibble    3.3.0
 ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
 ## ✔ purrr     1.1.0     
@@ -1604,6 +1609,7 @@ library(tidyverse)</code></pre>
 ## ✖ dplyr::lag()            masks stats::lag()
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <pre class="r"><code>library(janitor)</code></pre>
+<pre><code>## Warning: package &#39;janitor&#39; was built under R version 4.5.2</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;janitor&#39;
 ## 
@@ -1661,8 +1667,8 @@ names(pokemon_state_df)</code></pre>
     -height_ft, -weight_lbs, -type_split, -type
   )
 
-# Export complete dataset
-write_csv(pokemon_df, &quot;data/pokemon_data.csv&quot;)</code></pre>
+# Export raw dataset (before category labeling, for reference only)
+write_csv(pokemon_df, &quot;data/pokemon_data_raw.csv&quot;)</code></pre>
 <p>Note: For “Eternamax” Eternatus, no official height or weight data
 exists. Based on its in-game appearance and the way it is portrayed in
 the anime—as a colossal, rift-like dragon composed of red energy,
@@ -1752,11 +1758,32 @@ pokemon_df_final &lt;- pokemon_df |&gt;
   )
 
 
-pokemon_evolved_df &lt;- pokemon_df_final |&gt; 
+pokemon_evolved_df &lt;- pokemon_df_final |&gt;
   filter(dex %in% pokemon_evolved_n$dex)
 
+# Type One-Hot Encoding
+all_types &lt;- sort(unique(na.omit(c(pokemon_evolved_df$type_1, pokemon_evolved_df$type_2))))
 
-write_csv(pokemon_df_final, &quot;data/pokemon_data.csv&quot;)</code></pre>
+for (type in all_types) {
+  col_name &lt;- paste0(&quot;has_&quot;, tolower(type))
+  pokemon_evolved_df[[col_name]] &lt;- (pokemon_evolved_df$type_1 == type |
+                                      pokemon_evolved_df$type_2 == type)
+}
+
+# Add dual-type indicator
+pokemon_evolved_df &lt;- pokemon_evolved_df |&gt;
+  mutate(is_dual_type = !is.na(type_2))
+
+# Set factor order
+pokemon_evolved_df$generation &lt;- factor(pokemon_evolved_df$generation,
+  levels = paste0(&quot;Gen &quot;, 1:9)
+)
+pokemon_evolved_df$category &lt;- factor(pokemon_evolved_df$category,
+  levels = c(&quot;Regular&quot;, &quot;Legendary&quot;, &quot;Mythical&quot;, &quot;Paradox&quot;, &quot;Ultra Beast&quot;)
+)
+
+# Export complete dataset (all evolution stages, for reference only)
+write_csv(pokemon_df_final, &quot;data/pokemon_data_all.csv&quot;)</code></pre>
 </div>
 <div id="retrieve-and-clean-up-the-type-chart." class="section level3">
 <h3>Retrieve and clean up the type chart.</h3>
@@ -1823,8 +1850,8 @@ dual_def &lt;- map_dfr(combn(types, 2, simplify = FALSE), \(pair) {
 def_type_df &lt;- bind_rows(single_def, dual_def)
 
 write_csv(def_type_df, &quot;data/def_type_df.csv&quot;)</code></pre>
-<pre class="r"><code># Export final evolution dataset (primary dataset for all downstream analysis)
-write_csv(pokemon_evolved_df, &quot;data/pokemon_data_final_evolutions.csv&quot;)</code></pre>
+<pre class="r"><code># Export final evolution dataset with all enrichments (primary dataset for all downstream analysis)
+write_csv(pokemon_evolved_df, &quot;data/pokemon_data_final_evolutions_enriched.csv&quot;)</code></pre>
 <hr />
 </div>
 <div id="cleaned-datasets-summary" class="section level2">
@@ -1848,15 +1875,21 @@ write_csv(pokemon_evolved_df, &quot;data/pokemon_data_final_evolutions.csv&quot;
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>pokemon_data.csv</code></td>
+<td><code>pokemon_data_raw.csv</code></td>
 <td>1,219</td>
-<td>Complete dataset (all evolution stages)</td>
-<td>Reference, comprehensive analysis</td>
+<td>Raw dataset (basic stats only)</td>
+<td>Reference</td>
 </tr>
 <tr class="even">
-<td><code>pokemon_data_final_evolutions.csv</code></td>
+<td><code>pokemon_data_all.csv</code></td>
+<td>1,219</td>
+<td>Complete dataset with category labels</td>
+<td>Reference, comprehensive analysis</td>
+</tr>
+<tr class="odd">
+<td><code>pokemon_data_final_evolutions_enriched.csv</code></td>
 <td>743</td>
-<td><strong>Final evolutions only</strong></td>
+<td><strong>Final evolutions with all features</strong></td>
 <td>Statistical analysis &amp; ML modeling</td>
 </tr>
 </tbody>
