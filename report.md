@@ -35,7 +35,7 @@
 
 ### Team Contributions
 - **Ruipeng Li**: : Data collection, web scraping, data cleaning
-- **Xuange Liang**: PCA analysis, clustering methodology，Classification modeling, hyperparameter tuning
+- **Xuange Liang**: PCA analysis, Clustering，Classification modeling
 - **Yiwen Zhang** & **Leah Li**: Visualization design, documentation
 
 ---

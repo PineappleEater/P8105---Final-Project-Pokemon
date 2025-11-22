@@ -40,8 +40,8 @@ theme_set(theme_minimal())
 ```
 
 ```{r load-data}
-# Load enriched dataset
-pokemon_df <- read_csv("data/pokemon_data_enriched.csv")
+# Load enriched dataset - FINAL EVOLUTIONS ONLY
+pokemon_df <- read_csv("data/pokemon_data_final_evolutions_enriched.csv")
 
 cat(glue("Dataset: {nrow(pokemon_df)} Pokemon with {ncol(pokemon_df)} features\n"))
 ```
