@@ -6,16 +6,17 @@
 <img src="assets/sprites/gif/pichu.gif" width="50" alt="Pichu">
 <img src="assets/sprites/gif/togepi.gif" width="55" alt="Togepi">
 <img src="assets/sprites/gif/eevee.gif" width="65" alt="Eevee">
-<img src="assets/sprites/gif/pikachu.gif" width="75" alt="Pikachu">
 <img src="assets/sprites/gif/charizard.gif" width="100" alt="Charizard">
-<img src="assets/sprites/gif/mewtwo.gif" width="95" alt="Mewtwo">
-<img src="assets/sprites/gif/rayquaza.gif" width="110" alt="Rayquaza">
-<img src="assets/sprites/gif/lucario.gif" width="80" alt="Lucario">
-<img src="assets/sprites/gif/garchomp.gif" width="90" alt="Garchomp">
+<img src="assets/sprites/gif/pikachu.gif" width="85" alt="Pikachu">
+<!-- <img src="assets/sprites/gif/rayquaza.gif" width="110" alt="Rayquaza"> -->
+<!-- <img src="assets/sprites/gif/lucario.gif" width="80" alt="Lucario">
+<img src="assets/sprites/gif/garchomp.gif" width="90" alt="Garchomp"> -->
 <img src="assets/sprites/gif/gengar.gif" width="70" alt="Gengar">
-<img src="assets/sprites/gif/dragonite.gif" width="85" alt="Dragonite">
+<img src="assets/sprites/gif/dragonite.gif" width="55" alt="Dragonite">
 <img src="assets/sprites/gif/jigglypuff.gif" width="55" alt="Jigglypuff">
-<img src="assets/sprites/gif/mew.gif" width="60" alt="Mew">
+<img src="assets/sprites/gif/mew.gif" width="45" alt="Mew">
+<img src="assets/sprites/gif/mewtwo.gif" width="95" alt="Mewtwo">
+
 
 <br>
 
@@ -359,10 +360,9 @@ https://github.com/PineappleEater/P8105---Final-Project-Pokemon
 <img src="assets/sprites/gif/umbreon.gif" width="72" alt="Umbreon">
 <img src="assets/sprites/gif/leafeon.gif" width="70" alt="Leafeon">
 <img src="assets/sprites/gif/glaceon.gif" width="74" alt="Glaceon">
-<img src="assets/sprites/gif/sylveon.gif" width="82" alt="Sylveon">
+<img src="assets/sprites/gif/sylveon.gif" width="60" alt="Sylveon">
 
 <br><br>
-
 **If you found this project helpful, please consider starring the repository!**
 
 Made with ❤️ by the P8105 Pokémon Research Team
