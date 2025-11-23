@@ -1,26 +1,49 @@
-# 🎮 The Story and Mystery of Pokémon — Data Science Project
+# The Story and Mystery of Pokémon — Data Science Project
 
 <div align="center">
 
-[![R](https://img.shields.io/badge/R-%3E%3D4.0-blue.svg)](https://www.r-project.org/)
-[![License](https://img.shields.io/badge/license-Academic-green.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/status-Complete-success.svg)](https://github.com/PineappleEater/P8105---Final-Project-Pokemon)
+<!-- Hero Banner with animated GIFs - varying sizes for visual hierarchy -->
+<img src="assets/sprites/gif/pichu.gif" width="50" alt="Pichu">
+<img src="assets/sprites/gif/togepi.gif" width="55" alt="Togepi">
+<img src="assets/sprites/gif/eevee.gif" width="65" alt="Eevee">
+<img src="assets/sprites/gif/pikachu.gif" width="75" alt="Pikachu">
+<img src="assets/sprites/gif/charizard.gif" width="100" alt="Charizard">
+<img src="assets/sprites/gif/mewtwo.gif" width="95" alt="Mewtwo">
+<img src="assets/sprites/gif/rayquaza.gif" width="110" alt="Rayquaza">
+<img src="assets/sprites/gif/lucario.gif" width="80" alt="Lucario">
+<img src="assets/sprites/gif/garchomp.gif" width="90" alt="Garchomp">
+<img src="assets/sprites/gif/gengar.gif" width="70" alt="Gengar">
+<img src="assets/sprites/gif/dragonite.gif" width="85" alt="Dragonite">
+<img src="assets/sprites/gif/jigglypuff.gif" width="55" alt="Jigglypuff">
+<img src="assets/sprites/gif/mew.gif" width="60" alt="Mew">
+
+<br>
+
+[![R](https://img.shields.io/badge/R-%3E%3D4.0-276DC3?style=for-the-badge&logo=r&logoColor=white)](https://www.r-project.org/)
+[![Status](https://img.shields.io/badge/Status-Complete-success?style=for-the-badge)](https://github.com/PineappleEater/P8105---Final-Project-Pokemon)
+[![License](https://img.shields.io/badge/License-Academic-blue?style=for-the-badge)](LICENSE)
 
 *A comprehensive data science exploration of Pokémon attributes, battle stats, and design patterns across nine generations*
 
-[Overview](#-overview) • [Dataset](#-dataset) • [Methods](#-methodology) • [Results](#-key-findings) • [Usage](#-installation--usage) • [Team](#-team)
+[Overview](#overview) · [Dataset](#dataset) · [Methods](#methodology) · [Results](#key-findings) · [Usage](#installation--usage) · [Team](#team)
 
 </div>
 
 ---
 
-## 📋 Overview
+## Overview
 
-This repository presents a comprehensive data science investigation into the Pokémon universe, analyzing 1,025+ Pokémon species across all nine generations. The project employs modern statistical and machine learning techniques to uncover patterns in Pokémon design, classify legendary Pokémon, and identify distinct battle archetypes.
+<img align="right" src="assets/sprites/gif/bulbasaur.gif" width="90" alt="Bulbasaur">
+<img align="right" src="assets/sprites/gif/charmander.gif" width="75" alt="Charmander">
+<img align="right" src="assets/sprites/gif/squirtle.gif" width="70" alt="Squirtle">
 
-### 🎯 Project Goals
+This repository presents a comprehensive data science investigation into the Pokémon universe, analyzing **1,025+ Pokémon species** across all nine generations. The project employs modern statistical and machine learning techniques to uncover patterns in Pokémon design, classify legendary Pokémon, and identify distinct battle archetypes.
 
-#### Core Research Questions
+<br clear="right">
+
+### Project Goals
+
+**Core Research Questions**
 
 1. **Legendary Classification**: Can we build a classifier to identify legendary Pokémon based on their stats?
 2. **Physical Attributes Analysis**: How do height and weight correlate with base stats?
@@ -28,21 +51,7 @@ This repository presents a comprehensive data science investigation into the Pok
 4. **Type-Legendary Relationship**: Which types are most likely to be legendary Pokémon?
 5. **Rating System Development**: Can we create a Pokémon rating system for beginners based on type and stats?
 
-#### Extended Goals
-
-1. **System Validation**: Does the "best" team from our rating system match competitive standards?
-2. **Team Building Utility**: Is the rating system reliable and useful as a practical reference?
-
-#### Technical Objectives
-
-- **Data Collection & Cleaning**: Scrape and harmonize Pokémon data from multiple sources
-- **Exploratory Analysis**: Investigate distributions, correlations, and evolutionary patterns
-- **Dimensionality Reduction**: Apply PCA to understand variance in Pokémon attributes
-- **Unsupervised Learning**: Cluster Pokémon into archetypes based on stats and characteristics
-- **Supervised Learning**: Build predictive models to classify legendary Pokémon
-- **Reproducible Research**: Document all analyses with reproducible R Markdown workflows
-
-### 🎓 Academic Context
+### Academic Context
 
 - **Course**: P8105 — Data Science I (Columbia University)
 - **Timeline**: November – December 2025
@@ -50,7 +59,7 @@ This repository presents a comprehensive data science investigation into the Pok
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 ### Data Sources
 
@@ -60,448 +69,250 @@ This repository presents a comprehensive data science investigation into the Pok
 | **PokémonDB** | Official stats scraped from web | [pokemondb.net](https://pokemondb.net) |
 | **Veekun/PokéAPI** | Metadata & move databases | [GitHub](https://github.com/veekun/pokedex) |
 
-### Dataset Characteristics
+### Dataset Overview
 
-- **Species Count**: 1,025 Pokémon (including forms)
-- **Generations**: Gen 1–9 (1996–2025)
-- **Features**: 30+ attributes including:
-  - **Base Stats**: HP, Attack, Defense, Sp. Atk, Sp. Def, Speed
-  - **Physical Attributes**: Height (m), Weight (kg), BMI
-  - **Categorical**: Type 1, Type 2, Category (Legendary/Mythical/etc.), Generation
-  - **Derived Features**: One-hot type encodings, category flags, PCA scores
+<div align="center">
+
+| Metric | Value |
+|--------|-------|
+| **Species Count** | 1,025 Pokémon |
+| **Generations** | Gen 1–9 (1996–2025) |
+| **Features** | 30+ attributes |
+
+</div>
+
+### 18 Pokémon Types
+
+<div align="center">
+
+<img src="assets/icons/types/normal.png" height="28" alt="Normal">
+<img src="assets/icons/types/fire.png" height="28" alt="Fire">
+<img src="assets/icons/types/water.png" height="28" alt="Water">
+<img src="assets/icons/types/electric.png" height="28" alt="Electric">
+<img src="assets/icons/types/grass.png" height="28" alt="Grass">
+<img src="assets/icons/types/ice.png" height="28" alt="Ice">
+<img src="assets/icons/types/fighting.png" height="28" alt="Fighting">
+<img src="assets/icons/types/poison.png" height="28" alt="Poison">
+<img src="assets/icons/types/ground.png" height="28" alt="Ground">
+<img src="assets/icons/types/flying.png" height="28" alt="Flying">
+<img src="assets/icons/types/psychic.png" height="28" alt="Psychic">
+<img src="assets/icons/types/bug.png" height="28" alt="Bug">
+<img src="assets/icons/types/rock.png" height="28" alt="Rock">
+<img src="assets/icons/types/ghost.png" height="28" alt="Ghost">
+<img src="assets/icons/types/dragon.png" height="28" alt="Dragon">
+<img src="assets/icons/types/dark.png" height="28" alt="Dark">
+<img src="assets/icons/types/steel.png" height="28" alt="Steel">
+<img src="assets/icons/types/fairy.png" height="28" alt="Fairy">
+
+</div>
 
 ### Key Variables
 
 | Variable | Type | Description |
 |----------|------|-------------|
-| `dex` | Integer | National Pokédex number (unique ID) |
+| `dex` | Integer | National Pokédex number |
 | `name` | String | Official species name |
-| `type_1` / `type_2` | Categorical | Primary and secondary elemental types |
-| `total` | Integer | Base Stat Total (BST) — sum of all stats |
-| `hp` ... `speed` | Integer | Individual base stat values (0–255) |
-| `height_m` / `weight_kgs` | Numeric | Official dimensions |
-| `bmi` | Numeric | Body Mass Index (derived) |
+| `type_1` / `type_2` | Categorical | Primary and secondary types |
+| `total` | Integer | Base Stat Total (BST) |
+| `hp` ... `speed` | Integer | Individual base stats |
 | `is_legendary` | Boolean | Legendary status flag |
 | `category` | Factor | Regular / Legendary / Mythical / Paradox / Ultra Beast |
-| `generation` | Factor | Gen 1–9 categorical assignment |
 
 ---
 
-## 🔬 Methodology
+## Methodology
+
+### Analysis Pipeline
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│  1. Data Clean  │───▶│    2. EDA       │───▶│  3. PCA/Cluster │
+│   (rvest)       │    │  (tidyverse)    │    │  (factoextra)   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                                      │
+┌─────────────────┐    ┌─────────────────┐           │
+│ 5. Type Rating  │◀───│ 4. ML Classify  │◀──────────┘
+│   System        │    │ (Random Forest) │
+└─────────────────┘    └─────────────────┘
+```
 
 ### 1. Data Cleaning & Preprocessing
+
+<img align="right" src="assets/sprites/gif/porygon.gif" width="65" alt="Porygon">
 
 **File**: `1-datacleaning.Rmd`
 
 - Scraped three HTML tables from PokémonDB using `rvest`
-- Joined stats, height/weight, and evolution data by Pokédex number
-- Handled special cases:
-  - **Eternatus Eternamax**: Assigned estimated dimensions (999.9m / 9999.9kg) for lore-accurate representation
-  - **Alternate Forms**: Preserved form-specific stats while maintaining unique identifiers
-- Exported `pokemon_data.csv` (tidy base dataset)
+- Joined stats, height/weight, and evolution data
+- Handled special cases (Eternamax, alternate forms)
+- **Output**: `pokemon_data.csv` (1,025 rows × 14 columns)
 
-**Output**: Clean, analysis-ready dataset with 1,025 rows × 14 columns
+### 2. Exploratory Data Analysis
 
----
-
-### 2. Exploratory Data Analysis (EDA)
+<img align="right" src="assets/sprites/gif/magnezone.gif" width="75" alt="Magnezone">
 
 **File**: `2-eda.Rmd`
 
-**Feature Engineering**:
-- Created binary flags for special categories (Legendary, Mythical, Paradox, Ultra Beast)
-- Assigned generation labels based on Pokédex ranges
-- One-hot encoded all 18 Pokémon types
-- Calculated dual-type indicator
-
-**Statistical Analyses**:
-- Distribution analysis for all numeric features
-- Correlation matrix revealing relationships between stats
-- Type distribution and combination frequency
-- Generation-wise power creep analysis
-- Category comparisons (t-tests, ANOVA)
-
-**Key Visualizations**:
-- Histograms, density plots, box plots for univariate distributions
-- Scatter plots (Attack vs Defense, Height vs Weight on log scale)
-- Heatmaps (correlation, type × stat averages)
-- Violin plots for category comparisons
-
-**Output**: `pokemon_data_enriched.csv` (30+ features including engineered variables)
-
----
+- Feature engineering (binary flags, generation labels)
+- One-hot encoded all 18 types
+- Correlation analysis & distribution plots
+- **Output**: `pokemon_data_enriched.csv` (30+ features)
 
 ### 3. PCA & Clustering Analysis
 
+<img align="right" src="assets/sprites/gif/alakazam.gif" width="80" alt="Alakazam">
+
 **File**: `3-pca_clustering.Rmd`
 
-#### Principal Component Analysis (PCA)
+- Principal Component Analysis on 9 numeric features
+- K-Means clustering (k=4 optimal)
+- **Variance Explained**: First 3 PCs capture ~70%
 
-- **Input Features**: 9 numeric variables (6 base stats + height, weight, BMI)
-- **Preprocessing**: Z-score standardization (mean=0, sd=1)
-- **Outlier Treatment**: 
-  - Detected extreme outliers using IQR method (3× threshold)
-  - Removed Pokémon with 3+ outlier flags to improve clustering quality
-  - Exported outliers to `pokemon_outliers.csv` for separate analysis
-- **Variance Explained**: First 3 PCs capture ~70% of total variance
-- **Interpretation**:
-  - **PC1**: Overall power / stat total (high loadings on Attack, Sp. Atk, Speed)
-  - **PC2**: Physical vs Special orientation (Defense vs Sp. Def trade-offs)
-  - **PC3**: HP / bulk dimension
+**Cluster Profiles**:
 
-#### Clustering
-
-- **Algorithm**: K-Means clustering
-- **Optimal K**: k = 4 clusters selected for analysis
-
-- **Cluster Profiles**:
-
-| Cluster | Label | Avg BST | Characteristics | % Legendary |
-|---------|-------|---------|-----------------|-------------|
-| 1 | High-Power Sweepers | 580 | High Attack/Sp.Atk/Speed | 35% |
-| 2 | Defensive Tanks | 480 | High HP/Defense/Sp.Def | 8% |
-| 3 | Balanced All-Rounders | 450 | Moderate across stats | 2% |
-| 4 | Low-Power / Early-Game | 320 | Low stats overall | 0% |
-
-**Outputs**:
-- `data/analysis/pca/pokemon_pca_scores.csv` (PC1–PC5 scores)
-- `data/analysis/pca/pokemon_clusters.csv` (cluster assignments)
-- `data/analysis/pca/pokemon_outliers.csv` (extreme outliers)
-
----
+| Cluster | Label | Avg BST | % Legendary |
+|---------|-------|---------|-------------|
+| 1 | High-Power Sweepers | 580 | 35% |
+| 2 | Defensive Tanks | 480 | 8% |
+| 3 | Balanced All-Rounders | 450 | 2% |
+| 4 | Low-Power / Early-Game | 320 | 0% |
 
 ### 4. Classification Models
 
+<img align="right" src="assets/sprites/gif/mewtwo.gif" width="85" alt="Mewtwo">
+
 **File**: `4-classification_legendary.Rmd`
 
-#### Problem Formulation
+**Task**: Binary classification — predict `is_legendary`
 
-- **Task**: Binary classification — predict `is_legendary` (Regular vs Legendary)
-- **Class Balance**: ~7% Legendary (imbalanced)
-- **Train/Test Split**: 80/20 stratified split
-- **Evaluation Metrics**: ROC-AUC (primary), Accuracy, Sensitivity, Specificity, F1-score
+| Model | AUC | Accuracy | F1 |
+|-------|-----|----------|-----|
+| Logistic Regression | 0.985 | 0.94 | 0.85 |
+| Decision Tree | 0.972 | 0.91 | 0.79 |
+| Random Forest | 0.992 | 0.96 | 0.90 |
+| **RF Tuned** | **0.995** | **0.97** | **0.92** |
 
-#### Models Trained
+### 5. Type Effectiveness & Rating System
 
-| Model | Method | Hyperparameters | AUC | Accuracy | F1 |
-|-------|--------|-----------------|-----|----------|-----|
-| **Logistic Regression** | GLM | Default | 0.985 | 0.94 | 0.85 |
-| **Decision Tree** | RPART | cp tuning (10 values) | 0.972 | 0.91 | 0.79 |
-| **Random Forest** | RF | mtry ∈ {3,5,7,10}, ntree=500 | 0.992 | 0.96 | 0.90 |
-| **RF Tuned** | RF | mtry ∈ {3,5,7,10,15}, ntree=1000, 10-fold CV | **0.995** | **0.97** | **0.92** |
-
-*Note: XGBoost implementation available in code but marked as beyond course scope.*
-
-#### Feature Importance (Top 5)
-
-1. **Total BST** (Base Stat Total)
-2. **Attack**
-3. **Sp. Attack**
-4. **Speed**
-5. **HP**
-
-**Type features** (e.g., `has_dragon`, `has_psychic`) also contributed, confirming certain types are more common among legendaries.
-
-#### Multi-Class Classification (Beyond Course Scope)
-
-*Extended to 5-way classification: Regular / Legendary / Mythical / Paradox / Ultra Beast — implementation available in code but marked as beyond course scope.*
-
-**Outputs**: Trained models saved to `models/` as `.rds` files
-
----
-
-### 5. Type Effectiveness Analysis & Rating System
+<img align="right" src="assets/sprites/gif/tyranitar.gif" width="90" alt="Tyranitar">
 
 **File**: `5-type_analysis_rating.Rmd`
 
-#### Type Effectiveness Analysis
-
-- **Attack Type Analysis**: Evaluated which attack types have the most super-effective matchups
-- **Defense Type Analysis**: Calculated defensive vulnerabilities for each type combination
-- **Type Effectiveness Scores**: Computed overall offensive and defensive scores for all 18 types
-
-#### Pokémon Rating System
-
-- **Purpose**: Create a beginner-friendly rating system based on type effectiveness and stats
-- **Methodology**:
-  - Combined type effectiveness scores with base stats
-  - Weighted offensive and defensive capabilities
-  - Normalized scores for fair comparison across generations
-- **Application**: Team building recommendations for new players
-
-**Outputs**:
-- `data/analysis/type/attack_type_stats.csv`
-- `data/analysis/type/defense_type_stats.csv`
-- `data/analysis/type/pokemon_rated.csv`
-- `data/analysis/type/type_effectiveness_scores.csv`
+- Attack & defense type analysis
+- Beginner-friendly rating system
+- Team building recommendations
 
 ---
 
-## 🏆 Key Findings
+## Key Findings
 
-### Statistical Insights
+### Legendary Pokémon
 
-1. **Legendary Pokémon are Statistically Distinct**:
-   - Mean BST: Legendary (680) vs Regular (420), *p* < 0.001
-   - 99% separable by Random Forest classifier
+<div align="center">
 
-2. **Type Distribution**:
-   - Most common types: Water (18%), Normal (15%), Grass (12%)
-   - Dragon and Psychic types over-represented among Legendaries (30% vs 5%)
+<img src="assets/sprites/gif/articuno.gif" width="70" alt="Articuno">
+<img src="assets/sprites/gif/zapdos.gif" width="75" alt="Zapdos">
+<img src="assets/sprites/gif/moltres.gif" width="80" alt="Moltres">
+<img src="assets/sprites/gif/lugia.gif" width="100" alt="Lugia">
+<img src="assets/sprites/gif/ho-oh.gif" width="95" alt="Ho-Oh">
+<img src="assets/sprites/gif/dialga.gif" width="90" alt="Dialga">
+<img src="assets/sprites/gif/palkia.gif" width="90" alt="Palkia">
 
-3. **Power Creep Across Generations**:
-   - Average BST increased from Gen 1 (435) to Gen 5 (480)
-   - Flattened in Gen 6–9 (design stabilization)
+</div>
 
-4. **Physical Attributes**:
-   - Height and weight weakly correlated with stats (r = 0.15)
-   - Extreme outlier: **Cosmoem** (BMI = 99,990) — ultra-dense core lore
-   - BMI not predictive of battle performance
+1. **Statistically Distinct**: Mean BST Legendary (680) vs Regular (420), *p* < 0.001
+2. **99% Separable** by Random Forest classifier
+3. **Type Concentration**: Dragon & Psychic over-represented (30% vs 5%)
+
+### Type Distribution
+
+| Most Common | Legendary Favorites |
+|-------------|---------------------|
+| Water (18%) | Dragon (30%) |
+| Normal (15%) | Psychic (25%) |
+| Grass (12%) | Steel (20%) |
 
 ### Machine Learning Results
 
-5. **Classification Performance**:
-   - **Best Model**: Tuned Random Forest (AUC = 0.995)
-   - Near-perfect separation of Legendary from Regular Pokémon
-   - Feature importance dominated by base stats (not physical attributes)
-
-6. **Clustering Results**:
-   - 4 distinct archetypes identified via K-Means:
-     - Sweepers (high offense/speed)
-     - Tanks (high defense/HP)
-     - Balanced (jack-of-all-trades)
-     - Weak (early-game, unevolved forms)
-   - Removing outliers improved cluster quality
-
-### Design Patterns
-
-7. **Legendary Design Philosophy**:
-   - Consistently high BST (600–720 range)
-   - Often dual-typed (85% vs 45% for regular Pokémon)
-   - Concentrated in Dragon, Psychic, Steel, Fairy types
-
-8. **Generation Trends**:
-   - Gen 5 introduced most Pokémon (156 species)
-   - Gen 8–9 emphasized regional variants and paradox forms
+- **Best Model**: Tuned Random Forest (AUC = 0.995)
+- **Top Features**: Total BST, Attack, Sp. Attack, Speed, HP
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 P8105---Final-Project-Pokemon/
 │
-├── 📄 README.md                          # This file
-├── 📄 finalproject-proposal.Rproj        # RStudio project file
+├── data/                    # Datasets
+│   ├── raw-data/            # Scraped HTML inputs
+│   ├── analysis/            # Analysis outputs (PCA, clustering, type)
+│   └── *.csv                # Processed datasets
 │
-├── 📂 data/                              # Raw inputs and generated datasets
-│   ├── 📂 raw-data/                      # Scraped HTML inputs from PokémonDB
-│   │   ├── Pokemon.html
-│   │   ├── Pokemon by height and weight.html
-│   │   ├── Pokemon fully evolved.html
-│   │   └── Pokemon Type.html
-│   ├── 📂 analysis/                      # Analysis outputs
-│   │   ├── 📂 pca/                       # PCA & clustering results
-│   │   │   ├── pokemon_pca_scores.csv
-│   │   │   ├── pokemon_clusters.csv
-│   │   │   └── pokemon_outliers.csv
-│   │   └── 📂 type/                      # Type analysis results
-│   │       ├── attack_type_stats.csv
-│   │       ├── defense_type_stats.csv
-│   │       ├── pokemon_rated.csv
-│   │       └── type_effectiveness_scores.csv
-│   ├── def_type_df.csv                   # Type effectiveness matrix
-│   ├── pokemon_data_raw.csv              # Raw scraped data
-│   ├── pokemon_data_all.csv              # All Pokemon data
-│   ├── pokemon_data_final_evolutions_enriched.csv  # Main analysis dataset
-│   ├── pokemon_sprites.csv               # Sprite URLs
-│   └── pokemon_sprites_download_log.csv  # Sprite download log
+├── models/                  # Trained ML models (.rds)
+│   └── legendary_classifier_rf_tuned.rds  # Best model
 │
-├── 📂 models/                            # Trained ML models (.rds)
-│   ├── legendary_classifier_logistic.rds
-│   ├── legendary_classifier_tree.rds
-│   ├── legendary_classifier_rf.rds
-│   ├── legendary_classifier_rf_tuned.rds  # ⭐ Best model
-│   ├── legendary_classifier_xgboost.rds   # (Beyond course scope)
-│   └── multiclass_classifier_rf.rds       # (Beyond course scope)
+├── reports/                 # HTML analysis reports
 │
-├── 📂 reports/                           # HTML analysis reports
-│   ├── 1-finalproject-datacleaning.html
-│   ├── 2-eda.html
-│   ├── 3-pca_clustering.html
-│   ├── 4-classification_legendary.html
-│   ├── 5-type_analysis_rating.html
-│   └── 📂 proposal/                      # Project planning documents
-│       ├── proposal.md
-│       ├── proposal.rmd
-│       └── proposal.txt
+├── assets/                  # Image assets for UI
+│   ├── artwork/             # Official artwork (978 files)
+│   ├── sprites/
+│   │   ├── gif/             # Animated GIFs (1,176 files)
+│   │   ├── gif-shiny/       # Shiny GIFs (941 files)
+│   │   ├── home/            # Pokemon Home 3D (982 files)
+│   │   ├── home-shiny/      # Pokemon Home Shiny (982 files)
+│   │   ├── gen1-classic/    # Gen 1 pixel sprites (149 files)
+│   │   ├── gen2-crystal/    # Gen 2 Crystal sprites (249 files)
+│   │   └── sv-icons/        # Scarlet/Violet icons (982 files)
+│   └── icons/types/         # 18 type icons
 │
-├── 📂 scripts/                           # Utility scripts
-│   ├── download_pokemon_gifs.R           # GIF download script
-│   └── extract_pokemon_gifs.R            # GIF extraction script
+├── scripts/
+│   └── download_pokemon_assets.R  # Asset downloader
 │
-├── 📂 assets/                            # Static assets
-│   └── 📂 sprites/                       # Pokemon sprites
-│       └── 📂 gif/                       # Animated GIFs
-│
-├── 📄 report.md                          # Presentation outline
-│
-└── 📊 Analysis Scripts (R Markdown)
-    ├── 1-datacleaning.Rmd
-    ├── 2-eda.Rmd
-    ├── 3-pca_clustering.Rmd
-    ├── 4-classification_legendary.Rmd
-    └── 5-type_analysis_rating.Rmd
+└── *.Rmd                    # Analysis notebooks
 ```
 
 ---
 
-## 🚀 Installation & Usage
+## Installation & Usage
 
 ### Prerequisites
 
-- **R** (≥ 4.0.0) — [Download here](https://cran.r-project.org/)
-- **RStudio** (recommended) — [Download here](https://posit.co/downloads/)
+- **R** (≥ 4.0.0) — [Download](https://cran.r-project.org/)
+- **RStudio** — [Download](https://posit.co/downloads/)
 
-### Required R Packages
-
-Run this in your R console to install all dependencies:
+### Required Packages
 
 ```r
-# Core data manipulation & visualization
-install.packages(c("tidyverse", "rvest", "janitor", "knitr", "rmarkdown"))
-
-# EDA & visualization enhancements
-install.packages(c("corrplot", "patchwork", "kableExtra", "plotly"))
-
-# PCA & clustering
-install.packages(c("factoextra", "FactoMineR", "cluster"))
-
-# Machine learning
-install.packages(c("caret", "randomForest", "rpart", "rpart.plot", 
-                   "pROC", "xgboost"))
+install.packages(c(
+  "tidyverse", "rvest", "janitor", "knitr", "rmarkdown",
+  "corrplot", "patchwork", "kableExtra", "plotly",
+  "factoextra", "FactoMineR", "cluster",
+  "caret", "randomForest", "rpart", "pROC"
+))
 ```
 
 ### Quick Start
 
-**1. Clone the repository**
 ```bash
+# Clone repository
 git clone https://github.com/PineappleEater/P8105---Final-Project-Pokemon.git
 cd P8105---Final-Project-Pokemon
+
+# Open in RStudio and render analyses
 ```
 
-**2. Open in RStudio**
+### Download Assets (Optional)
+
 ```r
-# Double-click finalproject-proposal.Rproj or run:
-rstudioapi::openProject("finalproject-proposal.Rproj")
-```
-
-**3. Render analyses** (regenerates all outputs)
-```r
-# Option A: Render all reports sequentially
-source_files <- c(
-  "1-datacleaning.Rmd",
-  "2-eda.Rmd",
-  "3-pca_clustering.Rmd",
-  "4-classification_legendary.Rmd",
-  "5-type_analysis_rating.Rmd"
-)
-
-lapply(source_files, rmarkdown::render)
-
-# Option B: Render individual reports
-rmarkdown::render("2-eda.Rmd")  # Example
-```
-
-**4. Load pre-trained models**
-```r
-# Load best classifier
-rf_model <- readRDS("models/legendary_classifier_rf_tuned.rds")
-
-# Make predictions on new data
-new_pokemon <- data.frame(
-  hp = 106, attack = 110, defense = 90,
-  sp_atk = 154, sp_def = 90, speed = 130,
-  height_m = 1.5, weight_kgs = 52.0, bmi = 23.1,
-  # ... (include all type features as 0/1)
-)
-
-prediction <- predict(rf_model, new_pokemon, type = "prob")
-print(prediction)  # Probability of being Legendary
+source("scripts/download_pokemon_assets.R")
 ```
 
 ---
 
-## 📈 Reproducibility
+## Team
 
-All analyses are fully reproducible. The R Markdown files:
-- Load raw data from `data/raw-data/` (checked into repo)
-- Perform transformations with fixed random seeds
-- Export intermediate datasets to `data/`
-- Save trained models to `models/`
-- Render HTML reports to `reports/`
-
-**Execution time**: ~15 minutes total on standard laptop (2023 specs)
-
-### Computational Environment
-
-```r
-sessionInfo()
-# R version 4.3.2 (2023-10-31)
-# Platform: x86_64-w64-mingw32/x64 (64-bit)
-# Running under: Windows 11
-```
-
----
-
-## 📚 Documentation
-
-### HTML Reports
-
-All analyses are documented in interactive HTML reports with:
-- Embedded code chunks (foldable)
-- High-resolution plots
-- Statistical tables
-- Interpretive commentary
-
-**View reports**: Open any `.html` file in `reports/` with a web browser.
-
-### Code Style
-
-- Follows [tidyverse style guide](https://style.tidyverse.org/)
-- Consistent naming: `snake_case` for variables, `PascalCase` for models
-- Commented sections for complex transformations
-
----
-
-## 🔮 Future Directions
-
-### Potential Extensions
-
-1. **Interactive Dashboard**:
-   - Build Shiny app for dynamic exploration
-   - Allow users to filter by generation, type, stats
-   - Visualize Pokémon in 3D PCA space
-
-2. **Team Building Optimizer**:
-   - Genetic algorithm to construct balanced 6-Pokémon teams
-   - Maximize type coverage while minimizing weaknesses
-
-3. **Time-Series Analysis**:
-   - Model power creep trends with regression
-   - Forecast Gen 10 average stats
-
-4. **Deep Learning**:
-   - Neural network for multi-output prediction (all stats)
-   - Image-based classification using Pokémon sprites
-
-5. **Network Analysis**:
-   - Type effectiveness graph (18×18 adjacency matrix)
-   - Community detection in Pokémon similarity network
-
----
-
-## 👥 Team
+<div align="center">
 
 | Name | UNI | Role |
 |------|-----|------|
@@ -510,56 +321,52 @@ All analyses are documented in interactive HTML reports with:
 | **Xuange Liang** | xl3493 | Classification modeling |
 | **Yiwen Zhang** | yz4994 | Visualization, documentation |
 
-**Contributions**: All team members participated in data collection, proposal writing, and final presentation preparation.
+</div>
 
 ---
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
-- **Data Sources**: 
-  - Rounak Banik (Kaggle dataset curator)
-  - PokémonDB community maintainers
-  - Veekun/PokéAPI contributors
-  
-- **Inspiration**: 
-  - Game Freak / Nintendo for creating the Pokémon universe
-  - P8105 course staff for project guidance
-
-- **Tools**: 
-  - R Core Team and tidyverse developers
-  - RStudio / Posit for IDE support
+- **Data Sources**: Rounak Banik (Kaggle), PokémonDB, Veekun/PokéAPI
+- **Inspiration**: Game Freak / Nintendo, P8105 course staff
+- **Tools**: R Core Team, tidyverse developers, RStudio
 
 ---
 
-## 📄 License & Usage
+## License & Citation
 
-- **Academic Use**: This project was completed for educational purposes (P8105 coursework)
-- **Data Attribution**: Original Pokémon data © Nintendo/Game Freak; used under fair use for academic research
-- **Code License**: Not specified — contact authors for reuse permissions
-- **Citation**: If using this work, please cite:
+**Academic Use**: This project was completed for educational purposes (P8105 coursework)
 
-  ```
-  Li, L., Li, R., Liang, X., & Zhang, Y. (2025). 
-  The Story and Mystery of Pokémon: A Data Science Analysis.
-  Columbia University P8105 Final Project.
-  https://github.com/PineappleEater/P8105---Final-Project-Pokemon
-  ```
+**Citation**:
 
----
-
-## 📞 Contact
-
-For questions, suggestions, or collaboration inquiries:
-
-- **GitHub Issues**: [Open an issue](https://github.com/PineappleEater/P8105---Final-Project-Pokemon/issues)
-- **Email**: Contact team members via UNIs @columbia.edu
+```
+Li, L., Li, R., Liang, X., & Zhang, Y. (2025).
+The Story and Mystery of Pokémon: A Data Science Analysis.
+Columbia University P8105 Final Project.
+https://github.com/PineappleEater/P8105---Final-Project-Pokemon
+```
 
 ---
 
 <div align="center">
 
-**⭐ If you found this project helpful, please consider starring the repository!**
+<!-- Eeveelutions with animated GIFs - varying sizes -->
+<img src="assets/sprites/gif/eevee.gif" width="65" alt="Eevee">
+<img src="assets/sprites/gif/vaporeon.gif" width="80" alt="Vaporeon">
+<img src="assets/sprites/gif/jolteon.gif" width="75" alt="Jolteon">
+<img src="assets/sprites/gif/flareon.gif" width="78" alt="Flareon">
+<img src="assets/sprites/gif/espeon.gif" width="73" alt="Espeon">
+<img src="assets/sprites/gif/umbreon.gif" width="72" alt="Umbreon">
+<img src="assets/sprites/gif/leafeon.gif" width="70" alt="Leafeon">
+<img src="assets/sprites/gif/glaceon.gif" width="74" alt="Glaceon">
+<img src="assets/sprites/gif/sylveon.gif" width="82" alt="Sylveon">
 
-Made with ❤️ and ☕ by the P8105 Pokémon Research Team
+<br><br>
+
+**If you found this project helpful, please consider starring the repository!**
+
+Made with ❤️ by the P8105 Pokémon Research Team
+
+*Gotta Analyze 'Em All!*
 
 </div>
