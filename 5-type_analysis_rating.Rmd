@@ -287,10 +287,10 @@ type_overall |>
 
 We develop a 100-point rating system for beginners with the following components:
 
-1. **Base Stat Total (40 points)**: Raw power indicator
+1. **Base Stat Total (40 points)**: Raw power indicator - **Smooth S-curve mapping**
 2. **Type Score (30 points)**: Offensive + defensive type advantages
-3. **Stat Distribution (20 points)**: Balance vs specialization
-4. **Accessibility (10 points)**: Non-legendary bonus
+3. **Stat Distribution (20 points)**: Balance vs specialization - **Smooth exponential decay**
+4. **Accessibility (10 points)**: Non-legendary bonus - **Smooth sigmoid function**
 
 ```{r rating-components}
 # Create type score lookup from our analysis
@@ -314,15 +314,57 @@ get_type_score <- function(type1, type2, type_scores_df) {
   }
 }
 
-# Calculate stat distribution score (penalize extreme variance)
+# Smooth BST Score Calculator (40 points max)
+# Uses logistic function (S-curve) for smooth transition
+calc_bst_score <- function(bst) {
+  # Parameters for S-curve
+  # Midpoint at BST=475 (average competitive Pokemon)
+  # Steepness: gradual transition from 250-700
+  L <- 40      # Maximum score
+  k <- 0.012   # Steepness (smaller = more gradual)
+  x0 <- 475    # Inflection point (50% of max score)
+  
+  # Logistic function: L / (1 + exp(-k * (x - x0)))
+  score <- L / (1 + exp(-k * (bst - x0)))
+  
+  # Ensure minimum of 5 points for very weak Pokemon
+  return(max(5, score))
+}
+
+# Smooth Balance Score Calculator (20 points max)
+# Uses exponential decay based on coefficient of variation
 calc_stat_balance <- function(hp, atk, def, spatk, spdef, spd) {
   stats <- c(hp, atk, def, spatk, spdef, spd)
   cv <- sd(stats) / mean(stats)  # Coefficient of variation
-
-  # Lower CV = more balanced = higher score
-  # Scale: CV of 0.1 = 20 points, CV of 0.8 = 5 points
-  balance_score <- 20 - (cv - 0.1) * 21.43
+  
+  # Exponential decay function
+  # Perfect balance (CV=0) = 20 points
+  # High variance (CV=1.0) ≈ 5 points
+  # Formula: 20 * exp(-2.5 * cv) with floor at 5
+  balance_score <- 20 * exp(-2.5 * cv)
+  
   return(max(5, min(20, balance_score)))
+}
+
+# Smooth Accessibility Score Calculator (10 points max)
+# Uses inverted sigmoid for smooth legendary penalty
+calc_accessibility_score <- function(category_label) {
+  # Map categories to numeric difficulty (0=easiest, 4=hardest)
+  difficulty <- case_when(
+    category_label == "Regular" ~ 0,
+    category_label == "Paradox" ~ 1,
+    category_label == "Ultra Beast" ~ 2,
+    category_label == "Mythical" ~ 3,
+    category_label == "Legendary" ~ 4,
+    TRUE ~ 2  # Default to medium difficulty
+  )
+  
+  # Sigmoid function for smooth transition
+  # Regular (0) → 10 points, Legendary (4) → ~0.5 points
+  # Formula: 10 / (1 + exp(2 * (difficulty - 1)))
+  score <- 10 / (1 + exp(2 * (difficulty - 1)))
+  
+  return(score)
 }
 ```
 
@@ -333,36 +375,22 @@ calc_stat_balance <- function(hp, atk, def, spatk, spdef, spd) {
 pokemon_rated <- pokemon_df |>
   rowwise() |>
   mutate(
-    # BST Score (40 points)
-    bst_score = case_when(
-      total >= 600 ~ 40,
-      total >= 550 ~ 35,
-      total >= 500 ~ 30,
-      total >= 450 ~ 25,
-      total >= 400 ~ 20,
-      total >= 350 ~ 15,
-      TRUE ~ 10
-    ),
+    # BST Score (40 points) - Smooth S-curve
+    bst_score = calc_bst_score(total),
 
     # Type Score (30 points)
     type_score = get_type_score(type_1, type_2, type_scores),
 
-    # Stat Balance Score (20 points)
+    # Stat Balance Score (20 points) - Smooth exponential decay
     balance_score = calc_stat_balance(hp, attack, defense, sp_atk, sp_def, speed),
 
-    # Accessibility Score (10 points) - non-legendary gets bonus
-    access_score = case_when(
-      category == "Regular" ~ 10,
-      category == "Paradox" ~ 8,
-      category == "Ultra Beast" ~ 5,
-      category == "Mythical" ~ 3,
-      category == "Legendary" ~ 0
-    ),
+    # Accessibility Score (10 points) - Smooth sigmoid
+    access_score = calc_accessibility_score(category),
 
     # Total Rating
     total_rating = bst_score + type_score + balance_score + access_score,
 
-    # Tier Assignment
+    # Tier Assignment (same thresholds)
     tier = case_when(
       total_rating >= 85 ~ "S",
       total_rating >= 75 ~ "A",
@@ -378,7 +406,84 @@ pokemon_rated <- pokemon_df |>
 pokemon_rated$tier <- factor(pokemon_rated$tier, levels = c("S", "A", "B", "C", "D", "F"))
 ```
 
-### 4.3 Rating Distribution
+### 4.3 Visualize Smooth Scoring Functions
+
+```{r visualize-scoring-functions}
+# Create data for visualization
+bst_range <- seq(200, 800, by = 5)
+cv_range <- seq(0, 1.2, by = 0.01)
+difficulty_range <- 0:4
+
+# BST Score visualization
+bst_viz <- tibble(
+  BST = bst_range,
+  Score = sapply(bst_range, calc_bst_score)
+)
+
+p1 <- ggplot(bst_viz, aes(x = BST, y = Score)) +
+  geom_line(color = "#2196F3", size = 1.5) +
+  geom_hline(yintercept = c(10, 20, 30, 40), linetype = "dashed", alpha = 0.3) +
+  geom_vline(xintercept = 475, linetype = "dashed", color = "red", alpha = 0.5) +
+  annotate("text", x = 475, y = 35, label = "Inflection Point\n(BST=475)", 
+           color = "red", size = 3) +
+  labs(
+    title = "BST Score: Smooth S-Curve Mapping",
+    subtitle = "Gradual transition from weak to strong Pokemon",
+    x = "Base Stat Total (BST)", y = "BST Score (max 40)"
+  ) +
+  theme_minimal()
+
+# Balance Score visualization
+balance_viz <- tibble(
+  CV = cv_range,
+  Score = sapply(cv_range, function(cv) {
+    20 * exp(-2.5 * cv)
+  })
+)
+
+p2 <- ggplot(balance_viz, aes(x = CV, y = Score)) +
+  geom_line(color = "#4CAF50", size = 1.5) +
+  geom_hline(yintercept = c(5, 10, 15, 20), linetype = "dashed", alpha = 0.3) +
+  labs(
+    title = "Balance Score: Exponential Decay",
+    subtitle = "Penalizes extreme stat variance smoothly",
+    x = "Coefficient of Variation (CV)", y = "Balance Score (max 20)"
+  ) +
+  theme_minimal()
+
+# Accessibility Score visualization
+category_labels <- c("Regular", "Paradox", "Ultra Beast", "Mythical", "Legendary")
+access_viz <- tibble(
+  Difficulty = difficulty_range,
+  Category = factor(category_labels, levels = category_labels),
+  Score = sapply(category_labels, calc_accessibility_score)
+)
+
+p3 <- ggplot(access_viz, aes(x = Difficulty, y = Score)) +
+  geom_line(color = "#FF9800", size = 1.5) +
+  geom_point(size = 3, color = "#FF9800") +
+  scale_x_continuous(breaks = 0:4, labels = category_labels) +
+  geom_hline(yintercept = c(0, 5, 10), linetype = "dashed", alpha = 0.3) +
+  labs(
+    title = "Accessibility Score: Smooth Sigmoid",
+    subtitle = "Gradual penalty for legendary Pokemon",
+    x = "Category", y = "Accessibility Score (max 10)"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Display all plots
+if (requireNamespace("patchwork", quietly = TRUE)) {
+  library(patchwork)
+  p1 / p2 / p3
+} else {
+  print(p1)
+  print(p2)
+  print(p3)
+}
+```
+
+### 4.4 Rating Distribution
 
 ```{r rating-distribution}
 # Summary by tier
@@ -409,7 +514,7 @@ ggplot(pokemon_rated, aes(x = category, y = total_rating, fill = category)) +
   theme(legend.position = "none")
 ```
 
-### 4.4 Top Rated Pokemon (For Beginners)
+### 4.5 Top Rated Pokemon (For Beginners)
 
 ```{r top-rated}
 # Top 20 highest rated Pokemon (excluding legendaries for beginner focus)
@@ -432,7 +537,7 @@ cat("\n=== TOP 20 POKEMON OVERALL (All Categories) ===\n")
 kable(top_all, caption = "Top 20 Rated Pokemon Overall", digits = 1)
 ```
 
-### 4.5 Best Pokemon by Type
+### 4.6 Best Pokemon by Type
 
 ```{r best-by-type}
 # Best rated Pokemon for each primary type
