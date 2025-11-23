@@ -91,7 +91,7 @@ This repository presents a comprehensive data science investigation into the Pok
 
 ### 1. Data Cleaning & Preprocessing
 
-**File**: `1-finalproject-datacleaning.Rmd`
+**File**: `1-datacleaning.Rmd`
 
 - Scraped three HTML tables from PokémonDB using `rvest`
 - Joined stats, height/weight, and evolution data by Pokédex number
@@ -152,11 +152,7 @@ This repository presents a comprehensive data science investigation into the Pok
 #### Clustering
 
 - **Algorithm**: K-Means clustering
-- **Optimal K Determination**:
-  - Elbow method (within-cluster sum of squares)
-  - Silhouette analysis (cluster cohesion & separation)
-  - Gap statistic (comparison to null reference)
-  - **Conclusion**: k = 4 clusters optimal
+- **Optimal K**: k = 4 clusters selected for analysis
 
 - **Cluster Profiles**:
 
@@ -167,12 +163,10 @@ This repository presents a comprehensive data science investigation into the Pok
 | 3 | Balanced All-Rounders | 450 | Moderate across stats | 2% |
 | 4 | Low-Power / Early-Game | 320 | Low stats overall | 0% |
 
-- **Validation**: Hierarchical clustering (Ward's method) confirmed similar groupings
-
-**Outputs**: 
-- `pokemon_pca_scores.csv` (PC1–PC5 scores)
-- `pokemon_clusters.csv` (cluster assignments)
-- `pokemon_outliers.csv` (extreme outliers)
+**Outputs**:
+- `data/analysis/pca/pokemon_pca_scores.csv` (PC1–PC5 scores)
+- `data/analysis/pca/pokemon_clusters.csv` (cluster assignments)
+- `data/analysis/pca/pokemon_outliers.csv` (extreme outliers)
 
 ---
 
@@ -195,7 +189,8 @@ This repository presents a comprehensive data science investigation into the Pok
 | **Decision Tree** | RPART | cp tuning (10 values) | 0.972 | 0.91 | 0.79 |
 | **Random Forest** | RF | mtry ∈ {3,5,7,10}, ntree=500 | 0.992 | 0.96 | 0.90 |
 | **RF Tuned** | RF | mtry ∈ {3,5,7,10,15}, ntree=1000, 10-fold CV | **0.995** | **0.97** | **0.92** |
-| **XGBoost** | Gradient Boosting | nrounds, max_depth, eta grid search | 0.993 | 0.96 | 0.91 |
+
+*Note: XGBoost implementation available in code but marked as beyond course scope.*
 
 #### Feature Importance (Top 5)
 
@@ -207,14 +202,38 @@ This repository presents a comprehensive data science investigation into the Pok
 
 **Type features** (e.g., `has_dragon`, `has_psychic`) also contributed, confirming certain types are more common among legendaries.
 
-#### Multi-Class Classification
+#### Multi-Class Classification (Beyond Course Scope)
 
-Extended to 5-way classification: Regular / Legendary / Mythical / Paradox / Ultra Beast
-- **Model**: Random Forest (mtry=7, ntree=500)
-- **Overall Accuracy**: 0.93
-- **Kappa**: 0.88 (strong agreement)
+*Extended to 5-way classification: Regular / Legendary / Mythical / Paradox / Ultra Beast — implementation available in code but marked as beyond course scope.*
 
-**Outputs**: 6 trained models saved to `models/` as `.rds` files
+**Outputs**: Trained models saved to `models/` as `.rds` files
+
+---
+
+### 5. Type Effectiveness Analysis & Rating System
+
+**File**: `5-type_analysis_rating.Rmd`
+
+#### Type Effectiveness Analysis
+
+- **Attack Type Analysis**: Evaluated which attack types have the most super-effective matchups
+- **Defense Type Analysis**: Calculated defensive vulnerabilities for each type combination
+- **Type Effectiveness Scores**: Computed overall offensive and defensive scores for all 18 types
+
+#### Pokémon Rating System
+
+- **Purpose**: Create a beginner-friendly rating system based on type effectiveness and stats
+- **Methodology**:
+  - Combined type effectiveness scores with base stats
+  - Weighted offensive and defensive capabilities
+  - Normalized scores for fair comparison across generations
+- **Application**: Team building recommendations for new players
+
+**Outputs**:
+- `data/analysis/type/attack_type_stats.csv`
+- `data/analysis/type/defense_type_stats.csv`
+- `data/analysis/type/pokemon_rated.csv`
+- `data/analysis/type/type_effectiveness_scores.csv`
 
 ---
 
@@ -246,13 +265,13 @@ Extended to 5-way classification: Regular / Legendary / Mythical / Paradox / Ult
    - Near-perfect separation of Legendary from Regular Pokémon
    - Feature importance dominated by base stats (not physical attributes)
 
-6. **Clustering Validation**:
-   - 4 distinct archetypes identified:
+6. **Clustering Results**:
+   - 4 distinct archetypes identified via K-Means:
      - Sweepers (high offense/speed)
      - Tanks (high defense/HP)
      - Balanced (jack-of-all-trades)
      - Weak (early-game, unevolved forms)
-   - Removing outliers to improved cluster results
+   - Removing outliers improved cluster quality
 
 ### Design Patterns
 
@@ -279,37 +298,60 @@ P8105---Final-Project-Pokemon/
 │   ├── 📂 raw-data/                      # Scraped HTML inputs from PokémonDB
 │   │   ├── Pokemon.html
 │   │   ├── Pokemon by height and weight.html
-│   │   └── Pokemon fully evolved.html
-│   ├── pokemon_data.csv                  # Cleaned base data
-│   ├── pokemon_data_enriched.csv         # With engineered features
-│   ├── pokemon_pca_scores.csv            # PCA component scores
-│   ├── pokemon_clusters.csv              # Cluster assignments
-│   └── pokemon_outliers.csv              # Detected outliers
+│   │   ├── Pokemon fully evolved.html
+│   │   └── Pokemon Type.html
+│   ├── 📂 analysis/                      # Analysis outputs
+│   │   ├── 📂 pca/                       # PCA & clustering results
+│   │   │   ├── pokemon_pca_scores.csv
+│   │   │   ├── pokemon_clusters.csv
+│   │   │   └── pokemon_outliers.csv
+│   │   └── 📂 type/                      # Type analysis results
+│   │       ├── attack_type_stats.csv
+│   │       ├── defense_type_stats.csv
+│   │       ├── pokemon_rated.csv
+│   │       └── type_effectiveness_scores.csv
+│   ├── def_type_df.csv                   # Type effectiveness matrix
+│   ├── pokemon_data_raw.csv              # Raw scraped data
+│   ├── pokemon_data_all.csv              # All Pokemon data
+│   ├── pokemon_data_final_evolutions_enriched.csv  # Main analysis dataset
+│   ├── pokemon_sprites.csv               # Sprite URLs
+│   └── pokemon_sprites_download_log.csv  # Sprite download log
 │
 ├── 📂 models/                            # Trained ML models (.rds)
 │   ├── legendary_classifier_logistic.rds
 │   ├── legendary_classifier_tree.rds
 │   ├── legendary_classifier_rf.rds
 │   ├── legendary_classifier_rf_tuned.rds  # ⭐ Best model
-│   ├── legendary_classifier_xgboost.rds
-│   └── multiclass_classifier_rf.rds
+│   ├── legendary_classifier_xgboost.rds   # (Beyond course scope)
+│   └── multiclass_classifier_rf.rds       # (Beyond course scope)
 │
 ├── 📂 reports/                           # HTML analysis reports
 │   ├── 1-finalproject-datacleaning.html
 │   ├── 2-eda.html
 │   ├── 3-pca_clustering.html
-│   └── 4-classification_legendary.html
+│   ├── 4-classification_legendary.html
+│   ├── 5-type_analysis_rating.html
+│   └── 📂 proposal/                      # Project planning documents
+│       ├── proposal.md
+│       ├── proposal.rmd
+│       └── proposal.txt
 │
-├── 📂 proposal/                          # Project planning documents
-│   ├── proposal.md
-│   ├── proposal.rmd
-│   └── proposal.txt
+├── 📂 scripts/                           # Utility scripts
+│   ├── download_pokemon_gifs.R           # GIF download script
+│   └── extract_pokemon_gifs.R            # GIF extraction script
+│
+├── 📂 assets/                            # Static assets
+│   └── 📂 sprites/                       # Pokemon sprites
+│       └── 📂 gif/                       # Animated GIFs
+│
+├── 📄 report.md                          # Presentation outline
 │
 └── 📊 Analysis Scripts (R Markdown)
-    ├── 1-finalproject-datacleaning.Rmd
+    ├── 1-datacleaning.Rmd
     ├── 2-eda.Rmd
     ├── 3-pca_clustering.Rmd
-    └── 4-classification_legendary.Rmd
+    ├── 4-classification_legendary.Rmd
+    └── 5-type_analysis_rating.Rmd
 ```
 
 ---
@@ -358,10 +400,11 @@ rstudioapi::openProject("finalproject-proposal.Rproj")
 ```r
 # Option A: Render all reports sequentially
 source_files <- c(
-  "1-finalproject-datacleaning.Rmd",
+  "1-datacleaning.Rmd",
   "2-eda.Rmd",
   "3-pca_clustering.Rmd",
-  "4-classification_legendary.Rmd"
+  "4-classification_legendary.Rmd",
+  "5-type_analysis_rating.Rmd"
 )
 
 lapply(source_files, rmarkdown::render)
