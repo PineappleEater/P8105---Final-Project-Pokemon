@@ -18,8 +18,7 @@
 <img src="assets/sprites/gif/mewtwo.gif" width="95" alt="Mewtwo">
 
 
-<br>
-
+<br> <br>
 [![R](https://img.shields.io/badge/R-%3E%3D4.0-276DC3?style=for-the-badge&logo=r&logoColor=white)](https://www.r-project.org/)
 [![Status](https://img.shields.io/badge/Status-Complete-success?style=for-the-badge)](https://github.com/PineappleEater/P8105---Final-Project-Pokemon)
 [![License](https://img.shields.io/badge/License-Academic-blue?style=for-the-badge)](LICENSE)
@@ -211,13 +210,13 @@ This repository presents a comprehensive data science investigation into the Pok
 
 <div align="center">
 
+<img src="assets/sprites/gif/dialga.gif" width="60" alt="Dialga">
 <img src="assets/sprites/gif/articuno.gif" width="70" alt="Articuno">
 <img src="assets/sprites/gif/zapdos.gif" width="75" alt="Zapdos">
 <img src="assets/sprites/gif/moltres.gif" width="80" alt="Moltres">
 <img src="assets/sprites/gif/lugia.gif" width="100" alt="Lugia">
 <img src="assets/sprites/gif/ho-oh.gif" width="95" alt="Ho-Oh">
-<img src="assets/sprites/gif/dialga.gif" width="90" alt="Dialga">
-<img src="assets/sprites/gif/palkia.gif" width="90" alt="Palkia">
+<img src="assets/sprites/gif/palkia.gif" width="60" alt="Palkia">
 
 </div>
 

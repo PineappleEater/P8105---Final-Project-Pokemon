@@ -317,12 +317,12 @@ get_type_score <- function(type1, type2, type_scores_df) {
 # Smooth BST Score Calculator (40 points max)
 # Uses logistic function (S-curve) for smooth transition
 calc_bst_score <- function(bst) {
-  # Parameters for S-curve
-  # Midpoint at BST=475 (average competitive Pokemon)
+  # Parameters for S-curve - adjusted for higher scores
+  # Midpoint at BST=450 (shifted left to give higher scores overall)
   # Steepness: gradual transition from 250-700
   L <- 40      # Maximum score
-  k <- 0.012   # Steepness (smaller = more gradual)
-  x0 <- 475    # Inflection point (50% of max score)
+  k <- 0.015   # Steepness (increased for faster growth)
+  x0 <- 450    # Inflection point (lowered to boost scores)
   
   # Logistic function: L / (1 + exp(-k * (x - x0)))
   score <- L / (1 + exp(-k * (bst - x0)))
@@ -337,11 +337,11 @@ calc_stat_balance <- function(hp, atk, def, spatk, spdef, spd) {
   stats <- c(hp, atk, def, spatk, spdef, spd)
   cv <- sd(stats) / mean(stats)  # Coefficient of variation
   
-  # Exponential decay function
+  # Exponential decay function - adjusted for higher baseline
   # Perfect balance (CV=0) = 20 points
-  # High variance (CV=1.0) ≈ 5 points
-  # Formula: 20 * exp(-2.5 * cv) with floor at 5
-  balance_score <- 20 * exp(-2.5 * cv)
+  # High variance (CV=1.0) ≈ 7.4 points (increased from 5)
+  # Formula: 20 * exp(-2 * cv) with floor at 5 (gentler decay)
+  balance_score <- 20 * exp(-2 * cv)
   
   return(max(5, min(20, balance_score)))
 }
@@ -349,20 +349,19 @@ calc_stat_balance <- function(hp, atk, def, spatk, spdef, spd) {
 # Smooth Accessibility Score Calculator (10 points max)
 # Uses inverted sigmoid for smooth legendary penalty
 calc_accessibility_score <- function(category_label) {
-  # Map categories to numeric difficulty (0=easiest, 4=hardest)
+  # Map categories to numeric difficulty (0=easiest to obtain, 2=hardest)
   difficulty <- case_when(
-    category_label == "Regular" ~ 0,
-    category_label == "Paradox" ~ 1,
-    category_label == "Ultra Beast" ~ 2,
-    category_label == "Mythical" ~ 3,
-    category_label == "Legendary" ~ 4,
-    TRUE ~ 2  # Default to medium difficulty
+    category_label == "Regular" ~ 0.3,        # Easy to get, ~9.8 points
+    category_label == "Pseudo-Legendary" ~ 1.0,  # Moderate effort, ~5 points
+    category_label == "Legendary" ~ 1.5,      # Hard to get, ~2.7 points
+    category_label == "Mythical" ~ 2.0,       # Very hard, ~1.2 points
+    TRUE ~ 1.0  # Default to medium difficulty
   )
   
   # Sigmoid function for smooth transition
-  # Regular (0) → 10 points, Legendary (4) → ~0.5 points
-  # Formula: 10 / (1 + exp(2 * (difficulty - 1)))
-  score <- 10 / (1 + exp(2 * (difficulty - 1)))
+  # Regular (0.3) → ~9.8 points, Legendary (1.5) → ~2.7 points
+  # Formula: 10 / (1 + exp(1.8 * (difficulty - 0.8)))
+  score <- 10 / (1 + exp(1.8 * (difficulty - 0.8)))
   
   return(score)
 }
@@ -390,14 +389,14 @@ pokemon_rated <- pokemon_df |>
     # Total Rating
     total_rating = bst_score + type_score + balance_score + access_score,
 
-    # Tier Assignment (same thresholds)
+    # Tier Assignment (adjusted thresholds for realistic distribution)
     tier = case_when(
-      total_rating >= 85 ~ "S",
-      total_rating >= 75 ~ "A",
-      total_rating >= 65 ~ "B",
-      total_rating >= 55 ~ "C",
-      total_rating >= 45 ~ "D",
-      TRUE ~ "F"
+      total_rating >= 75 ~ "S",  # Top ~1-2% (降低from 85)
+      total_rating >= 65 ~ "A",  # Strong Pokemon (~10-15%)
+      total_rating >= 55 ~ "B",  # Above average (~30-40%)
+      total_rating >= 45 ~ "C",  # Average (~30%)
+      total_rating >= 35 ~ "D",  # Below average (~15%)
+      TRUE ~ "F"                 # Weak Pokemon (~5%)
     )
   ) |>
   ungroup()
@@ -423,8 +422,8 @@ bst_viz <- tibble(
 p1 <- ggplot(bst_viz, aes(x = BST, y = Score)) +
   geom_line(color = "#2196F3", size = 1.5) +
   geom_hline(yintercept = c(10, 20, 30, 40), linetype = "dashed", alpha = 0.3) +
-  geom_vline(xintercept = 475, linetype = "dashed", color = "red", alpha = 0.5) +
-  annotate("text", x = 475, y = 35, label = "Inflection Point\n(BST=475)", 
+  geom_vline(xintercept = 450, linetype = "dashed", color = "red", alpha = 0.5) +
+  annotate("text", x = 450, y = 35, label = "Inflection Point\n(BST=450)", 
            color = "red", size = 3) +
   labs(
     title = "BST Score: Smooth S-Curve Mapping",
@@ -437,7 +436,7 @@ p1 <- ggplot(bst_viz, aes(x = BST, y = Score)) +
 balance_viz <- tibble(
   CV = cv_range,
   Score = sapply(cv_range, function(cv) {
-    20 * exp(-2.5 * cv)
+    20 * exp(-2 * cv)  # Updated to match new formula
   })
 )
 
@@ -551,4 +550,54 @@ best_by_type <- pokemon_rated |>
 
 cat("=== BEST REGULAR POKEMON BY PRIMARY TYPE ===\n")
 kable(best_by_type, caption = "Best Rated Regular Pokemon by Type", digits = 1)
+```
+
+### 4.7 Export Results
+
+```{r export-results}
+# Save rated Pokemon data to CSV
+write_csv(pokemon_rated, here("data", "pokemon_rated.csv"))
+
+# Create summary statistics
+rating_summary <- pokemon_rated |>
+  summarise(
+    total_pokemon = n(),
+    avg_rating = mean(total_rating),
+    median_rating = median(total_rating),
+    min_rating = min(total_rating),
+    max_rating = max(total_rating),
+    s_tier_count = sum(tier == "S"),
+    a_tier_count = sum(tier == "A"),
+    b_tier_count = sum(tier == "B"),
+    c_tier_count = sum(tier == "C"),
+    d_tier_count = sum(tier == "D"),
+    f_tier_count = sum(tier == "F"),
+    avg_bst_score = mean(bst_score),
+    avg_type_score = mean(type_score),
+    avg_balance_score = mean(balance_score),
+    avg_access_score = mean(access_score)
+  )
+
+write_csv(rating_summary, here("data", "rating_summary.csv"))
+
+cat("\n=== RATING SUMMARY ===\n")
+cat(sprintf("Total Pokemon: %d\n", rating_summary$total_pokemon))
+cat(sprintf("Average Rating: %.1f\n", rating_summary$avg_rating))
+cat(sprintf("Rating Range: %.1f - %.1f\n", rating_summary$min_rating, rating_summary$max_rating))
+cat(sprintf("\nTier Distribution:\n"))
+cat(sprintf("  S Tier: %d (%.1f%%)\n", rating_summary$s_tier_count, 100*rating_summary$s_tier_count/rating_summary$total_pokemon))
+cat(sprintf("  A Tier: %d (%.1f%%)\n", rating_summary$a_tier_count, 100*rating_summary$a_tier_count/rating_summary$total_pokemon))
+cat(sprintf("  B Tier: %d (%.1f%%)\n", rating_summary$b_tier_count, 100*rating_summary$b_tier_count/rating_summary$total_pokemon))
+cat(sprintf("  C Tier: %d (%.1f%%)\n", rating_summary$c_tier_count, 100*rating_summary$c_tier_count/rating_summary$total_pokemon))
+cat(sprintf("  D Tier: %d (%.1f%%)\n", rating_summary$d_tier_count, 100*rating_summary$d_tier_count/rating_summary$total_pokemon))
+cat(sprintf("  F Tier: %d (%.1f%%)\n", rating_summary$f_tier_count, 100*rating_summary$f_tier_count/rating_summary$total_pokemon))
+cat(sprintf("\nComponent Score Averages:\n"))
+cat(sprintf("  BST Score: %.1f / 40\n", rating_summary$avg_bst_score))
+cat(sprintf("  Type Score: %.1f / 30\n", rating_summary$avg_type_score))
+cat(sprintf("  Balance Score: %.1f / 20\n", rating_summary$avg_balance_score))
+cat(sprintf("  Accessibility Score: %.1f / 10\n", rating_summary$avg_access_score))
+
+cat("\n✓ Results exported to:\n")
+cat("  - data/pokemon_rated.csv\n")
+cat("  - data/rating_summary.csv\n")
 ```
