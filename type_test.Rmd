@@ -1,0 +1,151 @@
+---
+title: "Pokemon Type Effectiveness Analysis & Rating System"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+    theme: cosmo
+    self_contained: true
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_dir = "reports"
+    )
+  })
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 10,
+  fig.height = 6
+)
+```
+
+## 1. Load Libraries and Data
+
+```{r libraries}
+library(tidyverse)
+library(knitr)
+library(glue)
+library(here)  # For robust path handling
+
+set.seed(123)
+theme_set(theme_minimal(base_size = 12))
+```
+
+```{r load-data}
+# Load type effectiveness data
+type_df <- read_csv("data/def_type_df.csv")
+
+# Load Pokemon data
+pokemon_df <- read_csv("data/pokemon_data_final_evolutions_enriched.csv")
+
+# Restore factor levels
+pokemon_df$generation <- factor(pokemon_df$generation, levels = paste0("Gen ", 1:9))
+pokemon_df$category <- factor(pokemon_df$category,
+  levels = c("Regular", "Legendary", "Mythical", "Paradox", "Ultra Beast")
+)
+
+cat(glue("Type matchups: {nrow(type_df)} combinations\n"))
+cat(glue("Pokemon dataset: {nrow(pokemon_df)} Pokemon\n"))
+```
+
+## 2. Type Effectiveness Analysis
+
+### 2.1 Attack Type Analysis
+
+Which attack types have the most super-effective matchups (x2 or x4 damage)?
+
+```{r attack-effectiveness}
+# Count super-effective (x2, x4), not very effective (x0.5), and immune (x0) for each attack type
+attack_stats <- type_df |>
+  group_by(atk_type) |>
+  summarise(
+    super_effective_x4 = sum(multiplier == 4),
+    super_effective = sum(multiplier == 2),
+    not_effective = sum(multiplier == 0.5),
+    immune = sum(multiplier == 0),
+    neutral = sum(multiplier == 1),
+    .groups = "drop"
+  ) |>
+  arrange(desc(super_effective))
+
+kable(attack_stats, caption = "Attack Type Effectiveness (vs Single Types)")
+```
+```{r attack-effectiveness-scale and score}
+cols_list_max <- c("super_effective_x4", "super_effective", "neutral")
+cols_list_min <- c("not_effective")
+attack_stats_scaled <- attack_stats |>
+  mutate(
+    round(across(
+      all_of(cols_list_max),
+      ~ .x / max(.x) 
+    ),2),
+    round(across(
+      all_of(cols_list_min),
+      ~ .x / max(.x) 
+    ),2),
+    immune = if_else(immune > 0, 1, 0),
+    offensive_score = (
+      super_effective_x4*0.2	+ super_effective*0.6 + neutral*0.2	- not_effective*0.15)*100 - immune*10,
+    offensive_score_scaled = round(
+      (offensive_score - min(offensive_score)) /
+      (max(offensive_score) - min(offensive_score)) * 100,
+    2)) |> 
+  arrange(desc(offensive_score_scaled))
+
+
+kable(attack_stats_scaled, caption = "Attack Type Effectiveness")
+```
+
+### 2.3 Defense Type Analysis
+
+Which defense types have the most resistances (x0.5, x0.25, x0) and fewest weaknesses (x2, x4)?
+
+```{r defense-effectiveness}
+# Calculate defense effectiveness for single types
+defense_stats <- type_df |>
+  group_by(def_type) |>
+  summarise(
+    weaknesses = sum(multiplier == 2),
+    weaknesses_x4 = sum(multiplier == 4),
+    strong_resistances = sum(multiplier == 0.25),
+    resistances = sum(multiplier == 0.5),
+    immunities = sum(multiplier == 0),
+    neutral = sum(multiplier == 1),
+    .groups = "drop"
+  ) |>
+  arrange(desc(resistances))
+
+kable(defense_stats, caption = "Defense Type Effectiveness")
+```
+
+```{r defense-effectiveness-scale and score}
+cols_list_max <- c("strong_resistances", "resistances", "neutral")
+cols_list_min <- c("weaknesses_x4", "weaknesses")
+def_stats_scaled <- defense_stats |>
+  mutate(
+    round(across(
+      all_of(cols_list_max),
+      ~ round(.x / max(.x),2) 
+    ),2),
+    across(
+      all_of(cols_list_min),
+      ~ round(.x / max(.x),2) 
+    ),
+    defense_score = (
+      strong_resistances*0.2	+ resistances*0.45 + neutral*0.2	- weaknesses_x4*0.1 - weaknesses*0.05)*100 + immunities*5,
+    defense_score_scaled = round(
+      (defense_score - min(defense_score)) /
+      (max(defense_score) - min(defense_score)) * 100,
+    2)) |> 
+  arrange(desc(defense_score_scaled))
+
+
+kable(def_stats_scaled, caption = "Defence Type Effectiveness")
+```
