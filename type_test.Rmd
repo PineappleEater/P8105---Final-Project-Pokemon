@@ -77,6 +77,7 @@ attack_stats <- type_df |>
 
 kable(attack_stats, caption = "Attack Type Effectiveness (vs Single Types)")
 ```
+
 ```{r attack-effectiveness-scale and score}
 cols_list_max <- c("super_effective_x4", "super_effective", "neutral")
 cols_list_min <- c("not_effective")
@@ -148,4 +149,121 @@ def_stats_scaled <- defense_stats |>
 
 
 kable(def_stats_scaled, caption = "Defence Type Effectiveness")
+write_csv(def_stats_scaled, "data/def_stats_scaled.csv")
 ```
+
+
+## 4. Pokemon Rating System
+
+### 4.1 Rating Components
+
+We develop a 100-point rating system for beginners with the following components:
+
+1. **Efficient Stat Total (40 points)**: Raw power indicator - **Smooth S-curve mapping**
+2. **Stat Distribution (60 points)**: Offensive or defensive indicator base on distribution:
+  a) *Efficient attack power*(S-curve): Calculated by $max(attack, special\ attack)$ 
+                                or $0.6*(attack + special\ attack)$ if they are too close - **Mixed Offense**
+  b) *Durability expectations*: Calculated by $hp*\sqrt{defence*special\ defence}$
+  c) *Effective speed score*(V): Calculated by $S(v) = B(v) + 0.5*D(v)$, which $v = speed$
+                                            "Faster is better" $B(v)=\frac{v-v_{min}}{v_{max}-v_{min}}$
+                                            "Tactical value" $D(v)=\frac{|v-v_0|}{max(v_0-v_{min},v_{max}-v_0)}$
+                                                            or "Slower isn't necessarily worse"
+3. **Defensive only (30+0.5*Stat Distribution point)**: Defensive type advantages
+                                            
+
+```{r rating-components}
+# Smooth BST Score Calculator (40 points max)
+# Uses logistic function (S-curve) for smooth transition
+calc_bst_score <- function(total, atk, spatk, eff_atk) {
+  # Parameters for S-curve - adjusted for higher scores
+  # Midpoint at BST=450 (shifted left to give higher scores overall)
+  # Steepness: gradual transition from 250-700
+  L <- 40      # Maximum score
+  k <- 0.015   # Steepness (increased for faster growth)
+  x0 <- 450    # Inflection point (lowered to boost scores)
+  bst = total - atk - spatk + eff_atk
+  
+  # Logistic function: L / (1 + exp(-k * (x - x0)))
+  score <- L / (1 + exp(-k * (bst - x0)))
+  
+  # Ensure minimum of 5 points for very weak Pokemon
+  return(score)
+}
+
+# Efficient attack power
+calc_eff_atk <- function(atk, spatk){
+  ratio <- pmin(atk, spatk) / pmax(atk, spatk)
+  ifelse(ratio < 0.9, pmax(atk, spatk), 0.6*(atk + spatk))
+}
+# Durability expectations
+calc_eff_def <- function(hp, def, spdef){
+  hp * sqrt(def * spdef)
+}
+# Effective speed score
+calc_eff_spd <- function(spd, vmin, vmax, v0 = 80){
+  B <- (spd - vmin) / (vmax - vmin)
+  D <- (abs(spd - v0)) / max(v0 - vmin, vmax - v0)
+  B + 0.5 * D
+}
+# Stats Distribution (60 points)
+calc_atk_score <- function(eff_atk_s, eff_def_s, eff_spd_s){
+  (0.5*eff_atk_s + 0.1*eff_def_s + 0.4*eff_spd_s) * 60
+}
+
+calc_def_score <- function(eff_atk_s, eff_def_s, defense_score){
+  (0.8*eff_def_s + 0.2*eff_atk_s) * 30 + 30 * defense_score/100
+}
+
+```
+
+### 4.2 Calculate Ratings
+
+```{r calculate-ratings}
+#Give each Pokemon a Defense Type Score
+TYPE_ORDER <- c(
+  "Normal","Fire","Water","Electric","Grass","Ice",
+  "Fighting","Poison","Ground","Flying","Psychic",
+  "Bug","Rock","Ghost","Dragon","Dark","Steel","Fairy"
+)
+
+pokemon_df_score <- pokemon_df |>
+  mutate(
+    idx1 = match(type_1, TYPE_ORDER),
+    idx2 = match(type_2, TYPE_ORDER),
+    def_type = case_when(
+      is.na(type_2) ~ type_1,
+      TRUE ~ paste(
+        TYPE_ORDER[pmin(idx1, idx2)],
+        TYPE_ORDER[pmax(idx1, idx2)],
+        sep = "/"
+      )
+    )
+  ) |> 
+  left_join(
+    def_stats_scaled |> select(def_type, defense_score),
+    by = "def_type"
+  )
+
+
+# Calculate rating for each Pokemon
+pokemon_df_score <- pokemon_df_score |> 
+  mutate(
+    eff_atk = calc_eff_atk(attack, sp_atk),
+    eff_def = calc_eff_def(hp, defense, sp_def),
+    eff_spd = calc_eff_spd(speed, min(speed), max(speed)),
+    
+    eff_atk_s = eff_atk / max(eff_atk),
+    eff_def_s = eff_def / max(eff_def),
+    eff_spd_s = eff_spd / max(eff_spd),
+    # BST Score (40 points) - Smooth S-curve
+    bst_score = calc_bst_score(total, attack, sp_atk, eff_atk),
+    
+    # BST Score (40 points) + Stat Balance Score (60 points)
+    total_atk_score = bst_score + calc_atk_score(eff_atk_s, eff_def_s, eff_spd_s),
+    total_def_score = bst_score + calc_def_score(eff_atk_s, eff_def_s, defense_score)
+  ) |> 
+  select(dex, name, bst_score, 
+         def_type, defense_score, total_def_score, 
+         eff_atk, total_atk_score) #select这段你根据分析自己看着改吧，我纯为了确定是否符合强度理解。最终其实只需要分析total_def_score和total_atk_score了，综合属性的全在total_def_score里了不需要额外分析，不过可以做total_atk_score+total_def_score找出最强宝可梦（虽然没什么参考性）。
+```
+
