@@ -285,196 +285,266 @@ type_overall |>
 
 ### 4.1 Rating Components
 
-We develop a 100-point rating system for beginners with the following components:
+We develop a **dual-rating system** (100-point scale each) for competitive battling:
 
-1. **Base Stat Total (40 points)**: Raw power indicator - **Smooth S-curve mapping**
-2. **Type Score (30 points)**: Offensive + defensive type advantages
-3. **Stat Distribution (20 points)**: Balance vs specialization - **Smooth exponential decay**
-4. **Accessibility (10 points)**: Non-legendary bonus - **Smooth sigmoid function**
+**Offensive Rating (100 points):**
+1. **Efficient Stat Total (40 points)**: S-curve BST mapping with effective attack calculation
+2. **Stat Distribution - Offensive (60 points)**:
+   - Effective Attack Power (50%): Mixed offense recognition
+   - Effective Speed Score (40%): Dual tactical value (fast/slow strategies)
+   - Durability Buffer (10%): Minimum survivability
+
+**Defensive Rating (100 points):**
+1. **Efficient Stat Total (40 points)**: Same S-curve BST mapping
+2. **Stat Distribution - Defensive (30 points)**:
+   - Durability Expectation (80%): HP × √(Def × SpDef)
+   - Counter-Attack Ability (20%): Minimum offensive threat
+3. **Type Advantages (30 points)**: Defensive type matchup score
 
 ```{r rating-components}
-# Create type score lookup from our analysis
-type_scores <- type_overall |>
-  mutate(
-    # Normalize to 0-15 scale for primary type
-    type_score_normalized = scales::rescale(overall_score, to = c(0, 15))
-  )
-
-# Function to get type score
-get_type_score <- function(type1, type2, type_scores_df) {
-  score1 <- type_scores_df$type_score_normalized[type_scores_df$type == type1]
-  score1 <- ifelse(length(score1) == 0, 7.5, score1)
-
-  if (is.na(type2)) {
-    return(score1 * 2)  # Single type gets full weight
-  } else {
-    score2 <- type_scores_df$type_score_normalized[type_scores_df$type == type2]
-    score2 <- ifelse(length(score2) == 0, 7.5, score2)
-    return(score1 + score2)
-  }
-}
-
 # Smooth BST Score Calculator (40 points max)
 # Uses logistic function (S-curve) for smooth transition
-calc_bst_score <- function(bst) {
+calc_bst_score <- function(total, atk, spatk, eff_atk) {
   # Parameters for S-curve - adjusted for higher scores
   # Midpoint at BST=450 (shifted left to give higher scores overall)
   # Steepness: gradual transition from 250-700
   L <- 40      # Maximum score
   k <- 0.015   # Steepness (increased for faster growth)
   x0 <- 450    # Inflection point (lowered to boost scores)
-  
+  bst = total - atk - spatk + eff_atk  # Use effective attack to avoid double counting
+
   # Logistic function: L / (1 + exp(-k * (x - x0)))
   score <- L / (1 + exp(-k * (bst - x0)))
-  
+
   # Ensure minimum of 5 points for very weak Pokemon
-  return(max(5, score))
-}
-
-# Smooth Balance Score Calculator (20 points max)
-# Uses exponential decay based on coefficient of variation
-calc_stat_balance <- function(hp, atk, def, spatk, spdef, spd) {
-  stats <- c(hp, atk, def, spatk, spdef, spd)
-  cv <- sd(stats) / mean(stats)  # Coefficient of variation
-  
-  # Exponential decay function - adjusted for higher baseline
-  # Perfect balance (CV=0) = 20 points
-  # High variance (CV=1.0) ≈ 7.4 points (increased from 5)
-  # Formula: 20 * exp(-2 * cv) with floor at 5 (gentler decay)
-  balance_score <- 20 * exp(-2 * cv)
-  
-  return(max(5, min(20, balance_score)))
-}
-
-# Smooth Accessibility Score Calculator (10 points max)
-# Uses inverted sigmoid for smooth legendary penalty
-calc_accessibility_score <- function(category_label) {
-  # Map categories to numeric difficulty (0=easiest to obtain, 2=hardest)
-  difficulty <- case_when(
-    category_label == "Regular" ~ 0.3,        # Easy to get, ~9.8 points
-    category_label == "Pseudo-Legendary" ~ 1.0,  # Moderate effort, ~5 points
-    category_label == "Legendary" ~ 1.5,      # Hard to get, ~2.7 points
-    category_label == "Mythical" ~ 2.0,       # Very hard, ~1.2 points
-    TRUE ~ 1.0  # Default to medium difficulty
-  )
-  
-  # Sigmoid function for smooth transition
-  # Regular (0.3) → ~9.8 points, Legendary (1.5) → ~2.7 points
-  # Formula: 10 / (1 + exp(1.8 * (difficulty - 0.8)))
-  score <- 10 / (1 + exp(1.8 * (difficulty - 0.8)))
-  
   return(score)
+}
+
+# Efficient Attack Power Calculator
+# Recognizes mixed offense vs specialized attackers
+calc_eff_atk <- function(atk, spatk){
+  ratio <- pmin(atk, spatk) / pmax(atk, spatk)
+  # If ratio >= 0.9, it's a mixed attacker: use weighted sum
+  # Otherwise, it's specialized: use the higher value
+  ifelse(ratio < 0.9, pmax(atk, spatk), 0.6*(atk + spatk))
+}
+
+# Durability Expectations Calculator
+# Uses geometric mean to penalize unbalanced defenses
+calc_eff_def <- function(hp, def, spdef){
+  hp * sqrt(def * spdef)
+}
+
+# Effective Speed Score Calculator
+# Dual evaluation: base speed + tactical value
+calc_eff_spd <- function(spd, vmin, vmax, v0 = 80){
+  # B: "Faster is better" - linear normalization
+  B <- (spd - vmin) / (vmax - vmin)
+  # D: "Tactical value" - distance from baseline speed
+  # Both very fast and very slow have tactical value
+  D <- (abs(spd - v0)) / max(v0 - vmin, vmax - v0)
+  # Combined: base speed (67%) + tactical value (33%)
+  B + 0.5 * D
+}
+
+# Offensive Stat Distribution Score (60 points)
+calc_atk_score <- function(eff_atk_s, eff_def_s, eff_spd_s){
+  # Attack-oriented: prioritize offense (50%) and speed (40%)
+  # Minimal durability requirement (10%)
+  (0.5*eff_atk_s + 0.1*eff_def_s + 0.4*eff_spd_s) * 60
+}
+
+# Defensive Stat Distribution Score (30 points from stats + 30 points from type)
+calc_def_score <- function(eff_atk_s, eff_def_s, defense_score){
+  # Defense-oriented: prioritize durability (80% of 30pts)
+  # Keep some offensive threat (20% of 30pts)
+  # Plus type advantage score (30pts from defensive matchups)
+  (0.8*eff_def_s + 0.2*eff_atk_s) * 30 + 30 * defense_score/100
 }
 ```
 
-### 4.2 Calculate Ratings
+### 4.2 Prepare Defense Type Scores
+
+```{r prepare-defense-scores}
+# Load or calculate defense type scores from dual-type analysis
+# Create type combination string in canonical order
+TYPE_ORDER <- c(
+  "Normal","Fire","Water","Electric","Grass","Ice",
+  "Fighting","Poison","Ground","Flying","Psychic",
+  "Bug","Rock","Ghost","Dragon","Dark","Steel","Fairy"
+)
+
+# Calculate defense scores for all type combinations
+def_type_scores <- dual_defense_stats |>
+  select(def_type, defensive_score) |>
+  mutate(
+    # Normalize to 0-100 scale
+    defense_score = scales::rescale(defensive_score, to = c(0, 100))
+  )
+
+# Add single type defense scores
+single_def_scores <- defense_stats |>
+  select(def_type, defensive_score) |>
+  mutate(
+    defense_score = scales::rescale(defensive_score, to = c(0, 100))
+  )
+
+# Combine both
+all_def_scores <- bind_rows(def_type_scores, single_def_scores)
+```
+
+### 4.3 Calculate Dual Ratings
 
 ```{r calculate-ratings}
-# Calculate rating for each Pokemon
-pokemon_rated <- pokemon_df |>
-  rowwise() |>
+# Add defense type column to Pokemon data
+pokemon_df_typed <- pokemon_df |>
   mutate(
-    # BST Score (40 points) - Smooth S-curve
-    bst_score = calc_bst_score(total),
-
-    # Type Score (30 points)
-    type_score = get_type_score(type_1, type_2, type_scores),
-
-    # Stat Balance Score (20 points) - Smooth exponential decay
-    balance_score = calc_stat_balance(hp, attack, defense, sp_atk, sp_def, speed),
-
-    # Accessibility Score (10 points) - Smooth sigmoid
-    access_score = calc_accessibility_score(category),
-
-    # Total Rating
-    total_rating = bst_score + type_score + balance_score + access_score,
-
-    # Tier Assignment (adjusted thresholds for realistic distribution)
-    tier = case_when(
-      total_rating >= 75 ~ "S",  # Top ~1-2% (降低from 85)
-      total_rating >= 65 ~ "A",  # Strong Pokemon (~10-15%)
-      total_rating >= 55 ~ "B",  # Above average (~30-40%)
-      total_rating >= 45 ~ "C",  # Average (~30%)
-      total_rating >= 35 ~ "D",  # Below average (~15%)
-      TRUE ~ "F"                 # Weak Pokemon (~5%)
+    idx1 = match(type_1, TYPE_ORDER),
+    idx2 = match(type_2, TYPE_ORDER),
+    def_type = case_when(
+      is.na(type_2) ~ type_1,
+      TRUE ~ paste(
+        TYPE_ORDER[pmin(idx1, idx2)],
+        TYPE_ORDER[pmax(idx1, idx2)],
+        sep = "/"
+      )
     )
   ) |>
-  ungroup()
+  left_join(
+    all_def_scores |> select(def_type, defense_score),
+    by = "def_type"
+  ) |>
+  # Fill missing defense scores with median
+  mutate(defense_score = ifelse(is.na(defense_score), 50, defense_score))
+
+# Calculate rating for each Pokemon
+pokemon_rated <- pokemon_df_typed |>
+  mutate(
+    # Step 1: Calculate raw effective values
+    eff_atk = calc_eff_atk(attack, sp_atk),
+    eff_def = calc_eff_def(hp, defense, sp_def),
+    eff_spd = calc_eff_spd(speed, min(speed), max(speed)),
+
+    # Step 2: Normalize to [0,1] scale
+    eff_atk_s = eff_atk / max(eff_atk),
+    eff_def_s = eff_def / max(eff_def),
+    eff_spd_s = eff_spd / max(eff_spd),
+
+    # Step 3: Calculate BST score (shared by both ratings)
+    bst_score = calc_bst_score(total, attack, sp_atk, eff_atk),
+
+    # Step 4: Calculate final ratings
+    offensive_rating = bst_score + calc_atk_score(eff_atk_s, eff_def_s, eff_spd_s),
+    defensive_rating = bst_score + calc_def_score(eff_atk_s, eff_def_s, defense_score),
+
+    # Step 5: Create composite score (average of both)
+    total_rating = (offensive_rating + defensive_rating) / 2,
+
+    # Tier Assignment based on composite score
+    tier = case_when(
+      total_rating >= 75 ~ "S",  # Elite Pokemon
+      total_rating >= 65 ~ "A",  # Strong Pokemon
+      total_rating >= 55 ~ "B",  # Above average
+      total_rating >= 45 ~ "C",  # Average
+      total_rating >= 35 ~ "D",  # Below average
+      TRUE ~ "F"                 # Weak Pokemon
+    ),
+
+    # Role classification based on rating difference
+    role = case_when(
+      offensive_rating - defensive_rating > 10 ~ "Offensive",
+      defensive_rating - offensive_rating > 10 ~ "Defensive",
+      TRUE ~ "Balanced"
+    )
+  )
 
 # Set tier as factor
 pokemon_rated$tier <- factor(pokemon_rated$tier, levels = c("S", "A", "B", "C", "D", "F"))
+pokemon_rated$role <- factor(pokemon_rated$role, levels = c("Offensive", "Balanced", "Defensive"))
 ```
 
-### 4.3 Visualize Smooth Scoring Functions
+### 4.4 Visualize Scoring Functions
 
 ```{r visualize-scoring-functions}
 # Create data for visualization
 bst_range <- seq(200, 800, by = 5)
-cv_range <- seq(0, 1.2, by = 0.01)
-difficulty_range <- 0:4
+atk_pairs <- expand.grid(atk = seq(50, 200, 10), spatk = seq(50, 200, 10))
+spd_range <- seq(5, 200, by = 5)
 
 # BST Score visualization
 bst_viz <- tibble(
   BST = bst_range,
-  Score = sapply(bst_range, calc_bst_score)
+  # Use dummy values for attack stats
+  Score = sapply(bst_range, function(x) calc_bst_score(x, 100, 100, 100))
 )
 
 p1 <- ggplot(bst_viz, aes(x = BST, y = Score)) +
   geom_line(color = "#2196F3", size = 1.5) +
   geom_hline(yintercept = c(10, 20, 30, 40), linetype = "dashed", alpha = 0.3) +
   geom_vline(xintercept = 450, linetype = "dashed", color = "red", alpha = 0.5) +
-  annotate("text", x = 450, y = 35, label = "Inflection Point\n(BST=450)", 
+  annotate("text", x = 450, y = 35, label = "Inflection Point\n(BST=450)",
            color = "red", size = 3) +
   labs(
     title = "BST Score: Smooth S-Curve Mapping",
-    subtitle = "Gradual transition from weak to strong Pokemon",
+    subtitle = "Logistic function for gradual strength scaling",
     x = "Base Stat Total (BST)", y = "BST Score (max 40)"
   ) +
   theme_minimal()
 
-# Balance Score visualization
-balance_viz <- tibble(
-  CV = cv_range,
-  Score = sapply(cv_range, function(cv) {
-    20 * exp(-2 * cv)  # Updated to match new formula
-  })
-)
+# Effective Attack visualization
+eff_atk_viz <- atk_pairs |>
+  mutate(
+    eff_atk = calc_eff_atk(atk, spatk),
+    ratio = pmin(atk, spatk) / pmax(atk, spatk),
+    type = ifelse(ratio >= 0.9, "Mixed", "Specialized")
+  )
 
-p2 <- ggplot(balance_viz, aes(x = CV, y = Score)) +
-  geom_line(color = "#4CAF50", size = 1.5) +
-  geom_hline(yintercept = c(5, 10, 15, 20), linetype = "dashed", alpha = 0.3) +
+p2 <- ggplot(eff_atk_viz, aes(x = atk, y = spatk, fill = eff_atk)) +
+  geom_tile() +
+  geom_contour(aes(z = eff_atk), color = "white", alpha = 0.3) +
+  scale_fill_viridis_c(option = "plasma") +
+  geom_abline(slope = 1, linetype = "dashed", color = "white") +
+  annotate("text", x = 180, y = 180, label = "Mixed\nOffense",
+           color = "white", size = 4, fontface = "bold") +
+  annotate("text", x = 180, y = 80, label = "Specialized",
+           color = "white", size = 4, fontface = "bold") +
   labs(
-    title = "Balance Score: Exponential Decay",
-    subtitle = "Penalizes extreme stat variance smoothly",
-    x = "Coefficient of Variation (CV)", y = "Balance Score (max 20)"
+    title = "Effective Attack Power",
+    subtitle = "Recognizes mixed offense (ratio ≥ 0.9) vs specialization",
+    x = "Attack", y = "Special Attack", fill = "Eff. Attack"
   ) +
   theme_minimal()
 
-# Accessibility Score visualization
-category_labels <- c("Regular", "Paradox", "Ultra Beast", "Mythical", "Legendary")
-access_viz <- tibble(
-  Difficulty = difficulty_range,
-  Category = factor(category_labels, levels = category_labels),
-  Score = sapply(category_labels, calc_accessibility_score)
+# Effective Speed visualization
+spd_viz <- tibble(
+  Speed = spd_range,
+  Score = calc_eff_spd(spd_range, min(spd_range), max(spd_range)),
+  # Decompose into components
+  B = (spd_range - min(spd_range)) / (max(spd_range) - min(spd_range)),
+  D = abs(spd_range - 80) / max(80 - min(spd_range), max(spd_range) - 80) * 0.5
 )
 
-p3 <- ggplot(access_viz, aes(x = Difficulty, y = Score)) +
-  geom_line(color = "#FF9800", size = 1.5) +
-  geom_point(size = 3, color = "#FF9800") +
-  scale_x_continuous(breaks = 0:4, labels = category_labels) +
-  geom_hline(yintercept = c(0, 5, 10), linetype = "dashed", alpha = 0.3) +
+p3 <- ggplot(spd_viz, aes(x = Speed)) +
+  geom_line(aes(y = Score, color = "Total Score"), size = 1.5) +
+  geom_line(aes(y = B, color = "Base Speed (B)"), linetype = "dashed") +
+  geom_line(aes(y = D, color = "Tactical Value (D)"), linetype = "dotted") +
+  geom_vline(xintercept = 80, linetype = "dashed", color = "red", alpha = 0.5) +
+  annotate("text", x = 80, y = 1.3, label = "Baseline\nSpeed=80",
+           color = "red", size = 3) +
+  scale_color_manual(values = c("Total Score" = "#4CAF50",
+                                 "Base Speed (B)" = "#2196F3",
+                                 "Tactical Value (D)" = "#FF9800")) +
   labs(
-    title = "Accessibility Score: Smooth Sigmoid",
-    subtitle = "Gradual penalty for legendary Pokemon",
-    x = "Category", y = "Accessibility Score (max 10)"
+    title = "Effective Speed Score: Dual Tactical Value",
+    subtitle = "Both very fast and very slow have strategic importance",
+    x = "Speed Stat", y = "Normalized Score", color = "Component"
   ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme_minimal()
 
 # Display all plots
 if (requireNamespace("patchwork", quietly = TRUE)) {
   library(patchwork)
-  p1 / p2 / p3
+  (p1 | p2) / p3
 } else {
   print(p1)
   print(p2)
@@ -482,7 +552,7 @@ if (requireNamespace("patchwork", quietly = TRUE)) {
 }
 ```
 
-### 4.4 Rating Distribution
+### 4.5 Rating Distribution Analysis
 
 ```{r rating-distribution}
 # Summary by tier
@@ -492,98 +562,172 @@ tier_summary <- pokemon_rated |>
 
 kable(tier_summary, caption = "Pokemon Distribution by Tier")
 
-# Visualize rating distribution
+# Summary by role
+role_summary <- pokemon_rated |>
+  count(role) |>
+  mutate(percentage = round(100 * n / sum(n), 1))
+
+kable(role_summary, caption = "Pokemon Distribution by Battle Role")
+
+# Visualize dual rating distribution
+ggplot(pokemon_rated, aes(x = offensive_rating, y = defensive_rating)) +
+  geom_point(aes(color = tier, shape = role), alpha = 0.6, size = 3) +
+  geom_abline(slope = 1, linetype = "dashed", color = "gray50") +
+  scale_color_manual(values = c("S" = "#FFD700", "A" = "#C0C0C0", "B" = "#CD7F32",
+                                 "C" = "#4CAF50", "D" = "#2196F3", "F" = "#9E9E9E")) +
+  labs(
+    title = "Offensive vs Defensive Rating Distribution",
+    subtitle = "Points above diagonal = defense-oriented, below = offense-oriented",
+    x = "Offensive Rating", y = "Defensive Rating",
+    color = "Tier", shape = "Role"
+  ) +
+  theme_minimal()
+
+# Rating distribution histogram
 ggplot(pokemon_rated, aes(x = total_rating, fill = tier)) +
   geom_histogram(bins = 30, alpha = 0.8) +
   scale_fill_manual(values = c("S" = "#FFD700", "A" = "#C0C0C0", "B" = "#CD7F32",
                                 "C" = "#4CAF50", "D" = "#2196F3", "F" = "#9E9E9E")) +
   labs(
-    title = "Pokemon Rating Distribution",
+    title = "Composite Rating Distribution",
+    subtitle = "Average of offensive and defensive ratings",
     x = "Total Rating (100-point scale)", y = "Count", fill = "Tier"
-  )
-
-# Rating by category
-ggplot(pokemon_rated, aes(x = category, y = total_rating, fill = category)) +
-  geom_boxplot(alpha = 0.7) +
-  scale_fill_brewer(palette = "Set2") +
-  labs(
-    title = "Rating Distribution by Pokemon Category",
-    x = "Category", y = "Total Rating"
   ) +
+  theme_minimal()
+
+# Rating by role
+ggplot(pokemon_rated, aes(x = role, y = total_rating, fill = role)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("Offensive" = "#E91E63",
+                                "Balanced" = "#9C27B0",
+                                "Defensive" = "#3F51B5")) +
+  labs(
+    title = "Rating Distribution by Battle Role",
+    x = "Battle Role", y = "Composite Rating"
+  ) +
+  theme_minimal() +
   theme(legend.position = "none")
 ```
 
-### 4.5 Top Rated Pokemon (For Beginners)
+### 4.6 Top Rated Pokemon
 
 ```{r top-rated}
-# Top 20 highest rated Pokemon (excluding legendaries for beginner focus)
+# Top 20 offensive Pokemon
+top_offensive <- pokemon_rated |>
+  arrange(desc(offensive_rating)) |>
+  head(20) |>
+  select(name, type_1, type_2, role, offensive_rating, defensive_rating, tier, eff_atk)
+
+cat("=== TOP 20 OFFENSIVE POKEMON ===\n")
+kable(top_offensive, caption = "Top 20 Offensive Pokemon", digits = 1)
+
+# Top 20 defensive Pokemon
+top_defensive <- pokemon_rated |>
+  arrange(desc(defensive_rating)) |>
+  head(20) |>
+  select(name, type_1, type_2, def_type, role, defensive_rating, offensive_rating, tier, defense_score)
+
+cat("\n=== TOP 20 DEFENSIVE POKEMON ===\n")
+kable(top_defensive, caption = "Top 20 Defensive Pokemon", digits = 1)
+
+# Top 20 balanced Pokemon (high composite score)
+top_balanced <- pokemon_rated |>
+  filter(role == "Balanced") |>
+  arrange(desc(total_rating)) |>
+  head(20) |>
+  select(name, type_1, type_2, total_rating, offensive_rating, defensive_rating, tier)
+
+cat("\n=== TOP 20 BALANCED POKEMON ===\n")
+kable(top_balanced, caption = "Top 20 Balanced Pokemon", digits = 1)
+
+# Top regular Pokemon (for beginners)
 top_regular <- pokemon_rated |>
   filter(category == "Regular") |>
   arrange(desc(total_rating)) |>
   head(20) |>
-  select(name, type_1, type_2, total, total_rating, tier, bst_score, type_score, balance_score)
+  select(name, type_1, type_2, role, total_rating, offensive_rating, defensive_rating, tier)
 
-cat("=== TOP 20 POKEMON FOR BEGINNERS (Regular Pokemon Only) ===\n")
-kable(top_regular, caption = "Top 20 Rated Regular Pokemon", digits = 1)
-
-# Top overall including all categories
-top_all <- pokemon_rated |>
-  arrange(desc(total_rating)) |>
-  head(20) |>
-  select(name, category, type_1, type_2, total, total_rating, tier)
-
-cat("\n=== TOP 20 POKEMON OVERALL (All Categories) ===\n")
-kable(top_all, caption = "Top 20 Rated Pokemon Overall", digits = 1)
+cat("\n=== TOP 20 REGULAR POKEMON (For Beginners) ===\n")
+kable(top_regular, caption = "Top 20 Regular Pokemon", digits = 1)
 ```
 
-### 4.6 Best Pokemon by Type
+### 4.7 Best Pokemon by Type
 
 ```{r best-by-type}
-# Best rated Pokemon for each primary type
-best_by_type <- pokemon_rated |>
+# Best offensive Pokemon for each primary type
+best_offensive_by_type <- pokemon_rated |>
   filter(category == "Regular") |>
   group_by(type_1) |>
-  slice_max(total_rating, n = 1) |>
+  slice_max(offensive_rating, n = 1) |>
   ungroup() |>
-  arrange(desc(total_rating)) |>
-  select(type_1, name, total, total_rating, tier)
+  arrange(desc(offensive_rating)) |>
+  select(type_1, name, offensive_rating, role, tier)
 
-cat("=== BEST REGULAR POKEMON BY PRIMARY TYPE ===\n")
-kable(best_by_type, caption = "Best Rated Regular Pokemon by Type", digits = 1)
+cat("=== BEST OFFENSIVE POKEMON BY TYPE (Regular Only) ===\n")
+kable(best_offensive_by_type, caption = "Best Offensive Pokemon by Type", digits = 1)
+
+# Best defensive Pokemon for each primary type
+best_defensive_by_type <- pokemon_rated |>
+  filter(category == "Regular") |>
+  group_by(type_1) |>
+  slice_max(defensive_rating, n = 1) |>
+  ungroup() |>
+  arrange(desc(defensive_rating)) |>
+  select(type_1, name, defensive_rating, role, tier)
+
+cat("\n=== BEST DEFENSIVE POKEMON BY TYPE (Regular Only) ===\n")
+kable(best_defensive_by_type, caption = "Best Defensive Pokemon by Type", digits = 1)
 ```
 
-### 4.7 Export Results
+### 4.8 Export Results
 
 ```{r export-results}
+# Create output directory
+dir.create(here("data", "analysis", "rating"), recursive = TRUE, showWarnings = FALSE)
+
 # Save rated Pokemon data to CSV
-write_csv(pokemon_rated, here("data", "pokemon_rated.csv"))
+write_csv(pokemon_rated, here("data", "analysis", "rating", "pokemon_rated_dual.csv"))
 
 # Create summary statistics
 rating_summary <- pokemon_rated |>
   summarise(
     total_pokemon = n(),
-    avg_rating = mean(total_rating),
-    median_rating = median(total_rating),
-    min_rating = min(total_rating),
-    max_rating = max(total_rating),
+    avg_total_rating = mean(total_rating),
+    avg_offensive_rating = mean(offensive_rating),
+    avg_defensive_rating = mean(defensive_rating),
+    median_total_rating = median(total_rating),
+    min_total_rating = min(total_rating),
+    max_total_rating = max(total_rating),
     s_tier_count = sum(tier == "S"),
     a_tier_count = sum(tier == "A"),
     b_tier_count = sum(tier == "B"),
     c_tier_count = sum(tier == "C"),
     d_tier_count = sum(tier == "D"),
     f_tier_count = sum(tier == "F"),
+    offensive_count = sum(role == "Offensive"),
+    balanced_count = sum(role == "Balanced"),
+    defensive_count = sum(role == "Defensive"),
     avg_bst_score = mean(bst_score),
-    avg_type_score = mean(type_score),
-    avg_balance_score = mean(balance_score),
-    avg_access_score = mean(access_score)
+    avg_eff_atk = mean(eff_atk),
+    avg_eff_def = mean(eff_def),
+    avg_eff_spd = mean(eff_spd)
   )
 
-write_csv(rating_summary, here("data", "rating_summary.csv"))
+write_csv(rating_summary, here("data", "analysis", "rating", "rating_summary_dual.csv"))
 
-cat("\n=== RATING SUMMARY ===\n")
+# Export top Pokemon lists for reference
+write_csv(top_offensive, here("data", "analysis", "rating", "top_offensive_pokemon.csv"))
+write_csv(top_defensive, here("data", "analysis", "rating", "top_defensive_pokemon.csv"))
+write_csv(top_balanced, here("data", "analysis", "rating", "top_balanced_pokemon.csv"))
+write_csv(top_regular, here("data", "analysis", "rating", "top_regular_pokemon.csv"))
+
+cat("\n=== DUAL RATING SYSTEM SUMMARY ===\n")
 cat(sprintf("Total Pokemon: %d\n", rating_summary$total_pokemon))
-cat(sprintf("Average Rating: %.1f\n", rating_summary$avg_rating))
-cat(sprintf("Rating Range: %.1f - %.1f\n", rating_summary$min_rating, rating_summary$max_rating))
+cat(sprintf("\nAverage Ratings:\n"))
+cat(sprintf("  Composite Rating: %.1f / 100\n", rating_summary$avg_total_rating))
+cat(sprintf("  Offensive Rating: %.1f / 100\n", rating_summary$avg_offensive_rating))
+cat(sprintf("  Defensive Rating: %.1f / 100\n", rating_summary$avg_defensive_rating))
+cat(sprintf("\nRating Range: %.1f - %.1f\n", rating_summary$min_total_rating, rating_summary$max_total_rating))
 cat(sprintf("\nTier Distribution:\n"))
 cat(sprintf("  S Tier: %d (%.1f%%)\n", rating_summary$s_tier_count, 100*rating_summary$s_tier_count/rating_summary$total_pokemon))
 cat(sprintf("  A Tier: %d (%.1f%%)\n", rating_summary$a_tier_count, 100*rating_summary$a_tier_count/rating_summary$total_pokemon))
@@ -591,13 +735,21 @@ cat(sprintf("  B Tier: %d (%.1f%%)\n", rating_summary$b_tier_count, 100*rating_s
 cat(sprintf("  C Tier: %d (%.1f%%)\n", rating_summary$c_tier_count, 100*rating_summary$c_tier_count/rating_summary$total_pokemon))
 cat(sprintf("  D Tier: %d (%.1f%%)\n", rating_summary$d_tier_count, 100*rating_summary$d_tier_count/rating_summary$total_pokemon))
 cat(sprintf("  F Tier: %d (%.1f%%)\n", rating_summary$f_tier_count, 100*rating_summary$f_tier_count/rating_summary$total_pokemon))
+cat(sprintf("\nRole Distribution:\n"))
+cat(sprintf("  Offensive: %d (%.1f%%)\n", rating_summary$offensive_count, 100*rating_summary$offensive_count/rating_summary$total_pokemon))
+cat(sprintf("  Balanced: %d (%.1f%%)\n", rating_summary$balanced_count, 100*rating_summary$balanced_count/rating_summary$total_pokemon))
+cat(sprintf("  Defensive: %d (%.1f%%)\n", rating_summary$defensive_count, 100*rating_summary$defensive_count/rating_summary$total_pokemon))
 cat(sprintf("\nComponent Score Averages:\n"))
 cat(sprintf("  BST Score: %.1f / 40\n", rating_summary$avg_bst_score))
-cat(sprintf("  Type Score: %.1f / 30\n", rating_summary$avg_type_score))
-cat(sprintf("  Balance Score: %.1f / 20\n", rating_summary$avg_balance_score))
-cat(sprintf("  Accessibility Score: %.1f / 10\n", rating_summary$avg_access_score))
+cat(sprintf("  Effective Attack: %.1f\n", rating_summary$avg_eff_atk))
+cat(sprintf("  Effective Defense: %.1f\n", rating_summary$avg_eff_def))
+cat(sprintf("  Effective Speed: %.1f\n", rating_summary$avg_eff_spd))
 
-cat("\n✓ Results exported to:\n")
-cat("  - data/pokemon_rated.csv\n")
-cat("  - data/rating_summary.csv\n")
+cat("\n✓ Results exported to data/analysis/rating/:\n")
+cat("  - pokemon_rated_dual.csv (Complete ratings)\n")
+cat("  - rating_summary_dual.csv (Summary statistics)\n")
+cat("  - top_offensive_pokemon.csv (Top 20 offensive)\n")
+cat("  - top_defensive_pokemon.csv (Top 20 defensive)\n")
+cat("  - top_balanced_pokemon.csv (Top 20 balanced)\n")
+cat("  - top_regular_pokemon.csv (Top 20 for beginners)\n")
 ```

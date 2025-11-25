@@ -124,16 +124,18 @@ This repository presents a comprehensive data science investigation into the Pok
 
 ### Analysis Pipeline
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│  1. Data Clean  │───▶│    2. EDA       │───▶│  3. PCA/Cluster │
-│   (rvest)       │    │  (tidyverse)    │    │  (factoextra)   │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                                      │
-┌─────────────────┐    ┌─────────────────┐           │
-│ 5. Type Rating  │◀───│ 4. ML Classify  │◀──────────┘
-│   System        │    │ (Random Forest) │
-└─────────────────┘    └─────────────────┘
+```mermaid
+graph LR
+    A[1. Data Cleaning<br/>rvest scraping] --> B[2. EDA<br/>tidyverse exploration]
+    B --> C[3. PCA & Clustering<br/>factoextra analysis]
+    C --> D[4. ML Classification<br/>Random Forest tuning]
+    C --> E[5. Type Rating System<br/>Dual rating algorithm]
+
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style C fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style D fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style E fill:#fce4ec,stroke:#c2185b,stroke-width:2px
 ```
 
 ### 1. Data Cleaning & Preprocessing

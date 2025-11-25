@@ -264,6 +264,8 @@ pokemon_df_score <- pokemon_df_score |>
   ) |> 
   select(dex, name, bst_score, 
          def_type, defense_score, total_def_score, 
-         eff_atk, total_atk_score) #select这段你根据分析自己看着改吧，我纯为了确定是否符合强度理解。最终其实只需要分析total_def_score和total_atk_score了，综合属性的全在total_def_score里了不需要额外分析，不过可以做total_atk_score+total_def_score找出最强宝可梦（虽然没什么参考性）。
+         eff_atk, total_atk_score) 
+         
+         #select这段你根据分析自己看着改吧，我纯为了确定是否符合强度理解。最终其实只需要分析total_def_score和total_atk_score了，综合属性的全在total_def_score里了不需要额外分析，不过可以做total_atk_score+total_def_score找出最强宝可梦（虽然没什么参考性）。
 ```
 
