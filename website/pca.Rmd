@@ -1,5 +1,0 @@
----
-title: "pca"
-output: html_document
----
-
