@@ -63,6 +63,16 @@ pokemon_df$category <- factor(pokemon_df$category,
 
 # Display structure
 glimpse(pokemon_df)
+
+# Apply Factor Order
+type_order <- c(
+  "Normal","Fire","Water","Electric","Grass","Ice",
+  "Fighting","Poison","Ground","Flying","Psychic","Bug",
+  "Rock","Ghost","Dragon","Dark","Steel","Fairy"
+)
+
+pokemon_df$type_1 <- factor(pokemon_df$type_1, levels = type_order)
+pokemon_df$type_2 <- factor(pokemon_df$type_2, levels = type_order)
 ```
 
 ## 2. Data Overview
@@ -348,14 +358,43 @@ pokemon_df |>
 ### 6.1 Type Distribution
 
 ```{r type-counts}
-# Primary type
+# Official Type Color
+type_colors <- c(
+  Normal   = "#A8A77A",
+  Fire     = "#EE8130",
+  Water    = "#6390F0",
+  Electric = "#F7D02C",
+  Grass    = "#7AC74C",
+  Ice      = "#96D9D6",
+  Fighting = "#C22E28",
+  Poison   = "#A33EA1",
+  Ground   = "#E2BF65",
+  Flying   = "#A98FF3",
+  Psychic  = "#F95587",
+  Bug      = "#A6B91A",
+  Rock     = "#B6A136",
+  Ghost    = "#735797",
+  Dragon   = "#6F35FC",
+  Dark     = "#705746",
+  Steel    = "#B7B7CE",
+  Fairy    = "#D685AD"
+)
+
+# Types(Normal+Fly will both count to Normal and Flying type)
 p1 <- pokemon_df |>
-  count(type_1, sort = TRUE) |>
+  pivot_longer(
+    cols = c(type_1, type_2),
+    names_to = "slot",
+    values_to = "type"
+  ) |>
+  filter(!is.na(type)) |>
+  count(type, sort = TRUE) |>
   head(10) |>
-  ggplot(aes(x = reorder(type_1, n), y = n, fill = type_1)) +
+  ggplot(aes(x = reorder(type, n), y = n, fill = type)) +
   geom_col(alpha = 0.8) +
+  scale_fill_manual(values = type_colors) +
   coord_flip() +
-  labs(title = "Top 10 Primary Types", x = "Type", y = "Count") +
+  labs(title = "Top 10 Types", x = "Type", y = "Count") +
   theme(legend.position = "none")
 
 # Dual-type proportion
@@ -387,6 +426,7 @@ pokemon_df |>
   mutate(combo = paste(type_1, "/", type_2)) |>
   ggplot(aes(x = reorder(combo, n), y = n, fill = type_1)) +
   geom_col(alpha = 0.8) +
+  scale_fill_manual(values = type_colors) +
   coord_flip() +
   labs(
     title = "Top 15 Type Combinations",
@@ -399,12 +439,21 @@ pokemon_df |>
 ```{r avg-stats-type}
 # Calculate average stats per type
 type_stats <- pokemon_df |>
-  group_by(type_1) |>
+  pivot_longer(
+    cols = c(type_1, type_2),
+    names_to = "slot",
+    values_to = "type"
+  ) |>
+  filter(!is.na(type)) |>
+  group_by(type) |>
   summarise(
     count = n(),
     avg_total = mean(total, na.rm = TRUE),
+    avg_hp = mean(hp, na.rm = TRUE),
     avg_attack = mean(attack, na.rm = TRUE),
+    avg_sp_atk = mean(sp_atk, na.rm = TRUE),
     avg_defense = mean(defense, na.rm = TRUE),
+    avg_sp_def = mean(sp_def, na.rm = TRUE),
     avg_speed = mean(speed, na.rm = TRUE)
   ) |>
   arrange(desc(avg_total))
@@ -414,12 +463,15 @@ print(kable(head(type_stats, 10), caption = "Top 10 Types by Average BST", digit
 # Heatmap
 type_stats |>
   head(12) |>
-  select(type_1, avg_attack, avg_defense, avg_speed) |>
-  pivot_longer(-type_1, names_to = "stat", values_to = "value") |>
+  select(type, avg_hp, avg_attack, avg_sp_atk, avg_defense, avg_sp_def, avg_speed) |>
+  pivot_longer(-type, names_to = "stat", values_to = "value") |>
   mutate(stat = str_remove(stat, "avg_")) |>
-  ggplot(aes(x = stat, y = reorder(type_1, value), fill = value)) +
+  ggplot(aes(x = stat, y = reorder(type, value), fill = value)) +
   geom_tile() +
-  scale_fill_gradient(low = "lightblue", high = "darkred") +
+  scale_fill_gradientn(
+    colours = c("#b9d6f2", "#d0e1f9", "#f7f9ff", "#f9d5e5", "#f6b0c3"),
+    name = "Average Value"
+  ) +
   labs(
     title = "Average Stats Heatmap (Top 12 Types by BST)",
     x = "Stat", y = "Primary Type", fill = "Average Value"
@@ -504,13 +556,21 @@ ggplot(gen_stats, aes(x = generation)) +
 
 ```{r type-diversity}
 pokemon_df |>
-  group_by(generation, type_1) |>
+  pivot_longer(
+    cols = c(type_1, type_2),
+    names_to = "slot",
+    values_to = "type"
+  ) |>
+  filter(!is.na(type)) |>
+  mutate(type = factor(type, levels = type_order)) |> 
+  group_by(generation, type) |>
   summarise(count = n(), .groups = "drop") |>
-  ggplot(aes(x = generation, y = count, fill = type_1)) +
+  ggplot(aes(x = generation, y = count, fill = type)) +
   geom_col(position = "stack") +
+  scale_fill_manual(values = type_colors) +
   labs(
     title = "Type Distribution by Generation",
-    x = "Generation", y = "Count", fill = "Primary Type"
+    x = "Generation", y = "Count", fill = "Type"
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
