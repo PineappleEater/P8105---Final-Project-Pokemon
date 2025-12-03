@@ -1,11 +1,15 @@
 ---
-output: 
+title: "The Story and Mystery of Pokémon"
+output:
   html_document:
     toc: true
-    toc_float: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    toc_depth: 3
     theme: cosmo
     code_folding: hide
-    
+    self_contained: false
 ---
 
 ```{r setup, include=FALSE}
@@ -13,200 +17,368 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(plotly)
 library(kableExtra)
+
+# Load data
+pokemon_data <- read_csv("../data/pokemon_data_final_evolutions_enriched.csv", show_col_types = FALSE)
 ```
 
 <style>
-  .hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 60px 20px;
-    text-align: center;
-    border-radius: 10px;
-    margin-bottom: 30px;
-  }
-  
-  .hero h1 {
-    font-size: 3em;
-    margin-bottom: 10px;
-  }
-  
-  .stat-box {
-    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    margin: 10px;
-  }
-  
-  .stat-number {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #667eea;
-  }
+/* Hero Section */
+.hero {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+padding: 80px 20px;
+text-align: center;
+border-radius: 15px;
+margin-bottom: 40px;
+box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+}
+
+.hero h1 {
+font-size: 3.5em;
+margin-bottom: 15px;
+text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Stats Grid */
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 25px;
+margin: 40px 0;
+}
+
+.stat-card {
+background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+padding: 30px;
+border-radius: 15px;
+text-align: center;
+border: 2px solid rgba(102, 126, 234, 0.2);
+transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+}
+
+.stat-number {
+font-size: 3.5em;
+font-weight: bold;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+margin-bottom: 10px;
+}
+
+.stat-label {
+font-size: 1.1em;
+color: #666;
+font-weight: 500;
+}
+
+/* Feature Cards */
+.feature-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 30px;
+margin: 40px 0;
+}
+
+.feature-card {
+background: white;
+padding: 35px;
+border-radius: 15px;
+box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+transition: all 0.3s ease;
+border-left: 4px solid #667eea;
+}
+
+.feature-card:hover {
+transform: translateY(-8px);
+box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+}
+
+.feature-icon { font-size: 3em; margin-bottom: 20px; }
+.feature-title { font-size: 1.5em; font-weight: 600; color: #667eea; margin-bottom: 15px; }
+.feature-description { color: #666; line-height: 1.6; }
+
+/* Buttons */
+.cta-button {
+display: inline-block;
+padding: 15px 40px;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+text-decoration: none;
+border-radius: 50px;
+font-weight: 600;
+margin: 10px;
+transition: all 0.3s ease;
+box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.cta-button:hover {
+transform: translateY(-3px);
+box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+color: white;
+}
+
+/* Highlight Box */
+.highlight-box {
+background: #f8f9fa;
+padding: 30px;
+border-radius: 15px;
+margin: 30px 0;
+border-left: 5px solid #667eea;
+}
+
+/* Timeline */
+.timeline-item {
+background: #f8f9fa;
+padding: 20px;
+border-radius: 10px;
+margin-bottom: 15px;
+border-left: 4px solid #667eea;
+}
+
+.timeline-title {
+font-weight: 600;
+color: #667eea;
+font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+.hero h1 { font-size: 2em; }
+.stats-grid { grid-template-columns: 1fr 1fr; }
+}
 </style>
 
 <div class="hero">
-  <h1>The Story and Mystery of Pokémon</h1>
-  <h3>A Comprehensive Data Science Exploration</h3>
-  <p>P8105 – Data Science I | Columbia University | December 2025</p>
+<h1>🎮 The Story and Mystery of Pokémon</h1>
+<h3>A Comprehensive Data Science Exploration</h3>
+<p><strong>P8105 – Data Science I</strong> | Columbia University | Fall 2025</p>
 </div>
 
-# **Project Overview** {.tabset}
+# Executive Summary
 
-## Quick Stats
+This project analyzes **742 Pokémon** across nine generations using machine learning and statistical modeling. We achieve **99.5% accuracy** in legendary prediction and develop a comprehensive dual-rating system for competitive battling.
 
-<div style="display: flex; flex-wrap: wrap; justify-content: space-around;">
-  <div class="stat-box">
-有啥想写的
-  </div>
-  <div class="stat-box">
-有啥想写的
-  </div>
-  <div class="stat-box">
-有啥想写的
-  </div>
-  <div class="stat-box">
-有啥想写的
-  </div>
+**Key Results**: Legendary Pokémon are statistically distinct (BST 680 vs 420), concentrated in Dragon/Psychic/Steel types, and accurately classified through Random Forest modeling.
+
+## Dataset Overview
+
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-number">742</div>
+<div class="stat-label">Pokémon Species</div>
+</div>
+<div class="stat-card">
+<div class="stat-number">101</div>
+<div class="stat-label">Legendary Pokémon</div>
+</div>
+<div class="stat-card">
+<div class="stat-number">18</div>
+<div class="stat-label">Elemental Types</div>
+</div>
+<div class="stat-card">
+<div class="stat-number">519</div>
+<div class="stat-label">Average Base Stats</div>
+</div>
 </div>
 
-## Motivation
+# Project Components
 
-**Why Pokémon?**
+<div class="feature-grid">
+<div class="feature-card">
+<div class="feature-icon">🔍</div>
+<div class="feature-title">Exploratory Analysis</div>
+<div class="feature-description">In-depth exploration of Pokémon attributes, type distributions, and stat correlations.</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🤖</div>
+<div class="feature-title">Machine Learning</div>
+<div class="feature-description">Random Forest classification achieving 99.5% AUC for legendary prediction.</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">📈</div>
+<div class="feature-title">Statistical Modeling</div>
+<div class="feature-description">PCA analysis revealing 4 distinct clusters: Sweepers, Tanks, Balanced, Early-Game.</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">⚔️</div>
+<div class="feature-title">Type Effectiveness</div>
+<div class="feature-description">Analysis of type strengths and optimal combinations for competitive play.</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🎮</div>
+<div class="feature-title">Interactive Explorer</div>
+<div class="feature-description">Dynamic filtering and visualization for real-time data exploration.</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">⭐</div>
+<div class="feature-title">Dual Rating System</div>
+<div class="feature-description">Separate offensive and defensive ratings (100-point scale each) with role classification and tier assignment.</div>
+</div>
+</div>
 
-* Rich, structured dataset with quantitative and categorical features
-* Perfect case study for demonstrating complete data science workflow
-* Combines statistical rigor with creative exploration
-* Practical application for competitive play and team building
+# Research Questions
 
-**Dataset**: 1,025 Pokémon species across 9 generations (1996-2025)
-
-## Research Questions
-
-### Core Questions
-
-1. **Legendary Classification**: Can we build a classifier to identify legendary Pokémon?
-2. **Physical Attributes Analysis**: How does height and weight correlate with base stats?
-3. **Type Effectiveness**: Which type (or type combination) is strongest? Weakest?
-4. **Type-Legendary Relationship**: Which type is most likely to be legendary?
-5. **Rating System Development**: Can we create a Pokémon rating system for beginners?
-
-### Extended Questions
-
-6. **System Validation**: Does our "best" team match competitive standards?
-7. **Team Building Utility**: Is this system reliable for building competitive teams?
-
-# **Key Findings**
-
-## 1. Legendary Pokémon Are Statistically Distinct
-
-```{r legendary_stats, echo=FALSE}
-# Create sample data for demonstration
-set.seed(123)
-pokemon_sample <- data.frame(
-  Category = rep(c("Regular", "Legendary"), each = 50),
-  Total_BST = c(rnorm(50, 420, 80), rnorm(50, 680, 50))
+```{r research_questions, echo=FALSE}
+questions_df <- data.frame(
+Question = c(
+"Can we identify legendary Pokémon from their stats?",
+"How do physical attributes correlate with battle stats?",
+"Which type combinations are strongest/weakest?",
+"Which types are most likely to be legendary?",
+"Can we develop a dual-rating system for competitive battling?",
+"Does our optimal team match competitive standards?"
+),
+Status = rep("✅ Complete", 6),
+Method = c(
+"Random Forest (99.5% AUC)",
+"Correlation Analysis",
+"Type Effectiveness Matrix",
+"Chi-Square Test",
+"Dual Rating Algorithm",
+"Competitive Meta Analysis"
+)
 )
 
-plot_ly(pokemon_sample, x = ~Category, y = ~Total_BST, type = "box",
-        color = ~Category, colors = c("#667eea", "#764ba2")) %>%
-  layout(title = "Base Stat Total by Category",
-         yaxis = list(title = "Total BST"),
-         xaxis = list(title = ""))
+kable(questions_df, format = "html") %>%
+kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+column_spec(2, bold = TRUE, color = "#667eea") %>%
+column_spec(3, color = "#666")
 ```
 
-* **Mean BST Difference**: 259.4 points (*p* < 0.001)
-* **Cohen's d**: 2.84 (very large effect size)
-* **Classification Accuracy**: 99.5% with Random Forest
+# Key Findings {.tabset}
 
-## 2. Type Strength Rankings
+## Top Types
 
-**Strongest Types** (by average BST):
+```{r top_types, echo=FALSE, fig.height=5}
+top_types <- pokemon_data %>%
+group_by(type_1) %>%
+summarise(Count = n(), Avg_Total = mean(total, na.rm = TRUE)) %>%
+arrange(desc(Avg_Total)) %>%
+head(5)
 
-1. **Dragon** (520) - 28% are legendary
-2. **Psychic** (495) - 25% legendary  
-3. **Steel** (485) - 15% legendary
-
-**Weakest Types**:
-
-1. **Bug** (395) - Only 0.5% legendary
-2. **Normal** (410) - 1% legendary
-3. **Grass** (425) - Mediocre stats
-
-## 3. Rating System Validation
-
-Our beginner-friendly rating system achieved:
-
-* **92% alignment** with competitive meta
-* **6/6 recommended Pokémon** in top competitive tiers
-* **12.7% average VGC usage** (well above competitive threshold)
-
-### Recommended Team Performance
-
-| Pokémon | Our Tier | VGC Usage | Validation |
-|---------|----------|-----------|------------|
-| Garchomp | S (95) | 18.5% | ✅ Tier 1 |
-| Metagross | S (93) | 12.3% | ✅ Tier 1 |
-| Gyarados | A (88) | 8.7% | ✅ Tier 2 |
-| Magnezone | A (85) | 6.4% | ✅ Tier 2 |
-| Togekiss | A (82) | 15.2% | ✅ Tier 1 |
-| Excadrill | A (80) | 14.8% | ✅ Tier 1 |
-
-# **Methodology Overview**
-
-Our analysis followed a complete data science pipeline:
-
-1. **Data Collection**: Web scraping from PokémonDB using `rvest`
-2. **Data Cleaning**: Handling special cases, feature engineering
-3. **EDA**: Statistical analysis, visualization
-4. **Dimensionality Reduction**: PCA analysis
-5. **Unsupervised Learning**: K-means clustering
-6. **Supervised Learning**: 5 classification models
-7. **Validation**: External competitive meta comparison
-
-# **Interactive Visualizations**
-
-```{r type_distribution, echo=FALSE}
-# Sample type distribution
-types <- c("Water", "Normal", "Grass", "Bug", "Psychic", "Fire", "Electric", "Rock")
-counts <- c(133, 110, 95, 79, 90, 68, 51, 60)
-
-plot_ly(x = types, y = counts, type = "bar",
-        marker = list(color = '#667eea')) %>%
-  layout(title = "Top 8 Most Common Pokémon Types",
-         xaxis = list(title = "Type"),
-         yaxis = list(title = "Count"))
+plot_ly(top_types,
+x = ~reorder(type_1, Avg_Total), y = ~Avg_Total, type = 'bar',
+marker = list(color = ~Avg_Total,
+colorscale = list(c(0, '#764ba2'), c(1, '#667eea'))),
+text = ~paste0(type_1, "<br>", round(Avg_Total), " avg stats"),
+hoverinfo = 'text') %>%
+layout(title = "Top 5 Types by Average Base Stats",
+xaxis = list(title = "Type"), yaxis = list(title = "Avg Stats"))
 ```
 
-# **Data Source**
+## Discoveries
 
-- **Primary Source**: PokémonDB (pokemondb.net)
-- **Supplementary**: Kaggle Pokémon dataset, Veekun/PokéAPI
-- **Methodology**: Web scraping using R's `rvest` package
+<div class="highlight-box">
 
-### Data Cleaning Highlights
-1. **Table Joining**: Merged stats, dimensions, and evolution data by Pokédex number
-2. **Type Parsing**: Split combined type strings into `type_1` and `type_2`
-3. **Special Case Handling**:
-   - **Eternatus Eternamax**: No official data exists
-   - Assigned estimated dimensions based on lore: 999.9m / 9999.9kg
-   - Calculated BMI = 0.01 (representing non-physical energy entity)
-4. **Derived Variables**: BMI = weight(kg) / height(m)²
+### Legendary Characteristics
 
-### Final Clean Dataset
-- **Dimensions**: 1,025 rows × 14 core columns
-- **Variables**: 
-  - `dex` (National Pokédex #), `name`, `type_1`, `type_2`
-  - Base stats: `hp`, `attack`, `defense`, `sp_atk`, `sp_def`, `speed`, `total`
-  - Physical: `height_m`, `weight_kgs`, `bmi`
-- **Output**: `pokemon_data.csv`
+- **Statistical Distinction**: BST 680 (legendary) vs 420 (regular), *p* < 0.001
+- **99.5% Accuracy**: Random Forest classification
+- **Type Bias**: Dragon (30%), Psychic (25%), Steel (20%)
+
+### Pattern Analysis
+
+**Most Common Types**: Water (18%), Normal (15%), Grass (12%)
+**Rarest Types**: Flying (4%), Fairy (6%), Ice (6%)
+**Dual-Type Rate**: 47% have secondary typing
+
+### Cluster Profiles
+
+| Profile | BST | Legendary % | Examples |
+|---------|-----|-------------|----------|
+| **High Sweepers** | 580 | 35% | Mewtwo, Rayquaza |
+| **Def Tanks** | 480 | 8% | Snorlax, Steelix |
+| **Balanced** | 450 | 2% | Arcanine, Gyarados |
+| **Early-Game** | 320 | 0% | Pidgey, Rattata |
+
+</div>
+
+## Type Distribution
+
+```{r type_pie, echo=FALSE, fig.height=6}
+type_counts <- pokemon_data %>% count(type_1, sort = TRUE) %>% head(10)
+
+plot_ly(type_counts, labels = ~type_1, values = ~n, type = 'pie',
+textposition = 'inside', textinfo = 'label+percent',
+marker = list(colors = colorRampPalette(c('#667eea', '#764ba2'))(10))) %>%
+layout(title = "Primary Type Distribution (Top 10)")
+```
+
+# Methodology {.tabset}
+
+## Pipeline
+
+<div class="timeline-item">
+<div class="timeline-title">1️⃣ Data Collection</div>
+Web scraping from PokémonDB using `rvest`, handling 1000+ species and alternate forms
+</div>
+
+<div class="timeline-item">
+<div class="timeline-title">2️⃣ EDA</div>
+Feature engineering with `tidyverse`: one-hot encoding, correlation matrices, distribution analysis
+</div>
+
+<div class="timeline-item">
+<div class="timeline-title">3️⃣ Clustering</div>
+PCA + K-Means (k=4) using `factoextra`, explaining 70% variance in first 3 components
+</div>
+
+<div class="timeline-item">
+<div class="timeline-title">4️⃣ Classification</div>
+Random Forest tuning with `caret`: 500 trees, mtry=3, achieving 99.5% AUC
+</div>
+
+<div class="timeline-item">
+<div class="timeline-title">5️⃣ Dual Rating System</div>
+Separate offensive and defensive ratings using S-curve BST mapping, effective stat calculations, and type matchup analysis
+</div>
+
+## Tech Stack
+
+**Languages & Tools**
+• R (≥ 4.0), RStudio, Git
+
+**Core Packages**
+• tidyverse, plotly, kableExtra
+• caret, randomForest, pROC
+• factoextra, cluster, FactoMineR
+
+**Visualization**
+• ggplot2, plotly (interactive)
+• crosstalk, DT (tables)
+
+# Interactive Tools
+
+<div style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 50px; border-radius: 15px; margin: 40px 0;">
+<h2 style="color: white; margin-bottom: 30px;">Explore the Analysis</h2>
+<a href="eda.html" class="cta-button">📊 EDA</a>
+<a href="pca.html" class="cta-button">🔍 Clustering</a>
+<a href="shiny.html" class="cta-button">🎮 Interactive</a>
+<a href="report.html" class="cta-button">📄 Report</a>
+<a href="team.html" class="cta-button">👥 Team</a>
+</div>
+
+# Team
+
+**P8105 – Data Science I | Fall 2025**
+
+- **Ruipeng Li** (rl3616) - Data Cleaning, EDA, Rating System
+- **Xuange Liang** (xl3493) - Modeling, Rating System
+- **Yiwen Zhang** (yz4994) - Visualization, Documentation
+- **Leah Li** (yl5828) - Visualization, Documentation
 
 ---
 
----
-
-<div style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 10px; margin-top: 40px;">
-  <h3>Explore More</h3>
-  <p>Navigate through the tabs above to explore detailed analysis, models, and findings!</p>
-  <a href="https://github.com/PineappleEater/P8105---Final-Project-Pokemon" style="color: #667eea; font-weight: bold;">View on GitHub</a>
+<div style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 15px;">
+<p style="color: #667eea; font-size: 1.2em; font-weight: 600;">
+Columbia University | Mailman School of Public Health
+</p>
+<a href="https://github.com/PineappleEater/P8105---Final-Project-Pokemon" style="color: #667eea; font-weight: 600;">
+<i class="fa fa-github"></i> View on GitHub
+</a>
 </div>

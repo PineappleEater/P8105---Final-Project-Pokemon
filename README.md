@@ -194,15 +194,44 @@ graph LR
 | Random Forest | 0.992 | 0.96 | 0.90 |
 | **RF Tuned** | **0.995** | **0.97** | **0.92** |
 
-### 5. Type Effectiveness & Rating System
+### 5. Type Effectiveness & Dual Rating System
 
 <img align="right" src="assets/sprites/gif/tyranitar.gif" width="90" alt="Tyranitar">
 
-**File**: `5-type_analysis_rating.Rmd`
+**File**: `3-rating_system.Rmd`
 
-- Attack & defense type analysis
-- Beginner-friendly rating system
-- Team building recommendations
+**Dual Rating System** (100-point scale each):
+
+**Offensive Rating (100 pts)**:
+
+- BST Score (40 pts): S-curve mapping for smooth strength scaling
+- Offensive Stats (60 pts):
+  - Effective Attack Power (50%): Recognizes mixed vs specialized attackers
+  - Effective Speed Score (40%): Values both fast and slow tactical play
+  - Durability Buffer (10%): Minimum survivability requirement
+
+**Defensive Rating (100 pts)**:
+
+- BST Score (40 pts): Shared base stat evaluation
+- Defensive Stats (30 pts):
+  - Durability (80%): HP × √(Def × SpDef) — penalizes unbalanced defenses
+  - Counter-Attack (20%): Maintains offensive threat
+- Type Advantage (30 pts): Defensive type matchup score
+
+**Tier Assignment**:
+
+- **SS**: Elite (Off ≥75 or Def ≥65)
+- **S**: Strong (Off ≥65 or Def ≥55)
+- **A**: Above Average (Off ≥55 or Def ≥45)
+- **B**: Average (Off ≥45 or Def ≥35)
+- **C**: Below Average (Off ≥35 or Def ≥25)
+- **F**: Weak
+
+**Role Classification**:
+
+- **Offensive**: Off/Def ratio ≥ 1.15
+- **Balanced**: 0.85 < Off/Def ratio < 1.15
+- **Defensive**: Off/Def ratio ≤ 0.85
 
 ---
 
@@ -318,10 +347,10 @@ source("scripts/download_pokemon_assets.R")
 
 | Name | UNI | Role |
 |------|-----|------|
-| **Leah Li** | yl5828 | Data cleaning, EDA lead |
-| **Ruipeng Li** | rl3616 | PCA & clustering analysis |
-| **Xuange Liang** | xl3493 | Classification modeling |
-| **Yiwen Zhang** | yz4994 | Visualization, documentation |
+| **Ruipeng Li** | rl3616 | Data Cleaning, EDA, Rating System |
+| **Xuange Liang** | xl3493 | Modeling, Rating System |
+| **Yiwen Zhang** | yz4994 | Visualization, Documentation |
+| **Leah Li** | yl5828 | Visualization, Documentation |
 
 </div>
 

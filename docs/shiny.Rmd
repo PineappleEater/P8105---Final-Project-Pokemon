@@ -1,5 +1,270 @@
 ---
-title: "shiny"
-output: html_document
+title: "Interactive Pokemon Explorer"
+output:
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    toc_depth: 2
+    code_folding: hide
+    self_contained: false
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(plotly)
+library(DT)
+library(crosstalk)
+```
+
+<style>
+.hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.control-panel {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.stat-badge {
+  display: inline-block;
+  padding: 8px 15px;
+  margin: 5px;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border-radius: 5px;
+  font-weight: 600;
+}
+</style>
+
+<div class="hero">
+  <h1>🎮 Interactive Pokémon Explorer</h1>
+  <p style="font-size: 1.2em;">Explore correlations and patterns across 1,025+ Pokémon</p>
+</div>
+
+```{r data_loading}
+# Load data
+pokemon_data <- read_csv("../data/pokemon_data_final_evolutions_enriched.csv") %>%
+  mutate(
+    generation_num = as.numeric(str_extract(generation, "\\d+")),
+    is_legendary = as.logical(is_legendary),
+    display_name = paste0(name, " (", type_1,
+                         ifelse(is.na(type_2) | type_2 == "", "", paste0("/", type_2)), ")")
+  ) %>%
+  filter(!is.na(hp), !is.na(attack))  # Remove rows with missing data
+
+# Summary stats
+total_pokemon <- nrow(pokemon_data)
+legendary_count <- sum(pokemon_data$is_legendary)
+avg_total <- round(mean(pokemon_data$total, na.rm = TRUE))
+```
+
+# Dataset Overview
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0;">
+<div class="stat-badge" style="text-align: center;">
+<div style="font-size: 2em; color: #667eea;">742</div>
+<div>Total Pokémon</div>
+</div>
+<div class="stat-badge" style="text-align: center;">
+<div style="font-size: 2em; color: #764ba2;">101</div>
+<div>Legendary</div>
+</div>
+<div class="stat-badge" style="text-align: center;">
+<div style="font-size: 2em; color: #f57c00;">519</div>
+<div>Avg Base Stats</div>
+</div>
+</div>
+
+---
+
+# Interactive Exploration {.tabset .tabset-fade .tabset-pills}
+
+## 🎯 Correlation Explorer
+
+Explore relationships between different Pokémon attributes. Use the filters below to customize your view and discover patterns in the data!
+
+```{r interactive_controls, echo=FALSE}
+# Create shared data for crosstalk
+shared_pokemon <- SharedData$new(pokemon_data, key = ~dex, group = "pokemon")
+```
+
+<div class="control-panel">
+
+### 🎛️ Filter Options
+
+```{r filters, echo=FALSE}
+# Create filters using crosstalk
+bscols(
+  widths = c(3, 3, 3, 3),
+  filter_checkbox("legendary", "Legendary Status", shared_pokemon, ~ifelse(is_legendary, "Legendary", "Regular")),
+  filter_select("type1", "Primary Type", shared_pokemon, ~type_1),
+  filter_slider("generation", "Generation", shared_pokemon, ~generation_num, step = 1, width = "100%"),
+  filter_slider("total_stats", "Total Base Stats", shared_pokemon, ~total, step = 50, width = "100%")
+)
+```
+
+</div>
+
+### 📈 Correlation Visualizations {.tabset .tabset-pills}
+
+#### ⚔️ Attack vs Speed
+
+```{r plot_attack_speed, echo=FALSE, fig.height=6}
+plot_ly(shared_pokemon,
+        x = ~attack,
+        y = ~speed,
+        type = 'scatter',
+        mode = 'markers',
+        color = ~type_1,
+        colors = "Set3",
+        text = ~paste0("<b>", name, "</b><br>",
+                      "Type: ", type_1, ifelse(is.na(type_2) | type_2 == "", "", paste0("/", type_2)), "<br>",
+                      "Attack: ", attack, "<br>",
+                      "Speed: ", speed, "<br>",
+                      "Total: ", total),
+        hoverinfo = 'text',
+        marker = list(size = 8, opacity = 0.7, line = list(color = 'white', width = 1))) %>%
+  layout(title = "Attack vs Speed - Colored by Primary Type",
+         xaxis = list(title = "Attack"),
+         yaxis = list(title = "Speed"),
+         showlegend = TRUE,
+         legend = list(orientation = "h", y = -0.2))
+```
+
+#### 🛡️ Defense vs HP
+
+```{r plot_defense_hp, echo=FALSE, fig.height=6}
+plot_ly(shared_pokemon,
+        x = ~defense,
+        y = ~hp,
+        type = 'scatter',
+        mode = 'markers',
+        color = ~is_legendary,
+        colors = c("#3498db", "#e74c3c"),
+        text = ~paste0("<b>", name, "</b><br>",
+                      "Type: ", type_1, ifelse(is.na(type_2) | type_2 == "", "", paste0("/", type_2)), "<br>",
+                      "Defense: ", defense, "<br>",
+                      "HP: ", hp, "<br>",
+                      "Legendary: ", ifelse(is_legendary, "Yes", "No"), "<br>",
+                      "Total: ", total),
+        hoverinfo = 'text',
+        marker = list(size = 8, opacity = 0.7, line = list(color = 'white', width = 1))) %>%
+  layout(title = "Defense vs HP - Colored by Legendary Status",
+         xaxis = list(title = "Defense"),
+         yaxis = list(title = "HP"),
+         showlegend = TRUE,
+         legend = list(orientation = "h", y = -0.2))
+```
+
+#### ✨ Special Attack vs Special Defense
+
+```{r plot_special, echo=FALSE, fig.height=6}
+plot_ly(shared_pokemon,
+        x = ~sp_atk,
+        y = ~sp_def,
+        type = 'scatter',
+        mode = 'markers',
+        color = ~generation,
+        text = ~paste0("<b>", name, "</b><br>",
+                      "Generation: ", generation, "<br>",
+                      "Sp. Attack: ", sp_atk, "<br>",
+                      "Sp. Defense: ", sp_def, "<br>",
+                      "Total: ", total),
+        hoverinfo = 'text',
+        marker = list(size = 8, opacity = 0.7, line = list(color = 'white', width = 1))) %>%
+  layout(title = "Special Attack vs Special Defense - Colored by Generation",
+         xaxis = list(title = "Special Attack"),
+         yaxis = list(title = "Special Defense"),
+         showlegend = TRUE,
+         legend = list(orientation = "h", y = -0.2))
+```
+
+## 📋 Data Table
+
+Browse and search through the complete Pokémon dataset. Click on column headers to sort, use the search boxes to filter data!
+
+```{r data_table, echo=FALSE}
+# Create interactive data table with crosstalk
+datatable(
+  shared_pokemon,
+  options = list(
+    pageLength = 15,
+    scrollX = TRUE,
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-center', targets = "_all")
+    )
+  ),
+  class = 'cell-border stripe hover',
+  filter = 'top',
+  rownames = FALSE,
+  selection = 'multiple'
+) %>%
+  formatStyle(
+    'total',
+    background = styleColorBar(range(pokemon_data$total), '#667eea'),
+    backgroundSize = '100% 90%',
+    backgroundRepeat = 'no-repeat',
+    backgroundPosition = 'center'
+  ) %>%
+  formatStyle(
+    'is_legendary',
+    backgroundColor = styleEqual(c(TRUE, FALSE), c('#ffe6e6', '#e6f7ff'))
+  )
+```
+
+## 📊 Type Statistics
+
+View aggregated statistics grouped by primary type. Discover which types have the highest average stats and legendary rates!
+
+```{r summary_stats, echo=FALSE}
+summary_by_type <- pokemon_data %>%
+  group_by(type_1) %>%
+  summarise(
+    Count = n(),
+    `Avg Total` = round(mean(total, na.rm = TRUE)),
+    `Avg Attack` = round(mean(attack, na.rm = TRUE)),
+    `Avg Defense` = round(mean(defense, na.rm = TRUE)),
+    `Avg Speed` = round(mean(speed, na.rm = TRUE)),
+    `% Legendary` = round(100 * sum(is_legendary) / n(), 1)
+  ) %>%
+  arrange(desc(`Avg Total`))
+
+datatable(
+  summary_by_type,
+  options = list(
+    pageLength = 18,
+    dom = 't',
+    ordering = TRUE
+  ),
+  class = 'cell-border stripe hover',
+  rownames = FALSE
+) %>%
+  formatStyle(
+    'Avg Total',
+    background = styleColorBar(range(summary_by_type$`Avg Total`), '#764ba2'),
+    backgroundSize = '100% 90%',
+    backgroundRepeat = 'no-repeat',
+    backgroundPosition = 'center'
+  )
+```
+
+# Tips & Usage
+
+<div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+  <p style="color: #666;">
+    💡 <b>Tip:</b> Click and drag on any chart to zoom in. Double-click to reset.
+    Use the filters in the Correlation Explorer tab to interactively explore different subsets of Pokémon!
+  </p>
+</div>

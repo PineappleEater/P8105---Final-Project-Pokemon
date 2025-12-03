@@ -1,0 +1,137 @@
+---
+output: html_document
+---
+
+<style>
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin: 40px 0;
+}
+
+.team-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  transition: all 0.3s;
+}
+
+.team-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+  border-color: #667eea;
+}
+
+.team-card h3 {
+  color: #667eea;
+  margin-bottom: 5px;
+}
+
+.team-card .uni {
+  color: #764ba2;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.course-info {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contributions {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.contributions ul {
+  text-align: left;
+  margin: 10px 0;
+}
+</style>
+
+<div class="course-info">
+  <h1>P8105 – Data Science I</h1>
+  <h3>Columbia University, Mailman School of Public Health</h3>
+  <p style="font-size: 1.2em;">Fall 2025</p >
+</div>
+
+
+
+## Meet Our Team
+
+<div class="team-grid">
+
+<div class="team-card">
+  <h3>Ruipeng Li</h3>
+  <div class="uni">rl3616</div>
+  <div class="contributions">
+![](../assets/team/pichu.gif)
+  </div>
+</div>
+
+<div class="team-card">
+  <h3>Xuange Liang</h3>
+  <div class="uni">xl3493</div>
+  <div class="contributions">
+![](../assets/team/eevee.gif)
+  </div>
+</div>
+
+<div class="team-card">
+  <h3>Yiwen Zhang</h3>
+  <div class="uni">yz4994</div>
+  <div class="contributions">
+  ![](../assets/team/jigglypuff.gif)
+  </div>
+</div>
+
+<div class="team-card">
+  <h3>Leah Li</h3>
+  <div class="uni">yl5828</div>
+  <div class="contributions">
+  ![](../assets/team/alcremie.gif)
+  </div>
+</div>
+
+</div>
+
+## Project Timeline
+
+```{r timeline, echo=FALSE}
+timeline <- data.frame(
+  Phase = c("Draft Proposal", "Project Review", "Coding", "Webpage Construct"),
+  Duration = c("Week 1-2", "Week 2-3", "Week 3-4", "Week 4-5"),
+  Status = c("✅ Complete", "✅ Complete", "✅ Complete", "✅ Complete")
+)
+
+knitr::kable(timeline, format = "html", align = "lcc") |>
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), 
+                           full_width = FALSE)
+```
+
+## Acknowledgments
+
+We would like to thank:
+
+* **Professor Jeff Goldsmith** and the P8105 teaching team for guidance throughout this project
+
+---
+
+<div style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 10px; margin-top: 40px;">
+  <h3>View Our Work</h3>
+  <p style="font-size: 1.1em;">
+    <a href="https://github.com/PineappleEater/P8105---Final-Project-Pokemon" style="color: #667eea; font-weight: bold;">
+      <i class="fa fa-github"></i> GitHub Repository
+    </a>
+  </p>
+  <p>Full code, datasets, and documentation available</p>
+</div>

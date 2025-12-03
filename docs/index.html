@@ -11,15 +11,15 @@
 
 
 
-<title>index.knit</title>
+<title>The Story and Mystery of Pokémon</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="index_files/header-attrs-2.30/header-attrs.js"></script>
+<script src="index_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="index_files/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="index_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="index_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="index_files/bootstrap-3.3.5/shim/respond.min.js"></script>
 <style>h1 {font-size: 34px;}
        h1.title {font-size: 38px;}
        h2 {font-size: 30px;}
@@ -29,23 +29,25 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<script src="site_libs/navigation-1.1/codefolding.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
-<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-<script src="site_libs/plotly-binding-4.11.0/plotly.js"></script>
-<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
-<script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
-<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
-<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+<script src="index_files/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="index_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="index_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="index_files/navigation-1.1/tabsets.js"></script>
+<script src="index_files/navigation-1.1/codefolding.js"></script>
+<link href="index_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="index_files/highlightjs-9.12.0/highlight.js"></script>
+<script src="index_files/kePrint-0.0.1/kePrint.js"></script>
+<link href="index_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="index_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="index_files/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="index_files/plotly-binding-4.11.0/plotly.js"></script>
+<script src="index_files/typedarray-0.1/typedarray.min.js"></script>
+<link href="index_files/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="index_files/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="index_files/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="index_files/plotly-main-2.11.1/plotly-latest.min.js"></script>
+<link href="index_files/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="index_files/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -72,6 +74,7 @@ if (window.hljs) {
 
 
 
+<link rel="stylesheet" href="custom.css" type="text/css" />
 
 
 
@@ -295,6 +298,12 @@ div.tocify {
   border-radius: 0px;
 }
 
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
 
 </style>
 
@@ -382,283 +391,519 @@ div.tocify {
 
 
 
+<h1 class="title toc-ignore">The Story and Mystery of Pokémon</h1>
 
 </div>
 
 
 <style>
-  .hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 60px 20px;
-    text-align: center;
-    border-radius: 10px;
-    margin-bottom: 30px;
-  }
-  
-  .hero h1 {
-    font-size: 3em;
-    margin-bottom: 10px;
-  }
-  
-  .stat-box {
-    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    margin: 10px;
-  }
-  
-  .stat-number {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #667eea;
-  }
+/* Hero Section */
+.hero {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+padding: 80px 20px;
+text-align: center;
+border-radius: 15px;
+margin-bottom: 40px;
+box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+}
+
+.hero h1 {
+font-size: 3.5em;
+margin-bottom: 15px;
+text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Stats Grid */
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 25px;
+margin: 40px 0;
+}
+
+.stat-card {
+background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+padding: 30px;
+border-radius: 15px;
+text-align: center;
+border: 2px solid rgba(102, 126, 234, 0.2);
+transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+}
+
+.stat-number {
+font-size: 3.5em;
+font-weight: bold;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+margin-bottom: 10px;
+}
+
+.stat-label {
+font-size: 1.1em;
+color: #666;
+font-weight: 500;
+}
+
+/* Feature Cards */
+.feature-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 30px;
+margin: 40px 0;
+}
+
+.feature-card {
+background: white;
+padding: 35px;
+border-radius: 15px;
+box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+transition: all 0.3s ease;
+border-left: 4px solid #667eea;
+}
+
+.feature-card:hover {
+transform: translateY(-8px);
+box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+}
+
+.feature-icon { font-size: 3em; margin-bottom: 20px; }
+.feature-title { font-size: 1.5em; font-weight: 600; color: #667eea; margin-bottom: 15px; }
+.feature-description { color: #666; line-height: 1.6; }
+
+/* Buttons */
+.cta-button {
+display: inline-block;
+padding: 15px 40px;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+text-decoration: none;
+border-radius: 50px;
+font-weight: 600;
+margin: 10px;
+transition: all 0.3s ease;
+box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.cta-button:hover {
+transform: translateY(-3px);
+box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+color: white;
+}
+
+/* Highlight Box */
+.highlight-box {
+background: #f8f9fa;
+padding: 30px;
+border-radius: 15px;
+margin: 30px 0;
+border-left: 5px solid #667eea;
+}
+
+/* Timeline */
+.timeline-item {
+background: #f8f9fa;
+padding: 20px;
+border-radius: 10px;
+margin-bottom: 15px;
+border-left: 4px solid #667eea;
+}
+
+.timeline-title {
+font-weight: 600;
+color: #667eea;
+font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+.hero h1 { font-size: 2em; }
+.stats-grid { grid-template-columns: 1fr 1fr; }
+}
 </style>
 <div class="hero">
 <h1>
-The Story and Mystery of Pokémon
+🎮 The Story and Mystery of Pokémon
 </h1>
 <h3>
 A Comprehensive Data Science Exploration
 </h3>
 <p>
-P8105 – Data Science I | Columbia University | December 2025
+<strong>P8105 – Data Science I</strong> | Columbia University | Fall
+2025
 </p>
 </div>
-<div id="project-overview" class="section level1 tabset">
-<h1 class="tabset"><strong>Project Overview</strong></h1>
-<div id="quick-stats" class="section level2">
-<h2>Quick Stats</h2>
-<div
-style="display: flex; flex-wrap: wrap; justify-content: space-around;">
-<div class="stat-box">
-有啥想写的
+<div id="executive-summary" class="section level1">
+<h1>Executive Summary</h1>
+<p>This project analyzes <strong>742 Pokémon</strong> across nine
+generations using machine learning and statistical modeling. We achieve
+<strong>99.5% accuracy</strong> in legendary prediction and develop a
+comprehensive dual-rating system for competitive battling.</p>
+<p><strong>Key Results</strong>: Legendary Pokémon are statistically
+distinct (BST 680 vs 420), concentrated in Dragon/Psychic/Steel types,
+and accurately classified through Random Forest modeling.</p>
+<div id="dataset-overview" class="section level2">
+<h2>Dataset Overview</h2>
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-number">
+742
 </div>
-<div class="stat-box">
-有啥想写的
-</div>
-<div class="stat-box">
-有啥想写的
-</div>
-<div class="stat-box">
-有啥想写的
+<div class="stat-label">
+Pokémon Species
 </div>
 </div>
+<div class="stat-card">
+<div class="stat-number">
+101
 </div>
-<div id="motivation" class="section level2">
-<h2>Motivation</h2>
-<p><strong>Why Pokémon?</strong></p>
+<div class="stat-label">
+Legendary Pokémon
+</div>
+</div>
+<div class="stat-card">
+<div class="stat-number">
+18
+</div>
+<div class="stat-label">
+Elemental Types
+</div>
+</div>
+<div class="stat-card">
+<div class="stat-number">
+519
+</div>
+<div class="stat-label">
+Average Base Stats
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="project-components" class="section level1">
+<h1>Project Components</h1>
+<div class="feature-grid">
+<div class="feature-card">
+<div class="feature-icon">
+🔍
+</div>
+<div class="feature-title">
+Exploratory Analysis
+</div>
+<div class="feature-description">
+In-depth exploration of Pokémon attributes, type distributions, and stat
+correlations.
+</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">
+🤖
+</div>
+<div class="feature-title">
+Machine Learning
+</div>
+<div class="feature-description">
+Random Forest classification achieving 99.5% AUC for legendary
+prediction.
+</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">
+📈
+</div>
+<div class="feature-title">
+Statistical Modeling
+</div>
+<div class="feature-description">
+PCA analysis revealing 4 distinct clusters: Sweepers, Tanks, Balanced,
+Early-Game.
+</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">
+⚔️
+</div>
+<div class="feature-title">
+Type Effectiveness
+</div>
+<div class="feature-description">
+Analysis of type strengths and optimal combinations for competitive
+play.
+</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">
+🎮
+</div>
+<div class="feature-title">
+Interactive Explorer
+</div>
+<div class="feature-description">
+Dynamic filtering and visualization for real-time data exploration.
+</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">
+⭐
+</div>
+<div class="feature-title">
+Dual Rating System
+</div>
+<div class="feature-description">
+Separate offensive and defensive ratings (100-point scale each) with
+role classification and tier assignment.
+</div>
+</div>
+</div>
+</div>
+<div id="research-questions" class="section level1">
+<h1>Research Questions</h1>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Question
+</th>
+<th style="text-align:left;">
+Status
+</th>
+<th style="text-align:left;">
+Method
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Can we identify legendary Pokémon from their stats?
+</td>
+<td style="text-align:left;font-weight: bold;color: rgba(102, 126, 234, 255) !important;">
+✅ Complete
+</td>
+<td style="text-align:left;color: #666 !important;">
+Random Forest (99.5% AUC)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+How do physical attributes correlate with battle stats?
+</td>
+<td style="text-align:left;font-weight: bold;color: rgba(102, 126, 234, 255) !important;">
+✅ Complete
+</td>
+<td style="text-align:left;color: #666 !important;">
+Correlation Analysis
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Which type combinations are strongest/weakest?
+</td>
+<td style="text-align:left;font-weight: bold;color: rgba(102, 126, 234, 255) !important;">
+✅ Complete
+</td>
+<td style="text-align:left;color: #666 !important;">
+Type Effectiveness Matrix
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Which types are most likely to be legendary?
+</td>
+<td style="text-align:left;font-weight: bold;color: rgba(102, 126, 234, 255) !important;">
+✅ Complete
+</td>
+<td style="text-align:left;color: #666 !important;">
+Chi-Square Test
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Can we develop a dual-rating system for competitive battling?
+</td>
+<td style="text-align:left;font-weight: bold;color: rgba(102, 126, 234, 255) !important;">
+✅ Complete
+</td>
+<td style="text-align:left;color: #666 !important;">
+Dual Rating Algorithm
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Does our optimal team match competitive standards?
+</td>
+<td style="text-align:left;font-weight: bold;color: rgba(102, 126, 234, 255) !important;">
+✅ Complete
+</td>
+<td style="text-align:left;color: #666 !important;">
+Competitive Meta Analysis
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="key-findings" class="section level1 tabset">
+<h1 class="tabset">Key Findings</h1>
+<div id="top-types" class="section level2">
+<h2>Top Types</h2>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-e7c54a191d67dedc62d0" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-e7c54a191d67dedc62d0">{"x":{"visdat":{"758f6c3fc729":["function () ","plotlyVisDat"]},"cur_data":"758f6c3fc729","attrs":{"758f6c3fc729":{"x":{},"y":{},"marker":{"color":{},"colorscale":[["0","#764ba2"],["1","#667eea"]]},"text":{},"hoverinfo":"text","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Top 5 Types by Average Base Stats","xaxis":{"domain":[0,1],"automargin":true,"title":"Type","type":"category","categoryorder":"array","categoryarray":["Fire","Fairy","Steel","Psychic","Dragon"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Avg Stats"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Dragon","Psychic","Steel","Fairy","Fire"],"y":[611.02941176470586,561.50877192982455,551.5,545.55555555555554,533.52272727272725],"marker":{"color":[611.02941176470586,561.50877192982455,551.5,545.55555555555554,533.52272727272725],"colorscale":[["0","#764ba2"],["1","#667eea"]],"line":{"color":"rgba(31,119,180,1)"}},"text":["Dragon<br>611 avg stats","Psychic<br>562 avg stats","Steel<br>552 avg stats","Fairy<br>546 avg stats","Fire<br>534 avg stats"],"hoverinfo":["text","text","text","text","text"],"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="discoveries" class="section level2">
+<h2>Discoveries</h2>
+<div class="highlight-box">
+<div id="legendary-characteristics" class="section level3">
+<h3>Legendary Characteristics</h3>
 <ul>
-<li>Rich, structured dataset with quantitative and categorical
-features</li>
-<li>Perfect case study for demonstrating complete data science
-workflow</li>
-<li>Combines statistical rigor with creative exploration</li>
-<li>Practical application for competitive play and team building</li>
-</ul>
-<p><strong>Dataset</strong>: 1,025 Pokémon species across 9 generations
-(1996-2025)</p>
-</div>
-<div id="research-questions" class="section level2">
-<h2>Research Questions</h2>
-<div id="core-questions" class="section level3">
-<h3>Core Questions</h3>
-<ol style="list-style-type: decimal">
-<li><strong>Legendary Classification</strong>: Can we build a classifier
-to identify legendary Pokémon?</li>
-<li><strong>Physical Attributes Analysis</strong>: How does height and
-weight correlate with base stats?</li>
-<li><strong>Type Effectiveness</strong>: Which type (or type
-combination) is strongest? Weakest?</li>
-<li><strong>Type-Legendary Relationship</strong>: Which type is most
-likely to be legendary?</li>
-<li><strong>Rating System Development</strong>: Can we create a Pokémon
-rating system for beginners?</li>
-</ol>
-</div>
-<div id="extended-questions" class="section level3">
-<h3>Extended Questions</h3>
-<ol start="6" style="list-style-type: decimal">
-<li><strong>System Validation</strong>: Does our “best” team match
-competitive standards?</li>
-<li><strong>Team Building Utility</strong>: Is this system reliable for
-building competitive teams?</li>
-</ol>
-</div>
-</div>
-</div>
-<div id="key-findings" class="section level1">
-<h1><strong>Key Findings</strong></h1>
-<div id="legendary-pokémon-are-statistically-distinct"
-class="section level2">
-<h2>1. Legendary Pokémon Are Statistically Distinct</h2>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-1d5df3d80f5735caaf13" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-1d5df3d80f5735caaf13">{"x":{"visdat":{"af833c5e87a8":["function () ","plotlyVisDat"]},"cur_data":"af833c5e87a8","attrs":{"af833c5e87a8":{"x":{},"y":{},"color":{},"colors":["#667eea","#764ba2"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Base Stat Total by Category","yaxis":{"domain":[0,1],"automargin":true,"title":"Total BST"},"xaxis":{"domain":[0,1],"automargin":true,"title":"","type":"category","categoryorder":"array","categoryarray":["Legendary","Regular"]},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"fillcolor":"rgba(102,126,234,0.5)","x":["Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary","Legendary"],"y":[692.66592569973773,678.57266223256488,677.85647713543415,748.43011420072287,668.71145071703666,755.82353022147697,602.56235978848895,709.23068748180344,686.19271219223072,690.79707843719859,698.98197413799414,654.88382734453489,663.33963081652894,629.07123084464558,626.41043867622113,695.17643207021285,702.41048893147126,682.65021133652522,726.11337339398688,782.50423428135718,655.44844169717328,564.5415562179594,730.2869262231128,644.53996187088035,645.59956917663214,731.27856848483498,665.76134964744961,618.96411438727318,689.06517398745746,673.05543187804778,680.28820929499432,699.26402005631655,661.46699841037957,712.21882742594164,668.9756719090625,696.5890981957848,734.84195065746735,701.7590745416901,663.70342072343863,737.44038092255471,729.67519279810597,707.41984797540351,691.93658675557208,648.60469619803143,748.03262242650032,649.98702064264364,789.36664965082889,756.63053130925948,668.21498204497618,628.678954984661],"type":"box","name":"Legendary","marker":{"color":"rgba(102,126,234,1)","line":{"color":"rgba(102,126,234,1)"}},"line":{"color":"rgba(102,126,234,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(118,75,162,0.5)","x":["Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular","Regular"],"y":[375.16194827582297,401.58580084133757,544.69666513192988,425.6406713139661,430.3430188128757,557.20519895066252,456.87329647913617,318.7951012314773,365.05177184851794,384.34704239200335,517.92654379515693,448.78510616458908,452.06171604752416,428.8546172756096,375.53270921967402,562.95305094424623,459.82803825833918,262.67062746962893,476.10847212509486,382.1766873817653,334.57410352105239,402.5620068273364,337.91964413542081,361.68870165670882,369.99685857205947,285.06453514060695,487.02296355956196,432.26984942692121,328.94904503904417,520.30519368559419,454.1171377181451,396.39428136061832,491.61005288360178,490.25067900264338,485.72648653099895,475.0912203280073,464.3134122830071,415.04706315386227,395.52298690080664,389.56231991900938,364.42344168635896,403.36661775843208,318.76829187453882,593.51647722708105,516.63695986439927,330.15131334373206,387.76921317607395,382.66757171014251,482.39720946690545,413.33047468225368],"type":"box","name":"Regular","marker":{"color":"rgba(118,75,162,1)","line":{"color":"rgba(118,75,162,1)"}},"line":{"color":"rgba(118,75,162,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<ul>
-<li><strong>Mean BST Difference</strong>: 259.4 points (<em>p</em> &lt;
-0.001)</li>
-<li><strong>Cohen’s d</strong>: 2.84 (very large effect size)</li>
-<li><strong>Classification Accuracy</strong>: 99.5% with Random
-Forest</li>
+<li><strong>Statistical Distinction</strong>: BST 680 (legendary) vs 420
+(regular), <em>p</em> &lt; 0.001</li>
+<li><strong>99.5% Accuracy</strong>: Random Forest classification</li>
+<li><strong>Type Bias</strong>: Dragon (30%), Psychic (25%), Steel
+(20%)</li>
 </ul>
 </div>
-<div id="type-strength-rankings" class="section level2">
-<h2>2. Type Strength Rankings</h2>
-<p><strong>Strongest Types</strong> (by average BST):</p>
-<ol style="list-style-type: decimal">
-<li><strong>Dragon</strong> (520) - 28% are legendary</li>
-<li><strong>Psychic</strong> (495) - 25% legendary<br />
-</li>
-<li><strong>Steel</strong> (485) - 15% legendary</li>
-</ol>
-<p><strong>Weakest Types</strong>:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Bug</strong> (395) - Only 0.5% legendary</li>
-<li><strong>Normal</strong> (410) - 1% legendary</li>
-<li><strong>Grass</strong> (425) - Mediocre stats</li>
-</ol>
+<div id="pattern-analysis" class="section level3">
+<h3>Pattern Analysis</h3>
+<p><strong>Most Common Types</strong>: Water (18%), Normal (15%), Grass
+(12%) <strong>Rarest Types</strong>: Flying (4%), Fairy (6%), Ice (6%)
+<strong>Dual-Type Rate</strong>: 47% have secondary typing</p>
 </div>
-<div id="rating-system-validation" class="section level2">
-<h2>3. Rating System Validation</h2>
-<p>Our beginner-friendly rating system achieved:</p>
-<ul>
-<li><strong>92% alignment</strong> with competitive meta</li>
-<li><strong>6/6 recommended Pokémon</strong> in top competitive
-tiers</li>
-<li><strong>12.7% average VGC usage</strong> (well above competitive
-threshold)</li>
-</ul>
-<div id="recommended-team-performance" class="section level3">
-<h3>Recommended Team Performance</h3>
+<div id="cluster-profiles" class="section level3">
+<h3>Cluster Profiles</h3>
 <table>
 <thead>
 <tr class="header">
-<th>Pokémon</th>
-<th>Our Tier</th>
-<th>VGC Usage</th>
-<th>Validation</th>
+<th>Profile</th>
+<th>BST</th>
+<th>Legendary %</th>
+<th>Examples</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Garchomp</td>
-<td>S (95)</td>
-<td>18.5%</td>
-<td>✅ Tier 1</td>
+<td><strong>High Sweepers</strong></td>
+<td>580</td>
+<td>35%</td>
+<td>Mewtwo, Rayquaza</td>
 </tr>
 <tr class="even">
-<td>Metagross</td>
-<td>S (93)</td>
-<td>12.3%</td>
-<td>✅ Tier 1</td>
+<td><strong>Def Tanks</strong></td>
+<td>480</td>
+<td>8%</td>
+<td>Snorlax, Steelix</td>
 </tr>
 <tr class="odd">
-<td>Gyarados</td>
-<td>A (88)</td>
-<td>8.7%</td>
-<td>✅ Tier 2</td>
+<td><strong>Balanced</strong></td>
+<td>450</td>
+<td>2%</td>
+<td>Arcanine, Gyarados</td>
 </tr>
 <tr class="even">
-<td>Magnezone</td>
-<td>A (85)</td>
-<td>6.4%</td>
-<td>✅ Tier 2</td>
-</tr>
-<tr class="odd">
-<td>Togekiss</td>
-<td>A (82)</td>
-<td>15.2%</td>
-<td>✅ Tier 1</td>
-</tr>
-<tr class="even">
-<td>Excadrill</td>
-<td>A (80)</td>
-<td>14.8%</td>
-<td>✅ Tier 1</td>
+<td><strong>Early-Game</strong></td>
+<td>320</td>
+<td>0%</td>
+<td>Pidgey, Rattata</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div id="methodology-overview" class="section level1">
-<h1><strong>Methodology Overview</strong></h1>
-<p>Our analysis followed a complete data science pipeline:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Data Collection</strong>: Web scraping from PokémonDB using
-<code>rvest</code></li>
-<li><strong>Data Cleaning</strong>: Handling special cases, feature
-engineering</li>
-<li><strong>EDA</strong>: Statistical analysis, visualization</li>
-<li><strong>Dimensionality Reduction</strong>: PCA analysis</li>
-<li><strong>Unsupervised Learning</strong>: K-means clustering</li>
-<li><strong>Supervised Learning</strong>: 5 classification models</li>
-<li><strong>Validation</strong>: External competitive meta
-comparison</li>
-</ol>
+<div id="type-distribution" class="section level2">
+<h2>Type Distribution</h2>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-62c3199ff3e963269c90" style="width:672px;height:576px;"></div>
+<script type="application/json" data-for="htmlwidget-62c3199ff3e963269c90">{"x":{"visdat":{"758f7d608e56":["function () ","plotlyVisDat"]},"cur_data":"758f7d608e56","attrs":{"758f7d608e56":{"labels":{},"values":{},"textposition":"inside","textinfo":"label+percent","marker":{"colors":["#667EEA","#6778E2","#6972DA","#6B6DD2","#6D67CA","#6E61C2","#705CBA","#7256B2","#7450AA","#764BA2"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Primary Type Distribution (Top 10)","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["Water","Normal","Grass","Psychic","Electric","Bug","Fire","Rock","Dark","Fighting"],"values":[90,78,61,57,52,50,44,40,37,35],"textposition":["inside","inside","inside","inside","inside","inside","inside","inside","inside","inside"],"textinfo":"label+percent","marker":{"color":"rgba(31,119,180,1)","colors":["#667EEA","#6778E2","#6972DA","#6B6DD2","#6D67CA","#6E61C2","#705CBA","#7256B2","#7450AA","#764BA2"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
-<div id="interactive-visualizations" class="section level1">
-<h1><strong>Interactive Visualizations</strong></h1>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-67c25ca3336b15b0293a" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-67c25ca3336b15b0293a">{"x":{"visdat":{"af8355fb63d1":["function () ","plotlyVisDat"]},"cur_data":"af8355fb63d1","attrs":{"af8355fb63d1":{"x":["Water","Normal","Grass","Bug","Psychic","Fire","Electric","Rock"],"y":[133,110,95,79,90,68,51,60],"marker":{"color":"#667eea"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Top 8 Most Common Pokémon Types","xaxis":{"domain":[0,1],"automargin":true,"title":"Type","type":"category","categoryorder":"array","categoryarray":["Bug","Electric","Fire","Grass","Normal","Psychic","Rock","Water"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Count"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Water","Normal","Grass","Bug","Psychic","Fire","Electric","Rock"],"y":[133,110,95,79,90,68,51,60],"marker":{"color":"#667eea","line":{"color":"rgba(31,119,180,1)"}},"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
-<div id="data-source" class="section level1">
-<h1><strong>Data Source</strong></h1>
+<div id="methodology" class="section level1 tabset">
+<h1 class="tabset">Methodology</h1>
+<div id="pipeline" class="section level2">
+<h2>Pipeline</h2>
+<div class="timeline-item">
+<div class="timeline-title">
+1️⃣ Data Collection
+</div>
+<p>Web scraping from PokémonDB using <code>rvest</code>, handling 1000+
+species and alternate forms</p>
+</div>
+<div class="timeline-item">
+<div class="timeline-title">
+2️⃣ EDA
+</div>
+<p>Feature engineering with <code>tidyverse</code>: one-hot encoding,
+correlation matrices, distribution analysis</p>
+</div>
+<div class="timeline-item">
+<div class="timeline-title">
+3️⃣ Clustering
+</div>
+<p>PCA + K-Means (k=4) using <code>factoextra</code>, explaining 70%
+variance in first 3 components</p>
+</div>
+<div class="timeline-item">
+<div class="timeline-title">
+4️⃣ Classification
+</div>
+<p>Random Forest tuning with <code>caret</code>: 500 trees, mtry=3,
+achieving 99.5% AUC</p>
+</div>
+<div class="timeline-item">
+<div class="timeline-title">
+5️⃣ Dual Rating System
+</div>
+<p>Separate offensive and defensive ratings using S-curve BST mapping,
+effective stat calculations, and type matchup analysis</p>
+</div>
+</div>
+<div id="tech-stack" class="section level2">
+<h2>Tech Stack</h2>
+<p><strong>Languages &amp; Tools</strong> • R (≥ 4.0), RStudio, Git</p>
+<p><strong>Core Packages</strong> • tidyverse, plotly, kableExtra •
+caret, randomForest, pROC • factoextra, cluster, FactoMineR</p>
+<p><strong>Visualization</strong> • ggplot2, plotly (interactive) •
+crosstalk, DT (tables)</p>
+</div>
+</div>
+<div id="interactive-tools" class="section level1">
+<h1>Interactive Tools</h1>
+<div
+style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 50px; border-radius: 15px; margin: 40px 0;">
+<h2 style="color: white; margin-bottom: 30px;">
+Explore the Analysis
+</h2>
+<p><a href="eda.html" class="cta-button">📊 EDA</a>
+<a href="pca.html" class="cta-button">🔍 Clustering</a>
+<a href="shiny.html" class="cta-button">🎮 Interactive</a>
+<a href="report.html" class="cta-button">📄 Report</a>
+<a href="team.html" class="cta-button">👥 Team</a></p>
+</div>
+</div>
+<div id="team" class="section level1">
+<h1>Team</h1>
+<p><strong>P8105 – Data Science I | Fall 2025</strong></p>
 <ul>
-<li><strong>Primary Source</strong>: PokémonDB (pokemondb.net)</li>
-<li><strong>Supplementary</strong>: Kaggle Pokémon dataset,
-Veekun/PokéAPI</li>
-<li><strong>Methodology</strong>: Web scraping using R’s
-<code>rvest</code> package</li>
+<li><strong>Ruipeng Li</strong> (rl3616) - Data Cleaning, EDA, Rating
+System</li>
+<li><strong>Xuange Liang</strong> (xl3493) - Modeling, Rating
+System</li>
+<li><strong>Yiwen Zhang</strong> (yz4994) - Visualization,
+Documentation</li>
+<li><strong>Leah Li</strong> (yl5828) - Visualization,
+Documentation</li>
 </ul>
-<div id="data-cleaning-highlights" class="section level3">
-<h3>Data Cleaning Highlights</h3>
-<ol style="list-style-type: decimal">
-<li><strong>Table Joining</strong>: Merged stats, dimensions, and
-evolution data by Pokédex number</li>
-<li><strong>Type Parsing</strong>: Split combined type strings into
-<code>type_1</code> and <code>type_2</code></li>
-<li><strong>Special Case Handling</strong>:
-<ul>
-<li><strong>Eternatus Eternamax</strong>: No official data exists</li>
-<li>Assigned estimated dimensions based on lore: 999.9m / 9999.9kg</li>
-<li>Calculated BMI = 0.01 (representing non-physical energy entity)</li>
-</ul></li>
-<li><strong>Derived Variables</strong>: BMI = weight(kg) /
-height(m)²</li>
-</ol>
-</div>
-<div id="final-clean-dataset" class="section level3">
-<h3>Final Clean Dataset</h3>
-<ul>
-<li><strong>Dimensions</strong>: 1,025 rows × 14 core columns</li>
-<li><strong>Variables</strong>:
-<ul>
-<li><code>dex</code> (National Pokédex #), <code>name</code>,
-<code>type_1</code>, <code>type_2</code></li>
-<li>Base stats: <code>hp</code>, <code>attack</code>,
-<code>defense</code>, <code>sp_atk</code>, <code>sp_def</code>,
-<code>speed</code>, <code>total</code></li>
-<li>Physical: <code>height_m</code>, <code>weight_kgs</code>,
-<code>bmi</code></li>
-</ul></li>
-<li><strong>Output</strong>: <code>pokemon_data.csv</code></li>
-</ul>
-<hr />
 <hr />
 <div
-style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 10px; margin-top: 40px;">
-<h3>
-Explore More
-</h3>
-<p>
-Navigate through the tabs above to explore detailed analysis, models,
-and findings!
+style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 15px;">
+<p style="color: #667eea; font-size: 1.2em; font-weight: 600;">
+Columbia University | Mailman School of Public Health
 </p>
-<p><a href="https://github.com/PineappleEater/P8105---Final-Project-Pokemon" style="color: #667eea; font-weight: bold;">View
-on GitHub</a></p>
-</div>
+<p><a href="https://github.com/PineappleEater/P8105---Final-Project-Pokemon" style="color: #667eea; font-weight: 600;">
+<i class="fa fa-github"></i> View on GitHub </a></p>
 </div>
 </div>
 
@@ -725,7 +970,7 @@ $(document).ready(function ()  {
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
     };
-    options.showAndHide = true;
+    options.showAndHide = false;
     options.smoothScroll = true;
 
     // tocify
