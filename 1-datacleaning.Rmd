@@ -16,20 +16,20 @@ knit: (function(input, ...) {
     )
   })
 ---
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(rvest)
 library(tidyverse)
 library(janitor)
 ```
 
-
+## Cleaning Process
 ### Data Source  
 The data used in this project were scraped from pokemondb.net, a resource that maintains one of the most complete collections of Pokémon information to date, encompassing all nine generations (1,025 Pokémon species including alternate forms).  
 The dataset includes variables such as base statistics, physical dimensions (height and weight), and type attributes.  
 A portion of the metadata is sourced from the Veekun database, with additional details compiled by community contributors based on in-game data.
 
 I used `read_html()`, `html_table()`, and `as_tibble()` converted web page data into a tabular format.  
-```{r}
+```{r, message=FALSE, warning=FALSE}
 raw_state_df <- read_html("data/raw-data/Pokemon.html") |>
   html_table()
 
@@ -44,8 +44,6 @@ raw_evolved_df <- read_html("data/raw-data/Pokemon fully evolved.html") |>
 pokemon_state_df <- as_tibble(raw_state_df[[1]]) |>
   janitor::clean_names()
 
-names(pokemon_state_df)
-
 pokemon_df <- as_tibble(raw_wh_df[[1]]) |>
   janitor::clean_names() |>
   right_join(pokemon_state_df, by = c("name", "type", "number")) |>
@@ -57,24 +55,19 @@ pokemon_df <- as_tibble(raw_wh_df[[1]]) |>
   rename(
     dex = number
   ) |>
-  mutate(
-    weight_kgs = ifelse(name == "EternatusEternamax", 9999.9, weight_kgs),
-    height_m = ifelse(name == "EternatusEternamax", 999.9, height_m),
-    bmi = ifelse(name == "EternatusEternamax", round(9999.9 / (999.9^2), 1), bmi)
-  ) |>
+  filter(name != "EternatusEternamax") |> 
   select(
     dex, name, type_1, type_2,
     total, hp, attack, defense, sp_atk, sp_def, speed,
     height_m, weight_kgs, bmi,
     -height_ft, -weight_lbs, -type_split, -type
   )
-
-# Export raw dataset (before category labeling, for reference only)
-write_csv(pokemon_df, "data/pokemon_data_raw.csv")
 ```
 
-Note: For "Eternamax" Eternatus, no official height or weight data exists. Based on its in-game appearance and the way it is portrayed in the anime—as a colossal, rift-like dragon composed of red energy, fractures, and crystalline lines—I set its size to 999.9 meters tall and 9999.9 kilograms in weight. The resulting BMI is effectively zero, perfectly matching the idea of a non-physical energy entity. This also aligns with how the anime almost never shows its full body, only fragmented sections of its form.
+Note: For "Eternamax" Eternatus, no official height or weight data exists. Because it cannot be used in normal Pokémon games and cannot be analyzed conventionally, we have removed it.
 
+### About Special Pokemons  
+Since there aren't many special Pokémon, we didn't need to import a separate table; therefore, we created the table by filtering the Pokédex numbers.  
 ```{r}
 # About Legendary of Pokémon:
 pokemon_legend <- pokemon_df |>
@@ -116,7 +109,10 @@ pokemon_ub <- pokemon_df |>
   filter(dex %in% c(793:799, 803:806))
 ```
 
-```{r}
+### Final Pokémon dataset  
+Using a list of fully evolved Pokémon from the new dataset to filter our Pokémon list for further analysis.  
+Furthermore, we have created tags for all Pokémon based on their specific species and generation.
+```{r, message=FALSE, warning=FALSE}
 # About Final form list of Pokémon:
 pokemon_evolved_n <- raw_evolved_df[[1]] |>
   as_tibble(.name_repair = "unique") |>
@@ -124,11 +120,6 @@ pokemon_evolved_n <- raw_evolved_df[[1]] |>
   rename(dex = number) |>
   select(dex)
 
-
-```  
-
-```{r}
-#Final dataset
 # Add category columns
 pokemon_df_final <- pokemon_df |>
   mutate(
@@ -166,6 +157,7 @@ pokemon_df_final <- pokemon_df |>
 pokemon_evolved_df <- pokemon_df_final |>
   filter(dex %in% pokemon_evolved_n$dex)
 
+# 这段暂定，应该不需要
 # Type One-Hot Encoding
 all_types <- sort(unique(na.omit(c(pokemon_evolved_df$type_1, pokemon_evolved_df$type_2))))
 
@@ -174,7 +166,7 @@ for (type in all_types) {
   pokemon_evolved_df[[col_name]] <- (pokemon_evolved_df$type_1 == type |
                                       pokemon_evolved_df$type_2 == type)
 }
-
+  
 # Add dual-type indicator
 pokemon_evolved_df <- pokemon_evolved_df |>
   mutate(is_dual_type = !is.na(type_2))
@@ -186,12 +178,10 @@ pokemon_evolved_df$generation <- factor(pokemon_evolved_df$generation,
 pokemon_evolved_df$category <- factor(pokemon_evolved_df$category,
   levels = c("Regular", "Legendary", "Mythical", "Paradox", "Ultra Beast")
 )
-
-# Export complete dataset (all evolution stages, for reference only)
-write_csv(pokemon_df_final, "data/pokemon_data_all.csv")
 ```
 
-### Retrieve and clean up the type chart.
+### Type chart
+We expanded the single-type matchup table into a combined table that includes both single-type and dual-type defenses. To better reflect real battle mechanics, the defensive side includes both single and dual types, whereas the attacking side remains single-type only.  
 ```{r}
 raw_type_df <- read_html("data/raw-data/Pokemon Type.html") |> 
   html_table()
@@ -228,9 +218,7 @@ pokemon_type_df <- raw_type_df[[1]] |>
     Steel = ste,
     Fairy = fai
   )
-```
 
-```{r}
 types <- colnames(pokemon_type_df)[-1]
 
 single_def <- pokemon_type_df |> 
@@ -257,13 +245,21 @@ dual_def <- map_dfr(combn(types, 2, simplify = FALSE), \(pair) {
   select(def_type, atk_type, multiplier)
 
 def_type_df <- bind_rows(single_def, dual_def)
-
-write_csv(def_type_df, "data/def_type_df.csv")
 ```
 
+### Export
 ```{r}
 # Export final evolution dataset with all enrichments (primary dataset for all downstream analysis)
 write_csv(pokemon_evolved_df, "data/pokemon_data_final_evolutions_enriched.csv")
+
+# Export final type dataset(primary dataset for type analysis)
+write_csv(def_type_df, "data/def_type_df.csv")
+
+# Export raw dataset (before category labeling, for reference only)
+write_csv(pokemon_df, "data/pokemon_data_raw.csv")
+
+# Export complete dataset (all evolution stages, for reference only)
+write_csv(pokemon_df_final, "data/pokemon_data_all.csv")
 ```
 ---
 

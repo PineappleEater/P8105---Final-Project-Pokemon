@@ -1217,4 +1217,3 @@ dex,name,type_1,type_2,total,hp,attack,defense,sp_atk,sp_def,speed,height_m,weig
 1024,TerapagosNormal Form,Normal,NA,450,90,65,85,65,85,60,0.2,6.5,162.5,TRUE,FALSE,FALSE,FALSE,TRUE,Legendary,Gen 9
 1024,TerapagosTerastal Form,Normal,NA,600,95,95,110,105,110,85,0.3,16,177.8,TRUE,FALSE,FALSE,FALSE,TRUE,Legendary,Gen 9
 1025,Pecharunt,Poison,Ghost,600,88,88,160,88,88,88,0.3,0.3,3.3,FALSE,TRUE,FALSE,FALSE,TRUE,Mythical,Gen 9
-890,EternatusEternamax,Poison,Dragon,1125,255,115,250,125,250,130,999.9,9999.9,0,TRUE,FALSE,FALSE,FALSE,TRUE,Legendary,Gen 8
