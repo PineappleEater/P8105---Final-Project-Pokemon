@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2025-12-04" />
+
+<title>Pokemon EDA - Exploratory Data Analysis</title>
+
+<script src="eda_files/header-attrs-2.29/header-attrs.js"></script>
+<script src="eda_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="eda_files/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="eda_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="eda_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="eda_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="eda_files/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="eda_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="eda_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="eda_files/navigation-1.1/tabsets.js"></script>
+<script src="eda_files/navigation-1.1/codefolding.js"></script>
+<link href="eda_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="eda_files/highlightjs-9.12.0/highlight.js"></script>
+<link href="eda_files/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="eda_files/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Homekachu</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="report.html">Report</a>
+</li>
+<li>
+  <a href="eda.html">Exploratory Data Analysis</a>
+</li>
+<li>
+  <a href="analysis.html">ML &amp; Statistical Analysis</a>
+</li>
+<li>
+  <a href="rating.html">Rating System</a>
+</li>
+<li>
+  <a href="shiny.html">Interactive Explorer</a>
+</li>
+<li>
+  <a href="https://github.com/PineappleEater/P8105---Final-Project-Pokemon/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="team.html">
+    <span class="fa fa-regular fa-address-card"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://www.youtube.com/watch?v=8SJSS_CB6jE">
+    <span class="fa fa-brands fa-youtube"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Pokemon EDA - Exploratory Data
+Analysis</h1>
+<h4 class="date">2025-12-04</h4>
+
+</div>
+
+
+<div id="load-libraries-and-data" class="section level2">
+<h2>1. Load Libraries and Data</h2>
+<pre class="r"><code>library(tidyverse)
+library(ggplot2)
+library(knitr)
+
+# Set ggplot theme
+theme_set(theme_minimal(base_size = 12))
+
+# Check for optional packages
+has_corrplot &lt;- requireNamespace(&quot;corrplot&quot;, quietly = TRUE)
+has_patchwork &lt;- requireNamespace(&quot;patchwork&quot;, quietly = TRUE)
+has_kableExtra &lt;- requireNamespace(&quot;kableExtra&quot;, quietly = TRUE)
+
+if (has_patchwork) library(patchwork)</code></pre>
+<pre class="r"><code># Load enriched dataset - FINAL EVOLUTIONS ONLY with all features pre-computed
+# Features include: category labels, generation, type one-hot encoding, is_dual_type
+pokemon_df &lt;- read_csv(&quot;data/pokemon_data_final_evolutions_enriched.csv&quot;)
+
+# Restore factor levels (lost during CSV export)
+pokemon_df$generation &lt;- factor(pokemon_df$generation,
+  levels = paste0(&quot;Gen &quot;, 1:9)
+)
+pokemon_df$category &lt;- factor(pokemon_df$category,
+  levels = c(&quot;Regular&quot;, &quot;Legendary&quot;, &quot;Mythical&quot;, &quot;Paradox&quot;, &quot;Ultra Beast&quot;)
+)
+
+# Display structure
+glimpse(pokemon_df)</code></pre>
+<pre><code>## Rows: 742
+## Columns: 40
+## $ dex            &lt;dbl&gt; 3, 3, 6, 6, 6, 9, 9, 12, 15, 15, 18, 18, 20, 20, 22, 24…
+## $ name           &lt;chr&gt; &quot;Venusaur&quot;, &quot;VenusaurMega Venusaur&quot;, &quot;Charizard&quot;, &quot;Char…
+## $ type_1         &lt;chr&gt; &quot;Grass&quot;, &quot;Grass&quot;, &quot;Fire&quot;, &quot;Fire&quot;, &quot;Fire&quot;, &quot;Water&quot;, &quot;Wat…
+## $ type_2         &lt;chr&gt; &quot;Poison&quot;, &quot;Poison&quot;, &quot;Flying&quot;, &quot;Flying&quot;, &quot;Dragon&quot;, NA, N…
+## $ total          &lt;dbl&gt; 525, 625, 534, 634, 634, 530, 630, 395, 495, 395, 579, …
+## $ hp             &lt;dbl&gt; 80, 80, 78, 78, 78, 79, 79, 60, 65, 65, 83, 83, 55, 75,…
+## $ attack         &lt;dbl&gt; 82, 100, 84, 104, 130, 83, 103, 45, 150, 90, 80, 80, 81…
+## $ defense        &lt;dbl&gt; 83, 123, 78, 78, 111, 100, 120, 50, 40, 40, 80, 75, 60,…
+## $ sp_atk         &lt;dbl&gt; 100, 122, 109, 159, 130, 85, 135, 90, 15, 45, 135, 70, …
+## $ sp_def         &lt;dbl&gt; 100, 120, 85, 115, 85, 105, 115, 80, 80, 80, 80, 70, 70…
+## $ speed          &lt;dbl&gt; 80, 80, 100, 100, 100, 78, 78, 70, 145, 75, 121, 101, 9…
+## $ height_m       &lt;dbl&gt; 2.0, 2.4, 1.7, 1.7, 1.7, 1.6, 1.6, 1.1, 1.4, 1.0, 2.2, …
+## $ weight_kgs     &lt;dbl&gt; 100.0, 155.5, 90.5, 100.5, 110.5, 85.5, 101.1, 32.0, 40…
+## $ bmi            &lt;dbl&gt; 25.0, 27.0, 31.3, 34.8, 38.2, 33.4, 39.5, 26.4, 20.7, 2…
+## $ is_legendary   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
+## $ is_mythical    &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
+## $ is_paradox     &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
+## $ is_ultra_beast &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
+## $ is_special     &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
+## $ category       &lt;fct&gt; Regular, Regular, Regular, Regular, Regular, Regular, R…
+## $ generation     &lt;fct&gt; Gen 1, Gen 1, Gen 1, Gen 1, Gen 1, Gen 1, Gen 1, Gen 1,…
+## $ has_bug        &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, TRUE, TRUE, …
+## $ has_dark       &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
+## $ has_dragon     &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, NA, NA, FALSE, FALSE,…
+## $ has_electric   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
+## $ has_fairy      &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
+## $ has_fighting   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
+## $ has_fire       &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, TRUE, NA, NA, FALSE, FALSE, F…
+## $ has_flying     &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, NA, NA, TRUE, FALSE, F…
+## $ has_ghost      &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
+## $ has_grass      &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE, …
+## $ has_ground     &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
+## $ has_ice        &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
+## $ has_normal     &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
+## $ has_poison     &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, NA, NA, FALSE, TRUE, T…
+## $ has_psychic    &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
+## $ has_rock       &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
+## $ has_steel      &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
+## $ has_water      &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, F…
+## $ is_dual_type   &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE,…</code></pre>
+<pre class="r"><code># Apply Factor Order
+type_order &lt;- c(
+  &quot;Normal&quot;,&quot;Fire&quot;,&quot;Water&quot;,&quot;Electric&quot;,&quot;Grass&quot;,&quot;Ice&quot;,
+  &quot;Fighting&quot;,&quot;Poison&quot;,&quot;Ground&quot;,&quot;Flying&quot;,&quot;Psychic&quot;,&quot;Bug&quot;,
+  &quot;Rock&quot;,&quot;Ghost&quot;,&quot;Dragon&quot;,&quot;Dark&quot;,&quot;Steel&quot;,&quot;Fairy&quot;
+)
+
+pokemon_df$type_1 &lt;- factor(pokemon_df$type_1, levels = type_order)
+pokemon_df$type_2 &lt;- factor(pokemon_df$type_2, levels = type_order)</code></pre>
+</div>
+<div id="data-overview" class="section level2">
+<h2>2. Data Overview</h2>
+<div id="basic-statistics" class="section level3">
+<h3>2.1 Basic Statistics</h3>
+<pre class="r"><code># Numeric columns
+num_cols &lt;- c(
+  &quot;total&quot;, &quot;hp&quot;, &quot;attack&quot;, &quot;defense&quot;, &quot;sp_atk&quot;, &quot;sp_def&quot;, &quot;speed&quot;,
+  &quot;height_m&quot;, &quot;weight_kgs&quot;, &quot;bmi&quot;
+)
+
+# Summary table
+summary_stats &lt;- pokemon_df |&gt;
+  select(all_of(num_cols)) |&gt;
+  summary()
+
+print(summary_stats)</code></pre>
+<pre><code>##      total             hp             attack          defense      
+##  Min.   :175.0   Min.   :  1.00   Min.   : 10.00   Min.   : 10.00  
+##  1st Qu.:475.2   1st Qu.: 68.00   1st Qu.: 75.00   1st Qu.: 68.00  
+##  Median :505.0   Median : 80.00   Median : 95.00   Median : 80.00  
+##  Mean   :519.4   Mean   : 82.49   Mean   : 95.85   Mean   : 87.16  
+##  3rd Qu.:570.0   3rd Qu.: 95.00   3rd Qu.:115.00   3rd Qu.:100.00  
+##  Max.   :780.0   Max.   :255.00   Max.   :190.00   Max.   :230.00  
+##      sp_atk           sp_def           speed           height_m     
+##  Min.   : 10.00   Min.   : 20.00   Min.   :  5.00   Min.   : 0.100  
+##  1st Qu.: 60.00   1st Qu.: 70.00   1st Qu.: 60.00   1st Qu.: 1.000  
+##  Median : 85.00   Median : 82.00   Median : 84.00   Median : 1.400  
+##  Mean   : 87.19   Mean   : 85.36   Mean   : 81.37   Mean   : 1.704  
+##  3rd Qu.:108.75   3rd Qu.:100.00   3rd Qu.:100.00   3rd Qu.: 1.900  
+##  Max.   :194.00   Max.   :230.00   Max.   :200.00   Max.   :20.000  
+##    weight_kgs         bmi        
+##  Min.   :  0.1   Min.   :  0.40  
+##  1st Qu.: 24.5   1st Qu.: 16.82  
+##  Median : 52.1   Median : 26.50  
+##  Mean   :106.7   Mean   : 37.24  
+##  3rd Qu.:112.2   3rd Qu.: 40.00  
+##  Max.   :999.9   Max.   :644.00</code></pre>
+</div>
+<div id="category-counts" class="section level3">
+<h3>2.2 Category Counts</h3>
+<pre class="r"><code># Count by category
+category_summary &lt;- pokemon_df |&gt;
+  count(category) |&gt;
+  mutate(percentage = round(100 * n / sum(n), 2)) |&gt;
+  arrange(desc(n))
+
+print(kable(category_summary, caption = &quot;Pokemon by Category&quot;))</code></pre>
+<pre><code>## 
+## 
+## Table: Pokemon by Category
+## 
+## |category    |   n| percentage|
+## |:-----------|---:|----------:|
+## |Regular     | 583|      78.57|
+## |Legendary   | 101|      13.61|
+## |Mythical    |  28|       3.77|
+## |Paradox     |  20|       2.70|
+## |Ultra Beast |  10|       1.35|</code></pre>
+<pre class="r"><code># Count by generation
+gen_summary &lt;- pokemon_df |&gt;
+  count(generation) |&gt;
+  mutate(percentage = round(100 * n / sum(n), 2))
+
+print(kable(gen_summary, caption = &quot;Pokemon by Generation&quot;))</code></pre>
+<pre><code>## 
+## 
+## Table: Pokemon by Generation
+## 
+## |generation |   n| percentage|
+## |:----------|---:|----------:|
+## |Gen 1      | 112|      15.09|
+## |Gen 2      |  60|       8.09|
+## |Gen 3      | 102|      13.75|
+## |Gen 4      |  84|      11.32|
+## |Gen 5      |  99|      13.34|
+## |Gen 6      |  52|       7.01|
+## |Gen 7      |  67|       9.03|
+## |Gen 8      |  72|       9.70|
+## |Gen 9      |  94|      12.67|</code></pre>
+<pre class="r"><code># Type distribution (primary type)
+type_summary &lt;- pokemon_df |&gt;
+  count(type_1, sort = TRUE) |&gt;
+  mutate(percentage = round(100 * n / sum(n), 2))
+
+print(kable(head(type_summary, 10), caption = &quot;Pokemon by Primary Type (Top 10)&quot;))</code></pre>
+<pre><code>## 
+## 
+## Table: Pokemon by Primary Type (Top 10)
+## 
+## |type_1   |  n| percentage|
+## |:--------|--:|----------:|
+## |Water    | 90|      12.13|
+## |Normal   | 78|      10.51|
+## |Grass    | 61|       8.22|
+## |Psychic  | 57|       7.68|
+## |Electric | 52|       7.01|
+## |Bug      | 50|       6.74|
+## |Fire     | 44|       5.93|
+## |Rock     | 40|       5.39|
+## |Dark     | 37|       4.99|
+## |Fighting | 35|       4.72|</code></pre>
+</div>
+</div>
+<div id="univariate-analysis" class="section level2">
+<h2>3. Univariate Analysis</h2>
+<div id="base-stat-total-distribution" class="section level3">
+<h3>3.1 Base Stat Total Distribution</h3>
+<pre class="r"><code># Overall distribution
+p1 &lt;- ggplot(pokemon_df, aes(x = total)) +
+  geom_histogram(bins = 40, fill = &quot;steelblue&quot;, alpha = 0.7) +
+  geom_vline(aes(xintercept = mean(total, na.rm = TRUE)),
+    color = &quot;red&quot;, linetype = &quot;dashed&quot;, size = 1
+  ) +
+  labs(
+    title = &quot;Distribution of Base Stat Total (BST)&quot;,
+    subtitle = paste(&quot;Mean:&quot;, round(mean(pokemon_df$total, na.rm = TRUE), 1)),
+    x = &quot;Total BST&quot;, y = &quot;Count&quot;
+  )
+
+# By category
+p2 &lt;- ggplot(pokemon_df, aes(x = total, fill = category)) +
+  geom_density(alpha = 0.5) +
+  scale_fill_brewer(palette = &quot;Set2&quot;) +
+  labs(
+    title = &quot;BST Distribution by Category&quot;,
+    x = &quot;Total BST&quot;, y = &quot;Density&quot;, fill = &quot;Category&quot;
+  )
+
+if (has_patchwork) {
+  p1 / p2
+} else {
+  print(p1)
+  print(p2)
+}</code></pre>
+<p><img src="eda_files/figure-html/total-dist-1.png" width="960" /></p>
+</div>
+<div id="individual-stat-distributions" class="section level3">
+<h3>3.2 Individual Stat Distributions</h3>
+<pre class="r"><code>stat_cols &lt;- c(&quot;hp&quot;, &quot;attack&quot;, &quot;defense&quot;, &quot;sp_atk&quot;, &quot;sp_def&quot;, &quot;speed&quot;)
+
+pokemon_long &lt;- pokemon_df |&gt;
+  select(dex, name, category, all_of(stat_cols)) |&gt;
+  pivot_longer(
+    cols = all_of(stat_cols),
+    names_to = &quot;stat&quot;,
+    values_to = &quot;value&quot;
+  )
+
+ggplot(pokemon_long, aes(x = value, fill = stat)) +
+  geom_histogram(bins = 30, alpha = 0.7) +
+  facet_wrap(~stat, scales = &quot;free_y&quot;) +
+  scale_fill_brewer(palette = &quot;Set3&quot;) +
+  labs(
+    title = &quot;Distribution of Individual Base Stats&quot;,
+    x = &quot;Stat Value&quot;, y = &quot;Count&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="eda_files/figure-html/stat-distributions-1.png" width="960" /></p>
+</div>
+<div id="physical-attributes" class="section level3">
+<h3>3.3 Physical Attributes</h3>
+<pre class="r"><code>p1 &lt;- ggplot(pokemon_df, aes(x = height_m)) +
+  geom_histogram(bins = 40, fill = &quot;darkgreen&quot;, alpha = 0.7) +
+  scale_x_log10() +
+  labs(
+    title = &quot;Height Distribution (log scale)&quot;,
+    x = &quot;Height (m)&quot;, y = &quot;Count&quot;
+  )
+
+p2 &lt;- ggplot(pokemon_df, aes(x = weight_kgs)) +
+  geom_histogram(bins = 40, fill = &quot;darkorange&quot;, alpha = 0.7) +
+  scale_x_log10() +
+  labs(
+    title = &quot;Weight Distribution (log scale)&quot;,
+    x = &quot;Weight (kg)&quot;, y = &quot;Count&quot;
+  )
+
+p3 &lt;- pokemon_df |&gt;
+  filter(bmi &lt; 1000) |&gt; # Filter extreme outliers (Cosmoem BMI=99990)
+  # otherwise the plot will be severly compressed
+  ggplot(aes(x = bmi)) +
+  geom_histogram(bins = 40, fill = &quot;purple&quot;, alpha = 0.7) +
+  labs(
+    title = &quot;BMI Distribution (filtered &lt; 1000)&quot;,
+    subtitle = &quot;Note: Cosmoem (BMI=99,990) excluded as extreme outlier&quot;,
+    x = &quot;BMI&quot;, y = &quot;Count&quot;
+  )
+
+if (has_patchwork) {
+  (p1 | p2) / p3
+} else {
+  print(p1)
+  print(p2)
+  print(p3)
+}</code></pre>
+<p><img src="eda_files/figure-html/physical-dist-1.png" width="960" /></p>
+</div>
+</div>
+<div id="bivariate-analysis" class="section level2">
+<h2>4. Bivariate Analysis</h2>
+<div id="correlation-matrix" class="section level3">
+<h3>4.1 Correlation Matrix</h3>
+<pre class="r"><code># Compute correlation
+cor_matrix &lt;- pokemon_df |&gt;
+  select(all_of(num_cols)) |&gt;
+  cor(use = &quot;pairwise.complete.obs&quot;)
+
+# Visualize
+if (has_corrplot) {
+  corrplot::corrplot(cor_matrix,
+    method = &quot;color&quot;,
+    type = &quot;upper&quot;,
+    tl.col = &quot;black&quot;,
+    tl.srt = 45,
+    addCoef.col = &quot;black&quot;,
+    number.cex = 0.7,
+    title = &quot;Correlation Matrix of Pokemon Attributes&quot;,
+    mar = c(0, 0, 2, 0)
+  )
+} else {
+  # Alternative: heatmap
+  cor_df &lt;- as.data.frame(cor_matrix) |&gt;
+    rownames_to_column(&quot;var1&quot;) |&gt;
+    pivot_longer(-var1, names_to = &quot;var2&quot;, values_to = &quot;correlation&quot;)
+
+  ggplot(cor_df, aes(x = var1, y = var2, fill = correlation)) +
+    geom_tile() +
+    scale_fill_gradient2(low = &quot;blue&quot;, mid = &quot;white&quot;, high = &quot;red&quot;, midpoint = 0) +
+    labs(title = &quot;Correlation Matrix of Pokemon Attributes&quot;) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}</code></pre>
+<p><img src="eda_files/figure-html/correlation-1.png" width="960" /></p>
+</div>
+<div id="attack-vs-defense" class="section level3">
+<h3>4.2 Attack vs Defense</h3>
+<pre class="r"><code>ggplot(pokemon_df, aes(x = attack, y = defense, color = category)) +
+  geom_point(alpha = 0.6, size = 2) +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;black&quot;, linetype = &quot;dashed&quot;) +
+  scale_color_brewer(palette = &quot;Set2&quot;) +
+  labs(
+    title = &quot;Attack vs Defense by Category&quot;,
+    x = &quot;Attack&quot;, y = &quot;Defense&quot;, color = &quot;Category&quot;
+  )</code></pre>
+<p><img src="eda_files/figure-html/attack-defense-1.png" width="960" /></p>
+</div>
+<div id="special-attack-vs-special-defense" class="section level3">
+<h3>4.3 Special Attack vs Special Defense</h3>
+<pre class="r"><code>ggplot(pokemon_df, aes(x = sp_atk, y = sp_def, color = category)) +
+  geom_point(alpha = 0.6, size = 2) +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;black&quot;, linetype = &quot;dashed&quot;) +
+  scale_color_brewer(palette = &quot;Set2&quot;) +
+  labs(
+    title = &quot;Special Attack vs Special Defense by Category&quot;,
+    x = &quot;Special Attack&quot;, y = &quot;Special Defense&quot;, color = &quot;Category&quot;
+  )</code></pre>
+<p><img src="eda_files/figure-html/sp-attack-defense-1.png" width="960" /></p>
+</div>
+<div id="height-vs-weight" class="section level3">
+<h3>4.4 Height vs Weight</h3>
+<pre class="r"><code>ggplot(pokemon_df, aes(x = height_m, y = weight_kgs, color = type_1)) +
+  geom_point(alpha = 0.6, size = 2) +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;black&quot;) +
+  labs(
+    title = &quot;Height vs Weight (log-log scale)&quot;,
+    x = &quot;Height (m)&quot;, y = &quot;Weight (kg)&quot;, color = &quot;Primary Type&quot;
+  ) +
+  theme(legend.position = &quot;right&quot;)</code></pre>
+<p><img src="eda_files/figure-html/height-weight-1.png" width="960" /></p>
+</div>
+</div>
+<div id="group-comparisons" class="section level2">
+<h2>5. Group Comparisons</h2>
+<div id="stats-by-category" class="section level3">
+<h3>5.1 Stats by Category</h3>
+<pre class="r"><code># Box plots for each stat
+pokemon_long |&gt;
+  ggplot(aes(x = category, y = value, fill = category)) +
+  geom_boxplot(alpha = 0.7) +
+  facet_wrap(~stat, scales = &quot;free_y&quot;) +
+  scale_fill_brewer(palette = &quot;Set2&quot;) +
+  labs(
+    title = &quot;Base Stats by Pokemon Category&quot;,
+    x = &quot;Category&quot;, y = &quot;Stat Value&quot;
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = &quot;none&quot;
+  )</code></pre>
+<p><img src="eda_files/figure-html/stats-by-category-1.png" width="960" /></p>
+</div>
+<div id="bst-by-generation" class="section level3">
+<h3>5.2 BST by Generation</h3>
+<pre class="r"><code>ggplot(pokemon_df, aes(x = generation, y = total, fill = generation)) +
+  geom_violin(alpha = 0.7) +
+  geom_boxplot(width = 0.2, alpha = 0.5) +
+  scale_fill_brewer(palette = &quot;Spectral&quot;) +
+  labs(
+    title = &quot;Base Stat Total by Generation&quot;,
+    x = &quot;Generation&quot;, y = &quot;Total BST&quot;
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = &quot;none&quot;
+  )</code></pre>
+<p><img src="eda_files/figure-html/bst-generation-1.png" width="960" /></p>
+</div>
+<div id="stats-by-primary-type-top-types" class="section level3">
+<h3>5.3 Stats by Primary Type (Top Types)</h3>
+<pre class="r"><code># Get top 10 types
+top_types &lt;- pokemon_df |&gt;
+  count(type_1, sort = TRUE) |&gt;
+  head(10) |&gt;
+  pull(type_1)
+
+pokemon_df |&gt;
+  filter(type_1 %in% top_types) |&gt;
+  ggplot(aes(x = reorder(type_1, total, median), y = total, fill = type_1)) +
+  geom_boxplot(alpha = 0.7) +
+  coord_flip() +
+  labs(
+    title = &quot;BST by Primary Type (Top 10 Most Common)&quot;,
+    x = &quot;Primary Type&quot;, y = &quot;Total BST&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="eda_files/figure-html/stats-by-type-1.png" width="960" /></p>
+</div>
+</div>
+<div id="type-analysis" class="section level2">
+<h2>6. Type Analysis</h2>
+<div id="type-distribution" class="section level3">
+<h3>6.1 Type Distribution</h3>
+<pre class="r"><code># Official Type Color
+type_colors &lt;- c(
+  Normal   = &quot;#A8A77A&quot;,
+  Fire     = &quot;#EE8130&quot;,
+  Water    = &quot;#6390F0&quot;,
+  Electric = &quot;#F7D02C&quot;,
+  Grass    = &quot;#7AC74C&quot;,
+  Ice      = &quot;#96D9D6&quot;,
+  Fighting = &quot;#C22E28&quot;,
+  Poison   = &quot;#A33EA1&quot;,
+  Ground   = &quot;#E2BF65&quot;,
+  Flying   = &quot;#A98FF3&quot;,
+  Psychic  = &quot;#F95587&quot;,
+  Bug      = &quot;#A6B91A&quot;,
+  Rock     = &quot;#B6A136&quot;,
+  Ghost    = &quot;#735797&quot;,
+  Dragon   = &quot;#6F35FC&quot;,
+  Dark     = &quot;#705746&quot;,
+  Steel    = &quot;#B7B7CE&quot;,
+  Fairy    = &quot;#D685AD&quot;
+)
+
+# Types(Normal+Fly will both count to Normal and Flying type)
+p1 &lt;- pokemon_df |&gt;
+  pivot_longer(
+    cols = c(type_1, type_2),
+    names_to = &quot;slot&quot;,
+    values_to = &quot;type&quot;
+  ) |&gt;
+  filter(!is.na(type)) |&gt;
+  count(type, sort = TRUE) |&gt;
+  head(10) |&gt;
+  ggplot(aes(x = reorder(type, n), y = n, fill = type)) +
+  geom_col(alpha = 0.8) +
+  scale_fill_manual(values = type_colors) +
+  coord_flip() +
+  labs(title = &quot;Top 10 Types&quot;, x = &quot;Type&quot;, y = &quot;Count&quot;) +
+  theme(legend.position = &quot;none&quot;)
+
+# Dual-type proportion
+p2 &lt;- pokemon_df |&gt;
+  count(is_dual_type) |&gt;
+  mutate(label = if_else(is_dual_type, &quot;Dual-type&quot;, &quot;Mono-type&quot;)) |&gt;
+  ggplot(aes(x = &quot;&quot;, y = n, fill = label)) +
+  geom_col(width = 1) +
+  coord_polar(&quot;y&quot;) +
+  labs(title = &quot;Mono-type vs Dual-type&quot;, fill = &quot;&quot;) +
+  theme_void()
+
+if (has_patchwork) {
+  p1 | p2
+} else {
+  print(p1)
+  print(p2)
+}</code></pre>
+<p><img src="eda_files/figure-html/type-counts-1.png" width="960" /></p>
+</div>
+<div id="type-combinations" class="section level3">
+<h3>6.2 Type Combinations</h3>
+<pre class="r"><code># Top type combinations
+pokemon_df |&gt;
+  filter(!is.na(type_2)) |&gt;
+  count(type_1, type_2, sort = TRUE) |&gt;
+  head(15) |&gt;
+  mutate(combo = paste(type_1, &quot;/&quot;, type_2)) |&gt;
+  ggplot(aes(x = reorder(combo, n), y = n, fill = type_1)) +
+  geom_col(alpha = 0.8) +
+  scale_fill_manual(values = type_colors) +
+  coord_flip() +
+  labs(
+    title = &quot;Top 15 Type Combinations&quot;,
+    x = &quot;Type Combination&quot;, y = &quot;Count&quot;, fill = &quot;Primary Type&quot;
+  )</code></pre>
+<p><img src="eda_files/figure-html/type-combos-1.png" width="960" /></p>
+</div>
+<div id="average-stats-by-type" class="section level3">
+<h3>6.3 Average Stats by Type</h3>
+<pre class="r"><code># Calculate average stats per type
+type_stats &lt;- pokemon_df |&gt;
+  pivot_longer(
+    cols = c(type_1, type_2),
+    names_to = &quot;slot&quot;,
+    values_to = &quot;type&quot;
+  ) |&gt;
+  filter(!is.na(type)) |&gt;
+  group_by(type) |&gt;
+  summarise(
+    count = n(),
+    avg_total = mean(total, na.rm = TRUE),
+    avg_hp = mean(hp, na.rm = TRUE),
+    avg_attack = mean(attack, na.rm = TRUE),
+    avg_sp_atk = mean(sp_atk, na.rm = TRUE),
+    avg_defense = mean(defense, na.rm = TRUE),
+    avg_sp_def = mean(sp_def, na.rm = TRUE),
+    avg_speed = mean(speed, na.rm = TRUE)
+  ) |&gt;
+  arrange(desc(avg_total))
+
+print(kable(head(type_stats, 10), caption = &quot;Top 10 Types by Average BST&quot;, digits = 1))</code></pre>
+<pre><code>## 
+## 
+## Table: Top 10 Types by Average BST
+## 
+## |type     | count| avg_total| avg_hp| avg_attack| avg_sp_atk| avg_defense| avg_sp_def| avg_speed|
+## |:--------|-----:|---------:|------:|----------:|----------:|-----------:|----------:|---------:|
+## |Dragon   |    68|     600.3|   97.8|      108.2|      113.4|        95.1|       95.0|      90.9|
+## |Psychic  |    99|     550.4|   83.7|       88.9|      107.7|        85.1|       97.4|      87.6|
+## |Steel    |    60|     545.8|   79.2|      106.3|       81.3|       119.1|       90.0|      70.0|
+## |Fire     |    59|     539.7|   81.4|       98.3|      103.6|        85.2|       86.2|      85.1|
+## |Fighting |    69|     536.3|   84.5|      119.9|       72.4|        88.5|       81.1|      89.9|
+## |Fairy    |    49|     527.4|   74.9|       85.3|       95.9|        88.9|      100.8|      81.5|
+## |Ground   |    53|     526.5|   93.2|      106.6|       75.4|       103.4|       80.8|      67.0|
+## |Ice      |    45|     526.4|   88.3|       99.3|       85.4|        90.4|       85.1|      77.8|
+## |Dark     |    64|     523.9|   84.4|      106.2|       85.2|        82.0|       81.2|      84.8|
+## |Ghost    |    57|     519.3|   76.4|       91.3|       96.4|        87.8|       89.9|      77.5|</code></pre>
+<pre class="r"><code># Heatmap
+type_stats |&gt;
+  head(12) |&gt;
+  select(type, avg_hp, avg_attack, avg_sp_atk, avg_defense, avg_sp_def, avg_speed) |&gt;
+  pivot_longer(-type, names_to = &quot;stat&quot;, values_to = &quot;value&quot;) |&gt;
+  mutate(stat = str_remove(stat, &quot;avg_&quot;)) |&gt;
+  ggplot(aes(x = stat, y = reorder(type, value), fill = value)) +
+  geom_tile() +
+  scale_fill_gradientn(
+    colours = c(&quot;#b9d6f2&quot;, &quot;#d0e1f9&quot;, &quot;#f7f9ff&quot;, &quot;#f9d5e5&quot;, &quot;#f6b0c3&quot;),
+    name = &quot;Average Value&quot;
+  ) +
+  labs(
+    title = &quot;Average Stats Heatmap (Top 12 Types by BST)&quot;,
+    x = &quot;Stat&quot;, y = &quot;Primary Type&quot;, fill = &quot;Average Value&quot;
+  )</code></pre>
+<p><img src="eda_files/figure-html/avg-stats-type-1.png" width="960" /></p>
+</div>
+</div>
+<div id="special-categories-deep-dive" class="section level2">
+<h2>7. Special Categories Deep Dive</h2>
+<div id="legendary-vs-regular-stats" class="section level3">
+<h3>7.1 Legendary vs Regular Stats</h3>
+<pre class="r"><code># Statistical test
+legendary_test &lt;- t.test(total ~ is_legendary, data = pokemon_df)
+
+cat(&quot;T-test: Legendary vs Regular BST\n&quot;)</code></pre>
+<pre><code>## T-test: Legendary vs Regular BST</code></pre>
+<pre class="r"><code>cat(&quot;p-value:&quot;, legendary_test$p.value, &quot;\n&quot;)</code></pre>
+<pre><code>## p-value: 2.768909e-34</code></pre>
+<pre class="r"><code>cat(&quot;Mean Regular:&quot;, legendary_test$estimate[1], &quot;\n&quot;)</code></pre>
+<pre><code>## Mean Regular: 502.9563</code></pre>
+<pre class="r"><code>cat(&quot;Mean Legendary:&quot;, legendary_test$estimate[2], &quot;\n\n&quot;)</code></pre>
+<pre><code>## Mean Legendary: 623.8911</code></pre>
+<pre class="r"><code># Violin plot
+pokemon_df |&gt;
+  mutate(label = if_else(is_legendary, &quot;Legendary&quot;, &quot;Regular&quot;)) |&gt;
+  ggplot(aes(x = label, y = total, fill = label)) +
+  geom_violin(alpha = 0.7) +
+  geom_boxplot(width = 0.2, alpha = 0.5) +
+  scale_fill_manual(values = c(&quot;Regular&quot; = &quot;steelblue&quot;, &quot;Legendary&quot; = &quot;gold&quot;)) +
+  labs(
+    title = &quot;BST: Legendary vs Regular Pokemon&quot;,
+    x = &quot;&quot;, y = &quot;Total BST&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="eda_files/figure-html/legendary-comparison-1.png" width="960" /></p>
+</div>
+<div id="all-special-categories" class="section level3">
+<h3>7.2 All Special Categories</h3>
+<pre class="r"><code>category_stats &lt;- pokemon_df |&gt;
+  group_by(category) |&gt;
+  summarise(
+    count = n(),
+    avg_total = mean(total, na.rm = TRUE),
+    avg_hp = mean(hp, na.rm = TRUE),
+    avg_attack = mean(attack, na.rm = TRUE),
+    avg_defense = mean(defense, na.rm = TRUE),
+    avg_sp_atk = mean(sp_atk, na.rm = TRUE),
+    avg_sp_def = mean(sp_def, na.rm = TRUE),
+    avg_speed = mean(speed, na.rm = TRUE)
+  ) |&gt;
+  arrange(desc(avg_total))
+
+print(kable(category_stats, caption = &quot;Average Stats by Category&quot;, digits = 1))</code></pre>
+<pre><code>## 
+## 
+## Table: Average Stats by Category
+## 
+## |category    | count| avg_total| avg_hp| avg_attack| avg_defense| avg_sp_atk| avg_sp_def| avg_speed|
+## |:-----------|-----:|---------:|------:|----------:|-----------:|----------:|----------:|---------:|
+## |Legendary   |   101|     623.9|   98.3|      112.6|        99.4|      111.0|      103.4|      99.3|
+## |Mythical    |    28|     601.4|   83.9|      109.3|        98.5|      111.9|       96.2|     101.6|
+## |Paradox     |    20|     578.0|   95.9|      103.6|        94.5|       93.9|       90.7|      99.4|
+## |Ultra Beast |    10|     567.0|   93.6|      113.2|        91.8|      108.4|       73.0|      87.0|
+## |Regular     |   583|     494.6|   79.0|       91.7|        84.2|       81.3|       81.8|      76.6|</code></pre>
+</div>
+</div>
+<div id="generation-evolution-analysis" class="section level2">
+<h2>8. Generation Evolution Analysis</h2>
+<div id="power-creep-over-generations" class="section level3">
+<h3>8.1 Power Creep Over Generations</h3>
+<pre class="r"><code>gen_stats &lt;- pokemon_df |&gt;
+  group_by(generation) |&gt;
+  summarise(
+    count = n(),
+    avg_total = mean(total, na.rm = TRUE),
+    median_total = median(total, na.rm = TRUE),
+    sd_total = sd(total, na.rm = TRUE)
+  )
+
+ggplot(gen_stats, aes(x = generation)) +
+  geom_line(aes(y = avg_total, group = 1, color = &quot;Average&quot;), size = 1.2) +
+  geom_line(aes(y = median_total, group = 1, color = &quot;Median&quot;), size = 1.2) +
+  geom_point(aes(y = avg_total), size = 3) +
+  geom_point(aes(y = median_total), size = 3) +
+  scale_color_manual(values = c(&quot;Average&quot; = &quot;blue&quot;, &quot;Median&quot; = &quot;red&quot;)) +
+  labs(
+    title = &quot;Average &amp; Median BST by Generation&quot;,
+    x = &quot;Generation&quot;, y = &quot;BST&quot;, color = &quot;Metric&quot;
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="eda_files/figure-html/generation-power-creep-1.png" width="960" /></p>
+</div>
+<div id="type-diversity-by-generation" class="section level3">
+<h3>8.2 Type Diversity by Generation</h3>
+<pre class="r"><code>pokemon_df |&gt;
+  pivot_longer(
+    cols = c(type_1, type_2),
+    names_to = &quot;slot&quot;,
+    values_to = &quot;type&quot;
+  ) |&gt;
+  filter(!is.na(type)) |&gt;
+  mutate(type = factor(type, levels = type_order)) |&gt; 
+  group_by(generation, type) |&gt;
+  summarise(count = n(), .groups = &quot;drop&quot;) |&gt;
+  ggplot(aes(x = generation, y = count, fill = type)) +
+  geom_col(position = &quot;stack&quot;) +
+  scale_fill_manual(values = type_colors) +
+  labs(
+    title = &quot;Type Distribution by Generation&quot;,
+    x = &quot;Generation&quot;, y = &quot;Count&quot;, fill = &quot;Type&quot;
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="eda_files/figure-html/type-diversity-1.png" width="960" /></p>
+</div>
+</div>
+<div id="key-findings-summary" class="section level2">
+<h2>9. Key Findings Summary</h2>
+<pre class="r"><code>library(glue)
+
+cat(glue(&quot;=== EDA KEY FINDINGS ===
+
+1. Dataset Overview:
+   - Total Pokemon: {nrow(pokemon_df)}
+   - Legendary: {sum(pokemon_df$is_legendary)}
+   - Mythical: {sum(pokemon_df$is_mythical)}
+   - Regular: {sum(!pokemon_df$is_special)}
+
+2. Base Stats:
+   - Mean BST: {round(mean(pokemon_df$total, na.rm = TRUE), 1)}
+   - BST Range: {min(pokemon_df$total, na.rm = TRUE)} - {max(pokemon_df$total, na.rm = TRUE)}
+
+3. Type Distribution:
+   - Unique primary types: {length(unique(pokemon_df$type_1))}
+   - Dual-type Pokemon: {sum(pokemon_df$is_dual_type)} ({round(100 * mean(pokemon_df$is_dual_type), 1)}%)
+
+4. Statistical Tests:
+   - Legendary vs Regular BST p-value: {format(legendary_test$p.value, scientific = TRUE, digits = 3)}
+   - Difference is {if_else(legendary_test$p.value &lt; 0.001, &#39;highly&#39;, &#39;&#39;)} significant
+
+5. Correlations:
+   - Total vs Attack: {round(cor(pokemon_df$total, pokemon_df$attack, use = &#39;complete.obs&#39;), 3)}
+   - Attack vs Defense: {round(cor(pokemon_df$attack, pokemon_df$defense, use = &#39;complete.obs&#39;), 3)}
+   - Height vs Weight: {round(cor(pokemon_df$height_m, pokemon_df$weight_kgs, use = &#39;complete.obs&#39;), 3)}
+
+6. Physical Attributes:
+   - BMI Range (excluding outliers): {round(min(pokemon_df$bmi[pokemon_df$bmi &lt; 1000], na.rm = TRUE), 1)} - {round(max(pokemon_df$bmi[pokemon_df$bmi &lt; 1000], na.rm = TRUE), 1)}
+   - Extreme outlier: Cosmoem (BMI = 99,990) due to ultra-dense core
+   - Height range: {min(pokemon_df$height_m, na.rm = TRUE)} - {max(pokemon_df$height_m, na.rm = TRUE)} m
+   - Weight range: {min(pokemon_df$weight_kgs, na.rm = TRUE)} - {max(pokemon_df$weight_kgs, na.rm = TRUE)} kg
+&quot;))</code></pre>
+<pre><code>## === EDA KEY FINDINGS ===
+## 
+## 1. Dataset Overview:
+##    - Total Pokemon: 742
+##    - Legendary: 101
+##    - Mythical: 28
+##    - Regular: 583
+## 
+## 2. Base Stats:
+##    - Mean BST: 519.4
+##    - BST Range: 175 - 780
+## 
+## 3. Type Distribution:
+##    - Unique primary types: 18
+##    - Dual-type Pokemon: 471 (63.5%)
+## 
+## 4. Statistical Tests:
+##    - Legendary vs Regular BST p-value: 2.77e-34
+##    - Difference is highly significant
+## 
+## 5. Correlations:
+##    - Total vs Attack: 0.545
+##    - Attack vs Defense: 0.216
+##    - Height vs Weight: 0.631
+## 
+## 6. Physical Attributes:
+##    - BMI Range (excluding outliers): 0.4 - 644
+##    - Extreme outlier: Cosmoem (BMI = 99,990) due to ultra-dense core
+##    - Height range: 0.1 - 20 m
+##    - Weight range: 0.1 - 999.9 kg</code></pre>
+<hr />
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
