@@ -33,10 +33,10 @@ theme_set(theme_minimal(base_size = 12))
 
 ```{r load-data, include=FALSE}
 # Load type effectiveness data
-type_df <- read_csv("../data/def_type_df.csv", show_col_types = FALSE)
+type_df <- read_csv("data/def_type_df.csv", show_col_types = FALSE)
 
 # Load Pokemon data
-pokemon_df <- read_csv("../data/pokemon_data_final_evolutions_enriched.csv", show_col_types = FALSE)
+pokemon_df <- read_csv("data/pokemon_data_final_evolutions_enriched.csv", show_col_types = FALSE)
 
 # Restore factor levels
 pokemon_df$generation <- factor(pokemon_df$generation, levels = paste0("Gen ", 1:9))
@@ -48,14 +48,14 @@ pokemon_df$category <- factor(pokemon_df$category,
 # Overview
 
 <div style="text-align: center; margin: 20px 0;">
-<img src="../assets/sprites/gif/charizard.gif" width="75" alt="Charizard" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/garchomp.gif" width="70" alt="Garchomp" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/blissey.gif" width="70" alt="Blissey" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/aggron.gif" width="70" alt="Aggron" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/tyranitar.gif" width="70" alt="Tyranitar" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/metagross.gif" width="70" alt="Metagross" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/lucario.gif" width="70" alt="Lucario" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/scizor.gif" width="70" alt="Scizor" style="margin: 0 8px;">
+<img src="assets/sprites/gif/charizard.gif" width="75" alt="Charizard" style="margin: 0 8px;">
+<img src="assets/sprites/gif/garchomp.gif" width="70" alt="Garchomp" style="margin: 0 8px;">
+<img src="assets/sprites/gif/blissey.gif" width="70" alt="Blissey" style="margin: 0 8px;">
+<img src="assets/sprites/gif/aggron.gif" width="70" alt="Aggron" style="margin: 0 8px;">
+<img src="assets/sprites/gif/tyranitar.gif" width="70" alt="Tyranitar" style="margin: 0 8px;">
+<img src="assets/sprites/gif/metagross.gif" width="70" alt="Metagross" style="margin: 0 8px;">
+<img src="assets/sprites/gif/lucario.gif" width="70" alt="Lucario" style="margin: 0 8px;">
+<img src="assets/sprites/gif/scizor.gif" width="70" alt="Scizor" style="margin: 0 8px;">
 </div>
 
 A comprehensive **dual-rating system** for competitive Pokémon battling. Each Pokémon receives separate **Offensive** and **Defensive** ratings (100-point scale), enabling strategic team building and role identification.
@@ -85,7 +85,7 @@ A comprehensive **dual-rating system** for competitive Pokémon battling. Each P
 
 ## Offensive Rating (100 Points)
 
-<img src="../assets/sprites/gif/lucario.gif" width="70" alt="Lucario" style="float: right; margin: 0 0 10px 20px;">
+<img src="assets/sprites/gif/lucario.gif" width="70" alt="Lucario" style="float: right; margin: 0 0 10px 20px;">
 
 <div style="background: #fff5f5; padding: 25px; border-radius: 12px; border-left: 5px solid #e74c3c; margin: 20px 0;">
 
@@ -108,7 +108,7 @@ S-curve (logistic function) mapping for smooth strength scaling:
 
 ## Defensive Rating (100 Points)
 
-<img src="../assets/sprites/gif/shuckle.gif" width="70" alt="Shuckle" style="float: right; margin: 0 0 10px 20px;">
+<img src="assets/sprites/gif/shuckle.gif" width="70" alt="Shuckle" style="float: right; margin: 0 0 10px 20px;">
 
 <div style="background: #f0f9ff; padding: 25px; border-radius: 12px; border-left: 5px solid #3498db; margin: 20px 0;">
 
@@ -440,15 +440,15 @@ ggplot(pokemon_rated, aes(x = offensive_rating, y = defensive_rating)) +
 
 <div style="text-align: center; margin: 20px 0;">
 <div style="display: inline-block; text-align: center; margin: 0 15px;">
-<img src="../assets/sprites/gif/rayquaza.gif" width="100" alt="Rayquaza" style="display: block; margin: 0 auto 5px;">
+<img src="assets/sprites/gif/rayquaza.gif" width="100" alt="Rayquaza" style="display: block; margin: 0 auto 5px;">
 <div style="font-weight: 600; color: #667eea;">Rayquaza</div>
 </div>
 <div style="display: inline-block; text-align: center; margin: 0 15px;">
-<img src="../assets/sprites/gif/metagross.gif" width="85" alt="Metagross" style="display: block; margin: 0 auto 5px;">
+<img src="assets/sprites/gif/metagross.gif" width="85" alt="Metagross" style="display: block; margin: 0 auto 5px;">
 <div style="font-weight: 600; color: #667eea;">Metagross</div>
 </div>
 <div style="display: inline-block; text-align: center; margin: 0 15px;">
-<img src="../assets/sprites/gif/tyranitar.gif" width="85" alt="Tyranitar" style="display: block; margin: 0 auto 5px;">
+<img src="assets/sprites/gif/tyranitar.gif" width="85" alt="Tyranitar" style="display: block; margin: 0 auto 5px;">
 <div style="font-weight: 600; color: #667eea;">Tyranitar</div>
 </div>
 </div>
@@ -501,14 +501,14 @@ kable(top_regular,
 # Summary
 
 <div style="text-align: center; margin: 20px 0;">
-<img src="../assets/sprites/gif/pikachu.gif" width="70" alt="Pikachu" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/eevee.gif" width="70" alt="Eevee" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/snorlax.gif" width="75" alt="Snorlax" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/arcanine.gif" width="70" alt="Arcanine" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/lapras.gif" width="70" alt="Lapras" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/gyarados.gif" width="75" alt="Gyarados" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/umbreon.gif" width="70" alt="Umbreon" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/sylveon.gif" width="70" alt="Sylveon" style="margin: 0 8px;">
+<img src="assets/sprites/gif/pikachu.gif" width="70" alt="Pikachu" style="margin: 0 8px;">
+<img src="assets/sprites/gif/eevee.gif" width="70" alt="Eevee" style="margin: 0 8px;">
+<img src="assets/sprites/gif/snorlax.gif" width="75" alt="Snorlax" style="margin: 0 8px;">
+<img src="assets/sprites/gif/arcanine.gif" width="70" alt="Arcanine" style="margin: 0 8px;">
+<img src="assets/sprites/gif/lapras.gif" width="70" alt="Lapras" style="margin: 0 8px;">
+<img src="assets/sprites/gif/gyarados.gif" width="75" alt="Gyarados" style="margin: 0 8px;">
+<img src="assets/sprites/gif/umbreon.gif" width="70" alt="Umbreon" style="margin: 0 8px;">
+<img src="assets/sprites/gif/sylveon.gif" width="70" alt="Sylveon" style="margin: 0 8px;">
 </div>
 
 <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">

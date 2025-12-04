@@ -40,20 +40,20 @@ theme_set(theme_minimal(base_size = 12))
 
 ```{r load-data, include=FALSE}
 # Load final evolutions dataset
-pokemon_df <- read_csv("../data/pokemon_data_final_evolutions_enriched.csv", show_col_types = FALSE)
+pokemon_df <- read_csv("data/pokemon_data_final_evolutions_enriched.csv", show_col_types = FALSE)
 ```
 
 # Overview
 
 <div style="text-align: center; margin: 20px 0;">
-<img src="../assets/sprites/gif/alakazam.gif" width="70" alt="Alakazam" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/porygon.gif" width="70" alt="Porygon" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/mewtwo.gif" width="75" alt="Mewtwo" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/magnezone.gif" width="70" alt="Magnezone" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/gardevoir.gif" width="70" alt="Gardevoir" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/espeon.gif" width="70" alt="Espeon" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/celebi.gif" width="65" alt="Celebi" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/jirachi.gif" width="65" alt="Jirachi" style="margin: 0 8px;">
+<img src="assets/sprites/gif/alakazam.gif" width="70" alt="Alakazam" style="margin: 0 8px;">
+<img src="assets/sprites/gif/porygon.gif" width="70" alt="Porygon" style="margin: 0 8px;">
+<img src="assets/sprites/gif/mewtwo.gif" width="75" alt="Mewtwo" style="margin: 0 8px;">
+<img src="assets/sprites/gif/magnezone.gif" width="70" alt="Magnezone" style="margin: 0 8px;">
+<img src="assets/sprites/gif/gardevoir.gif" width="70" alt="Gardevoir" style="margin: 0 8px;">
+<img src="assets/sprites/gif/espeon.gif" width="70" alt="Espeon" style="margin: 0 8px;">
+<img src="assets/sprites/gif/celebi.gif" width="65" alt="Celebi" style="margin: 0 8px;">
+<img src="assets/sprites/gif/jirachi.gif" width="65" alt="Jirachi" style="margin: 0 8px;">
 </div>
 
 This page presents streamlined machine learning and statistical analyses of Pok√©mon data, including dimensionality reduction, clustering, and classification models.
@@ -81,7 +81,7 @@ This page presents streamlined machine learning and statistical analyses of Pok√
 
 # PCA Analysis
 
-<img src="../assets/sprites/gif/alakazam.gif" width="70" alt="Alakazam" style="float: right; margin: 0 0 10px 20px;">
+<img src="assets/sprites/gif/alakazam.gif" width="70" alt="Alakazam" style="float: right; margin: 0 0 10px 20px;">
 
 ## Dimensionality Reduction
 
@@ -159,7 +159,7 @@ fviz_pca_biplot(pca_result,
 
 # K-Means Clustering
 
-<img src="../assets/sprites/gif/magnezone.gif" width="75" alt="Magnezone" style="float: right; margin: 0 0 10px 20px;">
+<img src="assets/sprites/gif/magnezone.gif" width="75" alt="Magnezone" style="float: right; margin: 0 0 10px 20px;">
 
 ## Optimal Number of Clusters
 
@@ -236,7 +236,7 @@ kable(cluster_summary,
 
 # Classification Models
 
-<img src="../assets/sprites/gif/mewtwo.gif" width="85" alt="Mewtwo" style="float: right; margin: 0 0 10px 20px;">
+<img src="assets/sprites/gif/mewtwo.gif" width="85" alt="Mewtwo" style="float: right; margin: 0 0 10px 20px;">
 
 ## Legendary Prediction
 
@@ -426,14 +426,14 @@ plot(rf_imp, top = 15,
 </div>
 
 <div style="text-align: center; margin: 20px 0;">
-<img src="../assets/sprites/gif/gengar.gif" width="70" alt="Gengar" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/dragonite.gif" width="70" alt="Dragonite" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/lucario.gif" width="70" alt="Lucario" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/garchomp.gif" width="70" alt="Garchomp" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/tyranitar.gif" width="70" alt="Tyranitar" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/metagross.gif" width="70" alt="Metagross" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/salamence.gif" width="75" alt="Salamence" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/latios.gif" width="70" alt="Latios" style="margin: 0 8px;">
+<img src="assets/sprites/gif/gengar.gif" width="70" alt="Gengar" style="margin: 0 8px;">
+<img src="assets/sprites/gif/dragonite.gif" width="70" alt="Dragonite" style="margin: 0 8px;">
+<img src="assets/sprites/gif/lucario.gif" width="70" alt="Lucario" style="margin: 0 8px;">
+<img src="assets/sprites/gif/garchomp.gif" width="70" alt="Garchomp" style="margin: 0 8px;">
+<img src="assets/sprites/gif/tyranitar.gif" width="70" alt="Tyranitar" style="margin: 0 8px;">
+<img src="assets/sprites/gif/metagross.gif" width="70" alt="Metagross" style="margin: 0 8px;">
+<img src="assets/sprites/gif/salamence.gif" width="75" alt="Salamence" style="margin: 0 8px;">
+<img src="assets/sprites/gif/latios.gif" width="70" alt="Latios" style="margin: 0 8px;">
 </div>
 
 ---

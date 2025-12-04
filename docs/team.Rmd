@@ -66,14 +66,14 @@ output: html_document
 </div>
 
 <!-- <div style="text-align: center; margin: 30px 0;">
-<img src="../assets/sprites/gif/pikachu.gif" width="65" alt="Pikachu" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/bulbasaur.gif" width="65" alt="Bulbasaur" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/charmander.gif" width="65" alt="Charmander" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/squirtle.gif" width="65" alt="Squirtle" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/eevee.gif" width="65" alt="Eevee" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/mew.gif" width="65" alt="Mew" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/jigglypuff.gif" width="65" alt="Jigglypuff" style="margin: 0 8px;">
-<img src="../assets/sprites/gif/togepi.gif" width="65" alt="Togepi" style="margin: 0 8px;">
+<img src="assets/sprites/gif/pikachu.gif" width="65" alt="Pikachu" style="margin: 0 8px;">
+<img src="assets/sprites/gif/bulbasaur.gif" width="65" alt="Bulbasaur" style="margin: 0 8px;">
+<img src="assets/sprites/gif/charmander.gif" width="65" alt="Charmander" style="margin: 0 8px;">
+<img src="assets/sprites/gif/squirtle.gif" width="65" alt="Squirtle" style="margin: 0 8px;">
+<img src="assets/sprites/gif/eevee.gif" width="65" alt="Eevee" style="margin: 0 8px;">
+<img src="assets/sprites/gif/mew.gif" width="65" alt="Mew" style="margin: 0 8px;">
+<img src="assets/sprites/gif/jigglypuff.gif" width="65" alt="Jigglypuff" style="margin: 0 8px;">
+<img src="assets/sprites/gif/togepi.gif" width="65" alt="Togepi" style="margin: 0 8px;">
 </div> -->
 
 ## Meet Our Team
@@ -84,7 +84,7 @@ output: html_document
   <h3>Ruipeng Li</h3>
   <div class="uni">rl3616</div>
   <div class="contributions">
-![](../assets/team/pichu.gif)
+![](assets/team/pichu.gif)
   </div>
 </div>
 
@@ -92,7 +92,7 @@ output: html_document
   <h3>Xuange Liang</h3>
   <div class="uni">xl3493</div>
   <div class="contributions">
-![](../assets/team/eevee.gif)
+![](assets/team/eevee.gif)
   </div>
 </div>
 
@@ -100,7 +100,7 @@ output: html_document
   <h3>Yiwen Zhang</h3>
   <div class="uni">yz4994</div>
   <div class="contributions">
-  ![](../assets/team/jigglypuff.gif)
+  ![](assets/team/jigglypuff.gif)
   </div>
 </div>
 
@@ -108,7 +108,7 @@ output: html_document
   <h3>Leah Li</h3>
   <div class="uni">yl5828</div>
   <div class="contributions">
-  ![](../assets/team/alcremie.gif)
+  ![](assets/team/alcremie.gif)
   </div>
 </div>
 
@@ -137,11 +137,11 @@ We would like to thank:
 ---
 <!-- 
 <div style="text-align: center; margin: 30px 0;">
-<img src="../assets/sprites/gif/snorlax.gif" width="70" alt="Snorlax" style="margin: 0 10px;">
-<img src="../assets/sprites/gif/gengar.gif" width="65" alt="Gengar" style="margin: 0 10px;">
-<img src="../assets/sprites/gif/dragonite.gif" width="65" alt="Dragonite" style="margin: 0 10px;">
-<img src="../assets/sprites/gif/mewtwo.gif" width="75" alt="Mewtwo" style="margin: 0 10px;">
-<img src="../assets/sprites/gif/lucario.gif" width="65" alt="Lucario" style="margin: 0 10px;">
+<img src="assets/sprites/gif/snorlax.gif" width="70" alt="Snorlax" style="margin: 0 10px;">
+<img src="assets/sprites/gif/gengar.gif" width="65" alt="Gengar" style="margin: 0 10px;">
+<img src="assets/sprites/gif/dragonite.gif" width="65" alt="Dragonite" style="margin: 0 10px;">
+<img src="assets/sprites/gif/mewtwo.gif" width="75" alt="Mewtwo" style="margin: 0 10px;">
+<img src="assets/sprites/gif/lucario.gif" width="65" alt="Lucario" style="margin: 0 10px;">
 </div> -->
 
 <div style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 10px; margin-top: 40px;">
