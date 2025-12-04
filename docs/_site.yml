@@ -6,11 +6,13 @@ navbar:
     - text: "Report"
       href: report.html
     - text: "Exploratory Data Analysis"
-      href: eda.html 
-    - text: "Clustering and Classification"
-      href: pca.html 
-    - text: "shiny"
-      href: shiny.html 
+      href: eda.html
+    - text: "ML & Statistical Analysis"
+      href: analysis.html
+    - text: "Rating System"
+      href: rating.html
+    - text: "Interactive Explorer"
+      href: shiny.html
     - icon: fa-github fa-lg
       href: https://github.com/PineappleEater/P8105---Final-Project-Pokemon/
     - icon: fa-regular fa-address-card

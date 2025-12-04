@@ -13,13 +13,13 @@
 
 <title>The Story and Mystery of Pokémon</title>
 
-<script src="index_files/header-attrs-2.30/header-attrs.js"></script>
-<script src="index_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="index_files/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
-<script src="index_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="index_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="index_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <style>h1 {font-size: 34px;}
        h1.title {font-size: 38px;}
        h2 {font-size: 30px;}
@@ -29,25 +29,25 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="index_files/jqueryui-1.13.2/jquery-ui.min.js"></script>
-<link href="index_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="index_files/tocify-1.9.1/jquery.tocify.js"></script>
-<script src="index_files/navigation-1.1/tabsets.js"></script>
-<script src="index_files/navigation-1.1/codefolding.js"></script>
-<link href="index_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="index_files/highlightjs-9.12.0/highlight.js"></script>
-<script src="index_files/kePrint-0.0.1/kePrint.js"></script>
-<link href="index_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="index_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
-<script src="index_files/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-<script src="index_files/plotly-binding-4.11.0/plotly.js"></script>
-<script src="index_files/typedarray-0.1/typedarray.min.js"></script>
-<link href="index_files/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
-<script src="index_files/crosstalk-1.2.2/js/crosstalk.min.js"></script>
-<link href="index_files/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="index_files/plotly-main-2.11.1/plotly-latest.min.js"></script>
-<link href="index_files/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
-<link href="index_files/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -351,10 +351,13 @@ div.tocify {
   <a href="eda.html">Exploratory Data Analysis</a>
 </li>
 <li>
-  <a href="pca.html">Clustering and Classification</a>
+  <a href="analysis.html">ML &amp; Statistical Analysis</a>
 </li>
 <li>
-  <a href="shiny.html">shiny</a>
+  <a href="rating.html">Rating System</a>
+</li>
+<li>
+  <a href="shiny.html">Interactive Explorer</a>
 </li>
 <li>
   <a href="https://github.com/PineappleEater/P8105---Final-Project-Pokemon/">
@@ -751,8 +754,8 @@ Competitive Meta Analysis
 <h1 class="tabset">Key Findings</h1>
 <div id="top-types" class="section level2">
 <h2>Top Types</h2>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-e7c54a191d67dedc62d0" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-e7c54a191d67dedc62d0">{"x":{"visdat":{"758f6c3fc729":["function () ","plotlyVisDat"]},"cur_data":"758f6c3fc729","attrs":{"758f6c3fc729":{"x":{},"y":{},"marker":{"color":{},"colorscale":[["0","#764ba2"],["1","#667eea"]]},"text":{},"hoverinfo":"text","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Top 5 Types by Average Base Stats","xaxis":{"domain":[0,1],"automargin":true,"title":"Type","type":"category","categoryorder":"array","categoryarray":["Fire","Fairy","Steel","Psychic","Dragon"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Avg Stats"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Dragon","Psychic","Steel","Fairy","Fire"],"y":[611.02941176470586,561.50877192982455,551.5,545.55555555555554,533.52272727272725],"marker":{"color":[611.02941176470586,561.50877192982455,551.5,545.55555555555554,533.52272727272725],"colorscale":[["0","#764ba2"],["1","#667eea"]],"line":{"color":"rgba(31,119,180,1)"}},"text":["Dragon<br>611 avg stats","Psychic<br>562 avg stats","Steel<br>552 avg stats","Fairy<br>546 avg stats","Fire<br>534 avg stats"],"hoverinfo":["text","text","text","text","text"],"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-3d317c5672da0b8ac72f" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-3d317c5672da0b8ac72f">{"x":{"visdat":{"25f96f3802":["function () ","plotlyVisDat"]},"cur_data":"25f96f3802","attrs":{"25f96f3802":{"x":{},"y":{},"marker":{"color":{},"colorscale":[["0","#764ba2"],["1","#667eea"]]},"text":{},"hoverinfo":"text","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Top 5 Types by Average Base Stats","xaxis":{"domain":[0,1],"automargin":true,"title":"Type","type":"category","categoryorder":"array","categoryarray":["Fire","Fairy","Steel","Psychic","Dragon"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Avg Stats"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Dragon","Psychic","Steel","Fairy","Fire"],"y":[611.02941176470586,561.50877192982455,551.5,545.55555555555554,533.52272727272725],"marker":{"color":[611.02941176470586,561.50877192982455,551.5,545.55555555555554,533.52272727272725],"colorscale":[["0","#764ba2"],["1","#667eea"]],"line":{"color":"rgba(31,119,180,1)"}},"text":["Dragon<br>611 avg stats","Psychic<br>562 avg stats","Steel<br>552 avg stats","Fairy<br>546 avg stats","Fire<br>534 avg stats"],"hoverinfo":["text","text","text","text","text"],"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="discoveries" class="section level2">
 <h2>Discoveries</h2>
@@ -816,8 +819,8 @@ Competitive Meta Analysis
 </div>
 <div id="type-distribution" class="section level2">
 <h2>Type Distribution</h2>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-62c3199ff3e963269c90" style="width:672px;height:576px;"></div>
-<script type="application/json" data-for="htmlwidget-62c3199ff3e963269c90">{"x":{"visdat":{"758f7d608e56":["function () ","plotlyVisDat"]},"cur_data":"758f7d608e56","attrs":{"758f7d608e56":{"labels":{},"values":{},"textposition":"inside","textinfo":"label+percent","marker":{"colors":["#667EEA","#6778E2","#6972DA","#6B6DD2","#6D67CA","#6E61C2","#705CBA","#7256B2","#7450AA","#764BA2"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Primary Type Distribution (Top 10)","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["Water","Normal","Grass","Psychic","Electric","Bug","Fire","Rock","Dark","Fighting"],"values":[90,78,61,57,52,50,44,40,37,35],"textposition":["inside","inside","inside","inside","inside","inside","inside","inside","inside","inside"],"textinfo":"label+percent","marker":{"color":"rgba(31,119,180,1)","colors":["#667EEA","#6778E2","#6972DA","#6B6DD2","#6D67CA","#6E61C2","#705CBA","#7256B2","#7450AA","#764BA2"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-62dda4e8e8f57290e5f6" style="width:672px;height:576px;"></div>
+<script type="application/json" data-for="htmlwidget-62dda4e8e8f57290e5f6">{"x":{"visdat":{"25f93ec59457":["function () ","plotlyVisDat"]},"cur_data":"25f93ec59457","attrs":{"25f93ec59457":{"labels":{},"values":{},"textposition":"inside","textinfo":"label+percent","marker":{"colors":["#667EEA","#6778E2","#6972DA","#6B6DD2","#6D67CA","#6E61C2","#705CBA","#7256B2","#7450AA","#764BA2"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Primary Type Distribution (Top 10)","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["Water","Normal","Grass","Psychic","Electric","Bug","Fire","Rock","Dark","Fighting"],"values":[90,78,61,57,52,50,44,40,37,35],"textposition":["inside","inside","inside","inside","inside","inside","inside","inside","inside","inside"],"textinfo":"label+percent","marker":{"color":"rgba(31,119,180,1)","colors":["#667EEA","#6778E2","#6972DA","#6B6DD2","#6D67CA","#6E61C2","#705CBA","#7256B2","#7450AA","#764BA2"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="methodology" class="section level1 tabset">

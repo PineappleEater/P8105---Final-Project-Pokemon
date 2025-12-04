@@ -1,0 +1,501 @@
+---
+title: "Pokémon Dual Rating System"
+output:
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    toc_depth: 2
+    code_folding: hide
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 10,
+  fig.height = 6
+)
+```
+
+```{r load-libraries, include=FALSE}
+library(tidyverse)
+library(knitr)
+library(plotly)
+
+set.seed(123)
+theme_set(theme_minimal(base_size = 12))
+```
+
+```{r load-data, include=FALSE}
+# Load type effectiveness data
+type_df <- read_csv("../data/def_type_df.csv", show_col_types = FALSE)
+
+# Load Pokemon data
+pokemon_df <- read_csv("../data/pokemon_data_final_evolutions_enriched.csv", show_col_types = FALSE)
+
+# Restore factor levels
+pokemon_df$generation <- factor(pokemon_df$generation, levels = paste0("Gen ", 1:9))
+pokemon_df$category <- factor(pokemon_df$category,
+  levels = c("Regular", "Legendary", "Mythical", "Paradox", "Ultra Beast")
+)
+```
+
+# Overview
+
+A comprehensive **dual-rating system** for competitive Pokémon battling. Each Pokémon receives separate **Offensive** and **Defensive** ratings (100-point scale), enabling strategic team building and role identification.
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0;">
+<div style="padding: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">100</div>
+<div>Offensive Rating Scale</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">100</div>
+<div>Defensive Rating Scale</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">6</div>
+<div>Tier Levels (SS to F)</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">3</div>
+<div>Battle Roles</div>
+</div>
+</div>
+
+---
+
+# Rating System Components
+
+## Offensive Rating (100 Points)
+
+<div style="background: #fff5f5; padding: 25px; border-radius: 12px; border-left: 5px solid #e74c3c; margin: 20px 0;">
+
+### 📊 BST Score (40 points)
+S-curve (logistic function) mapping for smooth strength scaling:
+- **Inflection point**: BST = 450
+- **Maximum**: 40 points
+- Penalizes both very weak and recognizes elite stats
+
+### ⚔️ Offensive Stats Distribution (60 points)
+- **Effective Attack Power (50%)**: Recognizes mixed vs specialized attackers
+  - Mixed attackers (ratio ≥ 0.9): weighted average of Attack and Sp. Attack
+  - Specialized attackers: use higher of Attack or Sp. Attack
+- **Effective Speed Score (40%)**: Dual tactical value
+  - Fast sweepers (high speed) AND
+  - Trick Room users (very low speed) both valued
+- **Durability Buffer (10%)**: Minimum survivability requirement
+
+</div>
+
+## Defensive Rating (100 Points)
+
+<div style="background: #f0f9ff; padding: 25px; border-radius: 12px; border-left: 5px solid #3498db; margin: 20px 0;">
+
+### 📊 BST Score (40 points)
+Same S-curve mapping as offensive rating (shared component)
+
+### 🛡️ Defensive Stats Distribution (30 points)
+- **Durability Expectation (80%)**: HP × √(Def × SpDef)
+  - Uses geometric mean to penalize unbalanced defenses
+  - Rewards balanced defensive investment
+- **Counter-Attack Ability (20%)**: Minimum offensive threat
+  - Ensures defensive Pokémon aren't complete walls
+
+### 🔥 Type Advantage (30 points)
+Defensive type matchup score based on:
+- Resistances (×0.5, ×0.25)
+- Immunities (×0)
+- Weaknesses (×2, ×4)
+- Type combination synergy
+
+</div>
+
+---
+
+# Rating Formulas
+
+```{r rating-functions}
+# BST Score Calculator (40 points max)
+calc_bst_score <- function(total, atk, spatk, eff_atk) {
+  L <- 40      # Maximum score
+  k <- 0.015   # Steepness
+  x0 <- 450    # Inflection point
+  bst <- total - atk - spatk + eff_atk
+  score <- L / (1 + exp(-k * (bst - x0)))
+  return(score)
+}
+
+# Effective Attack Power
+calc_eff_atk <- function(atk, spatk){
+  ratio <- pmin(atk, spatk) / pmax(atk, spatk)
+  ifelse(ratio < 0.9, pmax(atk, spatk), 0.6*(atk + spatk))
+}
+
+# Durability Expectation
+calc_eff_def <- function(hp, def, spdef){
+  hp * sqrt(def * spdef)
+}
+
+# Effective Speed Score
+calc_eff_spd <- function(spd, vmin, vmax, v0 = 80){
+  B <- (spd - vmin) / (vmax - vmin)
+  D <- (abs(spd - v0)) / max(v0 - vmin, vmax - v0)
+  B + 0.5 * D
+}
+
+# Offensive Stat Distribution Score (60 points)
+calc_atk_score <- function(eff_atk_s, eff_def_s, eff_spd_s){
+  (0.5*eff_atk_s + 0.1*eff_def_s + 0.4*eff_spd_s) * 60
+}
+
+# Defensive Stat Distribution Score (60 points total)
+calc_def_score <- function(eff_atk_s, eff_def_s, defensive_score){
+  (0.8*eff_def_s + 0.2*eff_atk_s) * 30 + 30 * defensive_score/100
+}
+```
+
+## Visualization of Scoring Functions
+
+```{r scoring-viz, fig.width=12, fig.height=4}
+library(patchwork)
+
+# BST Score curve
+bst_range <- seq(200, 800, by = 5)
+bst_viz <- tibble(
+  BST = bst_range,
+  Score = sapply(bst_range, function(x) calc_bst_score(x, 100, 100, 100))
+)
+
+p1 <- ggplot(bst_viz, aes(x = BST, y = Score)) +
+  geom_line(color = "#667eea", size = 1.5) +
+  geom_vline(xintercept = 450, linetype = "dashed", color = "red", alpha = 0.5) +
+  annotate("text", x = 450, y = 35, label = "Inflection\n(450)", color = "red", size = 3) +
+  labs(title = "BST Score: S-Curve Mapping",
+       x = "Base Stat Total", y = "Score (max 40)") +
+  theme_minimal()
+
+# Effective Attack heatmap
+atk_pairs <- expand.grid(atk = seq(50, 200, 10), spatk = seq(50, 200, 10))
+eff_atk_viz <- atk_pairs %>%
+  mutate(eff_atk = calc_eff_atk(atk, spatk))
+
+p2 <- ggplot(eff_atk_viz, aes(x = atk, y = spatk, fill = eff_atk)) +
+  geom_tile() +
+  geom_abline(slope = 1, linetype = "dashed", color = "white") +
+  scale_fill_viridis_c(option = "plasma") +
+  labs(title = "Effective Attack Power",
+       x = "Attack", y = "Special Attack", fill = "Eff. Atk") +
+  theme_minimal()
+
+# Effective Speed curve
+spd_range <- seq(5, 200, by = 5)
+spd_viz <- tibble(
+  Speed = spd_range,
+  Score = calc_eff_spd(spd_range, min(spd_range), max(spd_range))
+)
+
+p3 <- ggplot(spd_viz, aes(x = Speed, y = Score)) +
+  geom_line(color = "#4CAF50", size = 1.5) +
+  geom_vline(xintercept = 80, linetype = "dashed", color = "red", alpha = 0.5) +
+  annotate("text", x = 80, y = 1.3, label = "Baseline\n(80)", color = "red", size = 3) +
+  labs(title = "Effective Speed Score",
+       x = "Speed Stat", y = "Normalized Score") +
+  theme_minimal()
+
+p1 + p2 + p3
+```
+
+---
+
+# Type Effectiveness Analysis
+
+## Defensive Type Rankings
+
+```{r type-defense}
+# Calculate defense effectiveness
+defense_stats <- type_df %>%
+  group_by(def_type) %>%
+  summarise(
+    weaknesses = sum(multiplier == 2),
+    weaknesses_x4 = sum(multiplier == 4),
+    strong_resistances = sum(multiplier == 0.25),
+    resistances = sum(multiplier == 0.5),
+    immunities = sum(multiplier == 0),
+    neutral = sum(multiplier == 1),
+    .groups = "drop"
+  )
+
+# Calculate defensive score
+def_stats_scaled <- defense_stats %>%
+  mutate(
+    defensive_score = (
+      strong_resistances*0.2/max(strong_resistances) +
+      resistances*0.45/max(resistances) +
+      neutral*0.2/max(neutral) -
+      weaknesses_x4*0.1/max(weaknesses_x4) -
+      weaknesses*0.05/max(weaknesses)
+    )*100 + immunities*5
+  ) %>%
+  arrange(desc(defensive_score))
+```
+
+```{r type-defense-viz, fig.height=8}
+# Top 15 defensive types
+def_stats_scaled %>%
+  slice_head(n = 15) %>%
+  mutate(def_type = factor(def_type, levels = def_type)) %>%
+  pivot_longer(
+    cols = c(weaknesses_x4, weaknesses, neutral, strong_resistances, resistances, immunities),
+    names_to = "effectiveness",
+    values_to = "count"
+  ) %>%
+  mutate(
+    effectiveness = factor(
+      effectiveness,
+      levels = c("weaknesses_x4", "weaknesses", "neutral",
+                "strong_resistances", "resistances", "immunities")
+    )
+  ) %>%
+  ggplot(aes(x = def_type, y = count, fill = effectiveness)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(
+    values = c(
+      "weaknesses_x4" = "#B71C1C",
+      "weaknesses" = "#F44336",
+      "neutral" = "#9E9E9E",
+      "strong_resistances" = "#2E7D32",
+      "resistances" = "#4CAF50",
+      "immunities" = "#2196F3"
+    ),
+    labels = c(
+      "4× Weak", "2× Weak", "Neutral",
+      "¼× Resist", "½× Resist", "Immune"
+    )
+  ) +
+  labs(
+    title = "Top 15 Defensive Type Combinations",
+    subtitle = "Best defensive typings based on resistance profile",
+    x = "Type Combination",
+    y = "Count",
+    fill = "Effectiveness"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+---
+
+# Calculate Pokémon Ratings
+
+```{r calculate-ratings}
+# Type order for defensive typing
+TYPE_ORDER <- c(
+  "Normal","Fire","Water","Electric","Grass","Ice",
+  "Fighting","Poison","Ground","Flying","Psychic",
+  "Bug","Rock","Ghost","Dragon","Dark","Steel","Fairy"
+)
+
+# Add defense type column
+pokemon_df_typed <- pokemon_df %>%
+  mutate(
+    idx1 = match(type_1, TYPE_ORDER),
+    idx2 = match(type_2, TYPE_ORDER),
+    def_type = case_when(
+      is.na(type_2) ~ type_1,
+      TRUE ~ paste(
+        TYPE_ORDER[pmin(idx1, idx2)],
+        TYPE_ORDER[pmax(idx1, idx2)],
+        sep = "/"
+      )
+    )
+  ) %>%
+  left_join(
+    def_stats_scaled %>% select(def_type, defensive_score),
+    by = "def_type"
+  )
+
+# Calculate ratings
+pokemon_rated <- pokemon_df_typed %>%
+  mutate(
+    # Step 1: Calculate raw effective values
+    eff_atk = calc_eff_atk(attack, sp_atk),
+    eff_def = calc_eff_def(hp, defense, sp_def),
+    eff_spd = calc_eff_spd(speed, min(speed), max(speed)),
+
+    # Step 2: Normalize to [0,1] scale
+    eff_atk_s = eff_atk / max(eff_atk),
+    eff_def_s = eff_def / max(eff_def),
+    eff_spd_s = eff_spd / max(eff_spd),
+
+    # Step 3: Calculate BST score (shared)
+    bst_score = calc_bst_score(total, attack, sp_atk, eff_atk),
+
+    # Step 4: Calculate final ratings
+    offensive_rating = bst_score + calc_atk_score(eff_atk_s, eff_def_s, eff_spd_s),
+    defensive_rating = bst_score + calc_def_score(eff_atk_s, eff_def_s, defensive_score),
+
+    # Tier assignment
+    tier = case_when(
+      offensive_rating >= 75 | defensive_rating >= 65 ~ "SS",
+      offensive_rating >= 65 | defensive_rating >= 55 ~ "S",
+      offensive_rating >= 55 | defensive_rating >= 45 ~ "A",
+      offensive_rating >= 45 | defensive_rating >= 35 ~ "B",
+      offensive_rating >= 35 | defensive_rating >= 25 ~ "C",
+      TRUE ~ "F"
+    ),
+
+    # Role classification
+    role = case_when(
+      offensive_rating / defensive_rating >= 1.15 ~ "Offensive",
+      offensive_rating / defensive_rating <= 0.85 ~ "Defensive",
+      TRUE ~ "Balanced"
+    )
+  )
+
+# Set factors
+pokemon_rated$tier <- factor(pokemon_rated$tier, levels = c("SS", "S", "A", "B", "C", "F"))
+pokemon_rated$role <- factor(pokemon_rated$role, levels = c("Offensive", "Balanced", "Defensive"))
+```
+
+---
+
+# Rating Distribution
+
+## Tier Distribution
+
+```{r tier-distribution}
+tier_summary <- pokemon_rated %>%
+  count(tier) %>%
+  mutate(percentage = round(100 * n / sum(n), 1))
+
+kable(tier_summary, caption = "Pokémon Distribution by Tier", align = "lcc")
+```
+
+```{r tier-viz, fig.height=5}
+ggplot(tier_summary, aes(x = tier, y = n, fill = tier)) +
+  geom_col(show.legend = FALSE) +
+  geom_text(aes(label = paste0(n, "\n(", percentage, "%)")),
+            vjust = -0.5, size = 4) +
+  scale_fill_manual(values = c("SS" = "#FF3CAC", "S" = "#FFD700",
+                                "A" = "#9C27B0", "B" = "#2196F3",
+                                "C" = "#4CAF50", "F" = "#9E9E9E")) +
+  labs(title = "Tier Distribution",
+       x = "Tier", y = "Count") +
+  theme_minimal(base_size = 12)
+```
+
+## Role Distribution
+
+```{r role-distribution}
+role_summary <- pokemon_rated %>%
+  count(role) %>%
+  mutate(percentage = round(100 * n / sum(n), 1))
+
+kable(role_summary, caption = "Pokémon Distribution by Battle Role", align = "lcc")
+```
+
+## Offensive vs Defensive Ratings
+
+```{r rating-scatter, fig.width=10, fig.height=7}
+ggplot(pokemon_rated, aes(x = offensive_rating, y = defensive_rating)) +
+  geom_point(aes(color = tier, shape = role), alpha = 0.6, size = 3) +
+  geom_abline(slope = 1, linetype = "dashed", color = "gray50", alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "gray30") +
+  scale_color_manual(values = c("SS" = "#FF3CAC", "S" = "#FFD700",
+                                 "A" = "#9C27B0", "B" = "#2196F3",
+                                 "C" = "#4CAF50", "F" = "#9E9E9E")) +
+  labs(
+    title = "Offensive vs Defensive Rating Distribution",
+    subtitle = "Points above diagonal = defense-oriented, below = offense-oriented",
+    x = "Offensive Rating", y = "Defensive Rating",
+    color = "Tier", shape = "Role"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+---
+
+# Top Rated Pokémon
+
+## Top 20 Offensive Pokémon
+
+```{r top-offensive}
+top_offensive <- pokemon_rated %>%
+  arrange(desc(offensive_rating)) %>%
+  head(20) %>%
+  select(name, type_1, type_2, role, offensive_rating, defensive_rating, tier)
+
+kable(top_offensive,
+      caption = "Top 20 Offensive Pokémon",
+      digits = 1,
+      align = "lllcccc")
+```
+
+## Top 20 Defensive Pokémon
+
+```{r top-defensive}
+top_defensive <- pokemon_rated %>%
+  arrange(desc(defensive_rating)) %>%
+  head(20) %>%
+  select(name, type_1, type_2, role, defensive_rating, offensive_rating, tier)
+
+kable(top_defensive,
+      caption = "Top 20 Defensive Pokémon",
+      digits = 1,
+      align = "lllcccc")
+```
+
+## Best Regular Pokémon (For Beginners)
+
+```{r top-regular}
+top_regular <- pokemon_rated %>%
+  filter(category == "Regular") %>%
+  arrange(desc(pmax(defensive_rating+10, offensive_rating))) %>%
+  head(20) %>%
+  select(name, type_1, type_2, role, offensive_rating, defensive_rating, tier)
+
+kable(top_regular,
+      caption = "Top 20 Regular Pokémon (Accessible for Beginners)",
+      digits = 1,
+      align = "lllcccc")
+```
+
+---
+
+# Summary
+
+<div style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">
+
+### 🎯 Dual Rating System Benefits
+
+1. **Separate Offensive & Defensive Evaluation**: No longer forced to choose between attacking power and tanking ability
+2. **Type Synergy Recognition**: Defensive typing contributes 30% to defensive rating
+3. **Mixed Attacker Support**: Algorithm recognizes both specialized and versatile attackers
+4. **Speed Flexibility**: Values both fast sweepers and Trick Room users
+5. **Balanced Defense Rewards**: Geometric mean prevents glass cannon defenses
+
+### 📊 Key Statistics
+
+- Average Offensive Rating: **`r round(mean(pokemon_rated$offensive_rating), 1)`**/100
+- Average Defensive Rating: **`r round(mean(pokemon_rated$defensive_rating), 1)`**/100
+- SS Tier Pokémon: **`r sum(pokemon_rated$tier == "SS")`** (`r round(100*mean(pokemon_rated$tier == "SS"), 1)`%)
+- Most Common Role: **`r names(which.max(table(pokemon_rated$role)))`** (`r round(100*max(table(pokemon_rated$role))/nrow(pokemon_rated), 1)`%)
+
+### 🏆 Best Type Combinations
+
+**Offensive**: Ground, Fighting, Fire (high super-effective coverage)
+**Defensive**: Steel/Fairy, Steel/Flying, Water/Ground (few weaknesses, many resistances)
+
+</div>
+
+---
+
+<div style="text-align: center; padding: 20px; color: #666;">
+Rating system designed for competitive singles format • Based on final evolution forms only
+</div>
