@@ -72,21 +72,37 @@ avg_total <- round(mean(pokemon_data$total, na.rm = TRUE))
 # Dataset Overview
 
 <div style="text-align: center; margin: 20px 0;">
-<div style="display: inline-block; text-align: center; margin: 0 10px;">
-<img src="../assets/sprites/gif/pikachu.gif" width="70" alt="Pikachu" style="display: block; margin: 0 auto 5px;">
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/pikachu.gif" width="65" alt="Pikachu" style="display: block; margin: 0 auto 5px;">
 <div style="font-weight: 600; color: #f39c12; font-size: 0.9em;">Pikachu</div>
 </div>
-<div style="display: inline-block; text-align: center; margin: 0 10px;">
-<img src="../assets/sprites/gif/bulbasaur.gif" width="70" alt="Bulbasaur" style="display: block; margin: 0 auto 5px;">
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/bulbasaur.gif" width="65" alt="Bulbasaur" style="display: block; margin: 0 auto 5px;">
 <div style="font-weight: 600; color: #27ae60; font-size: 0.9em;">Bulbasaur</div>
 </div>
-<div style="display: inline-block; text-align: center; margin: 0 10px;">
-<img src="../assets/sprites/gif/charmander.gif" width="70" alt="Charmander" style="display: block; margin: 0 auto 5px;">
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/charmander.gif" width="65" alt="Charmander" style="display: block; margin: 0 auto 5px;">
 <div style="font-weight: 600; color: #e74c3c; font-size: 0.9em;">Charmander</div>
 </div>
-<div style="display: inline-block; text-align: center; margin: 0 10px;">
-<img src="../assets/sprites/gif/squirtle.gif" width="70" alt="Squirtle" style="display: block; margin: 0 auto 5px;">
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/squirtle.gif" width="65" alt="Squirtle" style="display: block; margin: 0 auto 5px;">
 <div style="font-weight: 600; color: #3498db; font-size: 0.9em;">Squirtle</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/eevee.gif" width="65" alt="Eevee" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #8b6f47; font-size: 0.9em;">Eevee</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/mew.gif" width="60" alt="Mew" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #f06292; font-size: 0.9em;">Mew</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/togepi.gif" width="60" alt="Togepi" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Togepi</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/jigglypuff.gif" width="60" alt="Jigglypuff" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #ff69b4; font-size: 0.9em;">Jigglypuff</div>
 </div>
 </div>
 
@@ -288,17 +304,33 @@ datatable(
 # Tips & Usage
 
 <div style="text-align: center; margin: 20px 0;">
-<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
 <img src="../assets/sprites/gif/togepi.gif" width="60" alt="Togepi" style="display: block; margin: 0 auto 5px;">
 <div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Togepi</div>
 </div>
-<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
 <img src="../assets/sprites/gif/mew.gif" width="60" alt="Mew" style="display: block; margin: 0 auto 5px;">
 <div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Mew</div>
 </div>
-<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
 <img src="../assets/sprites/gif/jigglypuff.gif" width="60" alt="Jigglypuff" style="display: block; margin: 0 auto 5px;">
 <div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Jigglypuff</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/pichu.gif" width="55" alt="Pichu" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Pichu</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/clefairy.gif" width="60" alt="Clefairy" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Clefairy</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/ditto.gif" width="55" alt="Ditto" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Ditto</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 8px;">
+<img src="../assets/sprites/gif/psyduck.gif" width="60" alt="Psyduck" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Psyduck</div>
 </div>
 </div>
 

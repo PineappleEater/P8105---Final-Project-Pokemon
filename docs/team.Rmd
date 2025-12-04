@@ -1,4 +1,5 @@
 ---
+title: "Team"
 output: html_document
 ---
 
@@ -61,10 +62,19 @@ output: html_document
 <div class="course-info">
   <h1>P8105 – Data Science I</h1>
   <h3>Columbia University, Mailman School of Public Health</h3>
-  <p style="font-size: 1.2em;">Fall 2025</p >
+  <p style="font-size: 1.2em;">Fall 2025</p>
 </div>
 
-
+<!-- <div style="text-align: center; margin: 30px 0;">
+<img src="../assets/sprites/gif/pikachu.gif" width="65" alt="Pikachu" style="margin: 0 8px;">
+<img src="../assets/sprites/gif/bulbasaur.gif" width="65" alt="Bulbasaur" style="margin: 0 8px;">
+<img src="../assets/sprites/gif/charmander.gif" width="65" alt="Charmander" style="margin: 0 8px;">
+<img src="../assets/sprites/gif/squirtle.gif" width="65" alt="Squirtle" style="margin: 0 8px;">
+<img src="../assets/sprites/gif/eevee.gif" width="65" alt="Eevee" style="margin: 0 8px;">
+<img src="../assets/sprites/gif/mew.gif" width="65" alt="Mew" style="margin: 0 8px;">
+<img src="../assets/sprites/gif/jigglypuff.gif" width="65" alt="Jigglypuff" style="margin: 0 8px;">
+<img src="../assets/sprites/gif/togepi.gif" width="65" alt="Togepi" style="margin: 0 8px;">
+</div> -->
 
 ## Meet Our Team
 
@@ -125,6 +135,14 @@ We would like to thank:
 * **Professor Jeff Goldsmith** and the P8105 teaching team for guidance throughout this project
 
 ---
+<!-- 
+<div style="text-align: center; margin: 30px 0;">
+<img src="../assets/sprites/gif/snorlax.gif" width="70" alt="Snorlax" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/gengar.gif" width="65" alt="Gengar" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/dragonite.gif" width="65" alt="Dragonite" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/mewtwo.gif" width="75" alt="Mewtwo" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/lucario.gif" width="65" alt="Lucario" style="margin: 0 10px;">
+</div> -->
 
 <div style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 10px; margin-top: 40px;">
   <h3>View Our Work</h3>

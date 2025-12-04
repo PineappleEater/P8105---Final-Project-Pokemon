@@ -375,6 +375,9 @@ Separate offensive and defensive ratings using S-curve BST mapping, effective st
 <img src="../assets/sprites/gif/squirtle.gif" width="60" alt="Squirtle" style="margin: 0 10px;">
 <img src="../assets/sprites/gif/pikachu.gif" width="60" alt="Pikachu" style="margin: 0 10px;">
 <img src="../assets/sprites/gif/eevee.gif" width="60" alt="Eevee" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/mew.gif" width="60" alt="Mew" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/jigglypuff.gif" width="60" alt="Jigglypuff" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/togepi.gif" width="60" alt="Togepi" style="margin: 0 10px;">
 </div>
 <a href="eda.html" class="cta-button">EDA</a>
 <a href="analysis.html" class="cta-button">ML Analysis</a>
