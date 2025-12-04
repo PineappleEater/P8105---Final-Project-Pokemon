@@ -391,6 +391,12 @@ div.tocify {
 
 <div id="overview" class="section level1">
 <h1>Overview</h1>
+<div style="text-align: center; margin: 20px 0;">
+<p><img src="../assets/sprites/gif/charizard.gif" width="90" alt="Charizard" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/garchomp.gif" width="85" alt="Garchomp" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/blissey.gif" width="80" alt="Blissey" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/aggron.gif" width="85" alt="Aggron" style="margin: 0 10px;"></p>
+</div>
 <p>A comprehensive <strong>dual-rating system</strong> for competitive
 Pokémon battling. Each Pokémon receives separate
 <strong>Offensive</strong> and <strong>Defensive</strong> ratings
@@ -441,16 +447,17 @@ Battle Roles
 <h1>Rating System Components</h1>
 <div id="offensive-rating-100-points" class="section level2">
 <h2>Offensive Rating (100 Points)</h2>
+<p><img src="../assets/sprites/gif/lucario.gif" width="70" alt="Lucario" style="float: right; margin: 0 0 10px 20px;"></p>
 <div
 style="background: #fff5f5; padding: 25px; border-radius: 12px; border-left: 5px solid #e74c3c; margin: 20px 0;">
 <div id="bst-score-40-points" class="section level3">
-<h3>📊 BST Score (40 points)</h3>
+<h3>BST Score (40 points)</h3>
 <p>S-curve (logistic function) mapping for smooth strength scaling: -
 <strong>Inflection point</strong>: BST = 450 - <strong>Maximum</strong>:
 40 points - Penalizes both very weak and recognizes elite stats</p>
 </div>
 <div id="offensive-stats-distribution-60-points" class="section level3">
-<h3>⚔️ Offensive Stats Distribution (60 points)</h3>
+<h3>Offensive Stats Distribution (60 points)</h3>
 <ul>
 <li><strong>Effective Attack Power (50%)</strong>: Recognizes mixed vs
 specialized attackers
@@ -472,14 +479,15 @@ requirement</li>
 </div>
 <div id="defensive-rating-100-points" class="section level2">
 <h2>Defensive Rating (100 Points)</h2>
+<p><img src="../assets/sprites/gif/shuckle.gif" width="70" alt="Shuckle" style="float: right; margin: 0 0 10px 20px;"></p>
 <div
 style="background: #f0f9ff; padding: 25px; border-radius: 12px; border-left: 5px solid #3498db; margin: 20px 0;">
 <div id="bst-score-40-points-1" class="section level3">
-<h3>📊 BST Score (40 points)</h3>
+<h3>BST Score (40 points)</h3>
 <p>Same S-curve mapping as offensive rating (shared component)</p>
 </div>
 <div id="defensive-stats-distribution-30-points" class="section level3">
-<h3>🛡️ Defensive Stats Distribution (30 points)</h3>
+<h3>Defensive Stats Distribution (30 points)</h3>
 <ul>
 <li><strong>Durability Expectation (80%)</strong>: HP × √(Def × SpDef)
 <ul>
@@ -494,7 +502,7 @@ threat
 </ul>
 </div>
 <div id="type-advantage-30-points" class="section level3">
-<h3>🔥 Type Advantage (30 points)</h3>
+<h3>Type Advantage (30 points)</h3>
 <p>Defensive type matchup score based on: - Resistances (×0.5, ×0.25) -
 Immunities (×0) - Weaknesses (×2, ×4) - Type combination synergy</p>
 </div>
@@ -858,6 +866,11 @@ kable(role_summary, caption = &quot;Pokémon Distribution by Battle Role&quot;, 
 </div>
 <div id="top-rated-pokémon" class="section level1">
 <h1>Top Rated Pokémon</h1>
+<div style="text-align: center; margin: 20px 0;">
+<p><img src="../assets/sprites/gif/rayquaza.gif" width="100" alt="Rayquaza" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/metagross.gif" width="85" alt="Metagross" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/tyranitar.gif" width="85" alt="Tyranitar" style="margin: 0 10px;"></p>
+</div>
 <div id="top-20-offensive-pokémon" class="section level2">
 <h2>Top 20 Offensive Pokémon</h2>
 <pre class="r"><code>top_offensive &lt;- pokemon_rated %&gt;%
@@ -1514,10 +1527,15 @@ kable(top_regular,
 </div>
 <div id="summary" class="section level1">
 <h1>Summary</h1>
+<div style="text-align: center; margin: 20px 0;">
+<p><img src="../assets/sprites/gif/pikachu.gif" width="70" alt="Pikachu" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/eevee.gif" width="70" alt="Eevee" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/snorlax.gif" width="80" alt="Snorlax" style="margin: 0 10px;"></p>
+</div>
 <div
 style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">
 <div id="dual-rating-system-benefits" class="section level3">
-<h3>🎯 Dual Rating System Benefits</h3>
+<h3>Dual Rating System Benefits</h3>
 <ol style="list-style-type: decimal">
 <li><strong>Separate Offensive &amp; Defensive Evaluation</strong>: No
 longer forced to choose between attacking power and tanking ability</li>
@@ -1532,7 +1550,7 @@ glass cannon defenses</li>
 </ol>
 </div>
 <div id="key-statistics" class="section level3">
-<h3>📊 Key Statistics</h3>
+<h3>Key Statistics</h3>
 <ul>
 <li>Average Offensive Rating: <strong>45.1</strong>/100</li>
 <li>Average Defensive Rating: <strong>39.3</strong>/100</li>
@@ -1541,7 +1559,7 @@ glass cannon defenses</li>
 </ul>
 </div>
 <div id="best-type-combinations" class="section level3">
-<h3>🏆 Best Type Combinations</h3>
+<h3>Best Type Combinations</h3>
 <p><strong>Offensive</strong>: Ground, Fighting, Fire (high
 super-effective coverage) <strong>Defensive</strong>: Steel/Fairy,
 Steel/Flying, Water/Ground (few weaknesses, many resistances)</p>

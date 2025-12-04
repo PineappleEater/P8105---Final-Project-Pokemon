@@ -45,6 +45,25 @@ pokemon_df <- read_csv("../data/pokemon_data_final_evolutions_enriched.csv", sho
 
 # Overview
 
+<div style="text-align: center; margin: 20px 0;">
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/alakazam.gif" width="80" alt="Alakazam" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Alakazam</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/porygon.gif" width="80" alt="Porygon" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Porygon</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/mewtwo.gif" width="90" alt="Mewtwo" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Mewtwo</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/magnezone.gif" width="80" alt="Magnezone" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Magnezone</div>
+</div>
+</div>
+
 This page presents streamlined machine learning and statistical analyses of Pokémon data, including dimensionality reduction, clustering, and classification models.
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
@@ -69,6 +88,8 @@ This page presents streamlined machine learning and statistical analyses of Pok�
 ---
 
 # PCA Analysis
+
+<img src="../assets/sprites/gif/alakazam.gif" width="70" alt="Alakazam" style="float: right; margin: 0 0 10px 20px;">
 
 ## Dimensionality Reduction
 
@@ -146,6 +167,8 @@ fviz_pca_biplot(pca_result,
 
 # K-Means Clustering
 
+<img src="../assets/sprites/gif/magnezone.gif" width="75" alt="Magnezone" style="float: right; margin: 0 0 10px 20px;">
+
 ## Optimal Number of Clusters
 
 ```{r clustering-elbow, fig.height=5}
@@ -220,6 +243,8 @@ kable(cluster_summary,
 ---
 
 # Classification Models
+
+<img src="../assets/sprites/gif/mewtwo.gif" width="85" alt="Mewtwo" style="float: right; margin: 0 0 10px 20px;">
 
 ## Legendary Prediction
 
@@ -387,23 +412,40 @@ plot(rf_imp, top = 15,
 
 # Summary
 
+
+
 <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">
 
-### 📊 PCA Results
+### PCA Results
 - First 3 components capture ~70% of variance
 - PC1 represents battle effectiveness, PC2 represents physical size
 - Legendary Pokémon clearly separated in principal component space
 
-### 🎯 Clustering Results
+### Clustering Results
 - 4 distinct archetypes identified
 - Elite tier (high BST, 35% legendary) vs casual tier (low BST, 0% legendary)
 - Balanced distribution across defensive, balanced, and offensive clusters
 
-### 🤖 Classification Results
+### Classification Results
 - Random Forest achieves 99.5% AUC (near-perfect classification)
 - Legendary Pokémon are 99% separable by base stats alone
 - Total BST is the single most important feature
 
+</div>
+
+<div style="text-align: center; margin: 20px 0;">
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/gengar.gif" width="70" alt="Gengar" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Gengar</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/dragonite.gif" width="70" alt="Dragonite" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Dragonite</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/lucario.gif" width="70" alt="Lucario" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Lucario</div>
+</div>
 </div>
 
 ---

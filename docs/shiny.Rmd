@@ -71,6 +71,25 @@ avg_total <- round(mean(pokemon_data$total, na.rm = TRUE))
 
 # Dataset Overview
 
+<div style="text-align: center; margin: 20px 0;">
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/pikachu.gif" width="70" alt="Pikachu" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #f39c12; font-size: 0.9em;">Pikachu</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/bulbasaur.gif" width="70" alt="Bulbasaur" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #27ae60; font-size: 0.9em;">Bulbasaur</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/charmander.gif" width="70" alt="Charmander" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #e74c3c; font-size: 0.9em;">Charmander</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/squirtle.gif" width="70" alt="Squirtle" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #3498db; font-size: 0.9em;">Squirtle</div>
+</div>
+</div>
+
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0;">
 <div class="stat-badge" style="text-align: center;">
 <div style="font-size: 2em; color: #667eea;">742</div>
@@ -91,6 +110,8 @@ avg_total <- round(mean(pokemon_data$total, na.rm = TRUE))
 # Interactive Exploration {.tabset .tabset-fade .tabset-pills}
 
 ## 🎯 Correlation Explorer
+
+<img src="../assets/sprites/gif/eevee.gif" width="60" alt="Eevee" style="float: left; margin: 0 15px 10px 0;">
 
 Explore relationships between different Pokémon attributes. Use the filters below to customize your view and discover patterns in the data!
 
@@ -192,6 +213,8 @@ plot_ly(shared_pokemon,
 
 ## 📋 Data Table
 
+<img src="../assets/sprites/gif/ditto.gif" width="60" alt="Ditto" style="float: left; margin: 0 15px 10px 0;">
+
 Browse and search through the complete Pokémon dataset. Click on column headers to sort, use the search boxes to filter data!
 
 ```{r data_table, echo=FALSE}
@@ -225,6 +248,8 @@ datatable(
 ```
 
 ## 📊 Type Statistics
+
+<img src="../assets/sprites/gif/arceus.gif" width="60" alt="Arceus" style="float: left; margin: 0 15px 10px 0;">
 
 View aggregated statistics grouped by primary type. Discover which types have the highest average stats and legendary rates!
 
@@ -261,6 +286,21 @@ datatable(
 ```
 
 # Tips & Usage
+
+<div style="text-align: center; margin: 20px 0;">
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/togepi.gif" width="60" alt="Togepi" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Togepi</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/mew.gif" width="60" alt="Mew" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Mew</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/jigglypuff.gif" width="60" alt="Jigglypuff" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea; font-size: 0.9em;">Jigglypuff</div>
+</div>
+</div>
 
 <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
   <p style="color: #666;">

@@ -47,6 +47,25 @@ pokemon_df$category <- factor(pokemon_df$category,
 
 # Overview
 
+<div style="text-align: center; margin: 20px 0;">
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/charizard.gif" width="90" alt="Charizard" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #e74c3c; font-size: 0.9em;">Charizard</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/garchomp.gif" width="85" alt="Garchomp" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #e74c3c; font-size: 0.9em;">Garchomp</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/blissey.gif" width="80" alt="Blissey" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #3498db; font-size: 0.9em;">Blissey</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/aggron.gif" width="85" alt="Aggron" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #3498db; font-size: 0.9em;">Aggron</div>
+</div>
+</div>
+
 A comprehensive **dual-rating system** for competitive Pokémon battling. Each Pokémon receives separate **Offensive** and **Defensive** ratings (100-point scale), enabling strategic team building and role identification.
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0;">
@@ -74,15 +93,17 @@ A comprehensive **dual-rating system** for competitive Pokémon battling. Each P
 
 ## Offensive Rating (100 Points)
 
+<img src="../assets/sprites/gif/lucario.gif" width="70" alt="Lucario" style="float: right; margin: 0 0 10px 20px;">
+
 <div style="background: #fff5f5; padding: 25px; border-radius: 12px; border-left: 5px solid #e74c3c; margin: 20px 0;">
 
-### 📊 BST Score (40 points)
+### BST Score (40 points)
 S-curve (logistic function) mapping for smooth strength scaling:
 - **Inflection point**: BST = 450
 - **Maximum**: 40 points
 - Penalizes both very weak and recognizes elite stats
 
-### ⚔️ Offensive Stats Distribution (60 points)
+### Offensive Stats Distribution (60 points)
 - **Effective Attack Power (50%)**: Recognizes mixed vs specialized attackers
   - Mixed attackers (ratio ≥ 0.9): weighted average of Attack and Sp. Attack
   - Specialized attackers: use higher of Attack or Sp. Attack
@@ -95,19 +116,21 @@ S-curve (logistic function) mapping for smooth strength scaling:
 
 ## Defensive Rating (100 Points)
 
+<img src="../assets/sprites/gif/shuckle.gif" width="70" alt="Shuckle" style="float: right; margin: 0 0 10px 20px;">
+
 <div style="background: #f0f9ff; padding: 25px; border-radius: 12px; border-left: 5px solid #3498db; margin: 20px 0;">
 
-### 📊 BST Score (40 points)
+### BST Score (40 points)
 Same S-curve mapping as offensive rating (shared component)
 
-### 🛡️ Defensive Stats Distribution (30 points)
+### Defensive Stats Distribution (30 points)
 - **Durability Expectation (80%)**: HP × √(Def × SpDef)
   - Uses geometric mean to penalize unbalanced defenses
   - Rewards balanced defensive investment
 - **Counter-Attack Ability (20%)**: Minimum offensive threat
   - Ensures defensive Pokémon aren't complete walls
 
-### 🔥 Type Advantage (30 points)
+### Type Advantage (30 points)
 Defensive type matchup score based on:
 - Resistances (×0.5, ×0.25)
 - Immunities (×0)
@@ -423,6 +446,21 @@ ggplot(pokemon_rated, aes(x = offensive_rating, y = defensive_rating)) +
 
 # Top Rated Pokémon
 
+<div style="text-align: center; margin: 20px 0;">
+<div style="display: inline-block; text-align: center; margin: 0 15px;">
+<img src="../assets/sprites/gif/rayquaza.gif" width="100" alt="Rayquaza" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea;">Rayquaza</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 15px;">
+<img src="../assets/sprites/gif/metagross.gif" width="85" alt="Metagross" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea;">Metagross</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 15px;">
+<img src="../assets/sprites/gif/tyranitar.gif" width="85" alt="Tyranitar" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #667eea;">Tyranitar</div>
+</div>
+</div>
+
 ## Top 20 Offensive Pokémon
 
 ```{r top-offensive}
@@ -470,9 +508,24 @@ kable(top_regular,
 
 # Summary
 
+<div style="text-align: center; margin: 20px 0;">
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/pikachu.gif" width="70" alt="Pikachu" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #f39c12; font-size: 0.9em;">Pikachu</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/eevee.gif" width="70" alt="Eevee" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #f39c12; font-size: 0.9em;">Eevee</div>
+</div>
+<div style="display: inline-block; text-align: center; margin: 0 10px;">
+<img src="../assets/sprites/gif/snorlax.gif" width="80" alt="Snorlax" style="display: block; margin: 0 auto 5px;">
+<div style="font-weight: 600; color: #f39c12; font-size: 0.9em;">Snorlax</div>
+</div>
+</div>
+
 <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">
 
-### 🎯 Dual Rating System Benefits
+### Dual Rating System Benefits
 
 1. **Separate Offensive & Defensive Evaluation**: No longer forced to choose between attacking power and tanking ability
 2. **Type Synergy Recognition**: Defensive typing contributes 30% to defensive rating
@@ -480,14 +533,14 @@ kable(top_regular,
 4. **Speed Flexibility**: Values both fast sweepers and Trick Room users
 5. **Balanced Defense Rewards**: Geometric mean prevents glass cannon defenses
 
-### 📊 Key Statistics
+### Key Statistics
 
 - Average Offensive Rating: **`r round(mean(pokemon_rated$offensive_rating), 1)`**/100
 - Average Defensive Rating: **`r round(mean(pokemon_rated$defensive_rating), 1)`**/100
 - SS Tier Pokémon: **`r sum(pokemon_rated$tier == "SS")`** (`r round(100*mean(pokemon_rated$tier == "SS"), 1)`%)
 - Most Common Role: **`r names(which.max(table(pokemon_rated$role)))`** (`r round(100*max(table(pokemon_rated$role))/nrow(pokemon_rated), 1)`%)
 
-### 🏆 Best Type Combinations
+### Best Type Combinations
 
 **Offensive**: Ground, Fighting, Fire (high super-effective coverage)
 **Defensive**: Steel/Fairy, Steel/Flying, Water/Ground (few weaknesses, many resistances)

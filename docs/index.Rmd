@@ -154,9 +154,22 @@ font-size: 1.2em;
 </style>
 
 <div class="hero">
-<h1>🎮 The Story and Mystery of Pokémon</h1>
+<!-- <h1><img src="../assets/sprites/gif/pikachu.gif" width="60" alt="Pikachu" style="vertical-align: middle;"> The Story and Mystery of Pokémon</h1> -->
+<h1><img src="../assets/sprites/gif/pikachu.gif" width="60" alt="Pikachu" style="vertical-align: middle;"> The Story and Mystery of Pokémon</h1>
 <h3>A Comprehensive Data Science Exploration</h3>
 <p><strong>P8105 – Data Science I</strong> | Columbia University | Fall 2025</p>
+<!-- <div style="text-align: center; margin-bottom: 20px;">
+<img src="../assets/sprites/gif/pichu.gif" width="50" alt="Pichu">
+<img src="../assets/sprites/gif/togepi.gif" width="55" alt="Togepi">
+<img src="../assets/sprites/gif/eevee.gif" width="65" alt="Eevee">
+<img src="../assets/sprites/gif/charizard.gif" width="100" alt="Charizard">
+<img src="../assets/sprites/gif/pikachu.gif" width="85" alt="Pikachu">
+<img src="../assets/sprites/gif/gengar.gif" width="70" alt="Gengar">
+<img src="../assets/sprites/gif/dragonite.gif" width="55" alt="Dragonite">
+<img src="../assets/sprites/gif/jigglypuff.gif" width="55" alt="Jigglypuff">
+<img src="../assets/sprites/gif/mew.gif" width="45" alt="Mew">
+<img src="../assets/sprites/gif/mewtwo.gif" width="95" alt="Mewtwo">
+</div> -->
 </div>
 
 # Executive Summary
@@ -190,32 +203,32 @@ This project analyzes **742 Pokémon** across nine generations using machine lea
 
 <div class="feature-grid">
 <div class="feature-card">
-<div class="feature-icon">🔍</div>
+<div class="feature-icon"><img src="../assets/sprites/gif/pikachu.gif" width="75" alt="Pikachu"></div>
 <div class="feature-title">Exploratory Analysis</div>
 <div class="feature-description">In-depth exploration of Pokémon attributes, type distributions, and stat correlations.</div>
 </div>
 <div class="feature-card">
-<div class="feature-icon">🤖</div>
+<div class="feature-icon"><img src="../assets/sprites/gif/eevee.gif" width="75" alt="Eevee"></div>
 <div class="feature-title">Machine Learning</div>
 <div class="feature-description">Random Forest classification achieving 99.5% AUC for legendary prediction.</div>
 </div>
 <div class="feature-card">
-<div class="feature-icon">📈</div>
+<div class="feature-icon"><img src="../assets/sprites/gif/mew.gif" width="75" alt="Mew"></div>
 <div class="feature-title">Statistical Modeling</div>
 <div class="feature-description">PCA analysis revealing 4 distinct clusters: Sweepers, Tanks, Balanced, Early-Game.</div>
 </div>
 <div class="feature-card">
-<div class="feature-icon">⚔️</div>
+<div class="feature-icon"><img src="../assets/sprites/gif/jigglypuff.gif" width="75" alt="Jigglypuff"></div>
 <div class="feature-title">Type Effectiveness</div>
 <div class="feature-description">Analysis of type strengths and optimal combinations for competitive play.</div>
 </div>
 <div class="feature-card">
-<div class="feature-icon">🎮</div>
+<div class="feature-icon"><img src="../assets/sprites/gif/togepi.gif" width="75" alt="Togepi"></div>
 <div class="feature-title">Interactive Explorer</div>
 <div class="feature-description">Dynamic filtering and visualization for real-time data exploration.</div>
 </div>
 <div class="feature-card">
-<div class="feature-icon">⭐</div>
+<div class="feature-icon"><img src="../assets/sprites/gif/pichu.gif" width="75" alt="Pichu"></div>
 <div class="feature-title">Dual Rating System</div>
 <div class="feature-description">Separate offensive and defensive ratings (100-point scale each) with role classification and tier assignment.</div>
 </div>
@@ -233,7 +246,7 @@ Question = c(
 "Can we develop a dual-rating system for competitive battling?",
 "Does our optimal team match competitive standards?"
 ),
-Status = rep("✅ Complete", 6),
+Status = rep("Complete", 6),
 Method = c(
 "Random Forest (99.5% AUC)",
 "Correlation Analysis",
@@ -309,32 +322,32 @@ marker = list(colors = colorRampPalette(c('#667eea', '#764ba2'))(10))) %>%
 layout(title = "Primary Type Distribution (Top 10)")
 ```
 
-# Methodology {.tabset}
+# Methodology
 
-## Pipeline
+## Analysis Pipeline
 
 <div class="timeline-item">
-<div class="timeline-title">1️⃣ Data Collection</div>
+<div class="timeline-title">1.Data Collection</div>
 Web scraping from PokémonDB using `rvest`, handling 1000+ species and alternate forms
 </div>
 
 <div class="timeline-item">
-<div class="timeline-title">2️⃣ EDA</div>
+<div class="timeline-title">2.EDA</div>
 Feature engineering with `tidyverse`: one-hot encoding, correlation matrices, distribution analysis
 </div>
 
 <div class="timeline-item">
-<div class="timeline-title">3️⃣ Clustering</div>
+<div class="timeline-title">3.Clustering</div>
 PCA + K-Means (k=4) using `factoextra`, explaining 70% variance in first 3 components
 </div>
 
 <div class="timeline-item">
-<div class="timeline-title">4️⃣ Classification</div>
+<div class="timeline-title">4.Classification</div>
 Random Forest tuning with `caret`: 500 trees, mtry=3, achieving 99.5% AUC
 </div>
 
 <div class="timeline-item">
-<div class="timeline-title">5️⃣ Dual Rating System</div>
+<div class="timeline-title">5.Dual Rating System</div>
 Separate offensive and defensive ratings using S-curve BST mapping, effective stat calculations, and type matchup analysis
 </div>
 
@@ -356,11 +369,19 @@ Separate offensive and defensive ratings using S-curve BST mapping, effective st
 
 <div style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 50px; border-radius: 15px; margin: 40px 0;">
 <h2 style="color: white; margin-bottom: 30px;">Explore the Analysis</h2>
-<a href="eda.html" class="cta-button">📊 EDA</a>
-<a href="pca.html" class="cta-button">🔍 Clustering</a>
-<a href="shiny.html" class="cta-button">🎮 Interactive</a>
-<a href="report.html" class="cta-button">📄 Report</a>
-<a href="team.html" class="cta-button">👥 Team</a>
+<div style="text-align: center; margin: 20px 0;">
+<img src="../assets/sprites/gif/bulbasaur.gif" width="60" alt="Bulbasaur" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/charmander.gif" width="60" alt="Charmander" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/squirtle.gif" width="60" alt="Squirtle" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/pikachu.gif" width="60" alt="Pikachu" style="margin: 0 10px;">
+<img src="../assets/sprites/gif/eevee.gif" width="60" alt="Eevee" style="margin: 0 10px;">
+</div>
+<a href="eda.html" class="cta-button">EDA</a>
+<a href="analysis.html" class="cta-button">ML Analysis</a>
+<a href="rating.html" class="cta-button">Rating System</a>
+<a href="shiny.html" class="cta-button">Interactive</a>
+<a href="report.html" class="cta-button">Report</a>
+<a href="team.html" class="cta-button">Team</a>
 </div>
 
 # Team
