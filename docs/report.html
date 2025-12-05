@@ -708,7 +708,7 @@ grouping variable during modeling and suggested that any predictive
 model involving BST must carefully consider category imbalance.</li>
 </ul>
 <ol start="6" style="list-style-type: decimal">
-<li><strong>Summary of EDA Takeaways</strong></li>
+<li><strong>Summary</strong></li>
 </ol>
 <ul>
 <li><p>Our exploratory work revealed several insights that shaped later
@@ -728,6 +728,99 @@ must be filtered or transformed for analysis.</p></li>
 dimensionality-reduction techniques, designing classification tasks, and
 constructing a rating metric that reflects Pokémon balance and design
 structure.</p>
+</div>
+<div id="pca" class="section level2">
+<h2>PCA</h2>
+<p>To better understand the multivariate structure of Pokémon statistics
+and reduce dimensionality for downstream modeling, we conducted
+Principal Component Analysis (PCA) on standardized versions of the six
+base stats: HP, Attack, Defense, Special Attack, Special Defense, and
+Speed. Standardization was necessary because these attributes are
+measured on similar but not identical scales, and unscaled PCA would
+overweight variables with larger variance.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Variance Explained and Component Selection</strong></li>
+</ol>
+<ul>
+<li>The scree plot showed that the first two principal components (PCs)
+captured a substantial proportion of total variance, with PC1 explaining
+the largest share. This justified using PC1 and PC2 for visualization
+and exploratory clustering. While later components each explained
+smaller amounts of variance, the first few PCs together captured the
+primary axes of differentiation across Pokémon.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Interpreting the Principal Components</strong></li>
+</ol>
+<ul>
+<li><p>Examining the PCA loadings revealed distinct conceptual
+interpretations of the first two components:</p>
+<ul>
+<li>PC1 (Overall Power Axis):
+<ul>
+<li>PC1 loaded positively on nearly all six stats, particularly Attack,
+Special Attack, and Speed. This suggests that PC1 represents a general
+strength or combat effectiveness dimension. Pokémon with high PC1 scores
+tend to be strong attackers or well-rounded fighters, whereas low-PC1
+Pokémon tend to be weaker or early-stage forms.</li>
+</ul></li>
+<li>(Offense–Defense Tradeoff Axis):
+<ul>
+<li>displayed contrasting loadings between offensive stats (Attack, Sp.
+Attack) and defensive stats (Defense, Sp. Defense). Positive PC2 values
+correspond to defensive-oriented Pokémon, while negative PC2 values
+correspond to offense-heavy species. This axis reflects a strategic
+design dichotomy within the Pokémon universe.</li>
+</ul></li>
+</ul></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>PCA Biplots and Group Structure</strong></li>
+</ol>
+<ul>
+<li><p>The PCA scatterplot showed clear separation of Pokémon
+categories:</p>
+<ul>
+<li><p>Legendary and pseudo-legendary Pokémon cluster toward the
+upper-right region of the PC1–PC2 space, reflecting both high stats and
+more balanced distributions.</p></li>
+<li><p>Early-game or unevolved Pokémon cluster near the origin,
+indicating uniformly low stats.</p></li>
+<li><p>Specialized attackers (e.g., glass cannons) occupy extreme
+negative PC2 regions, while tanks and walls appear in high-PC2
+regions.</p></li>
+</ul></li>
+</ul>
+<p>These patterns confirm that Pokémon occupy structured roles defined
+by statistical profiles, and that PCA successfully captures these
+underlying archetypes.</p>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>How PCA Informed Later Decisions</strong></li>
+</ol>
+<ul>
+<li><p>Findings from PCA directly influenced our modeling choices:</p>
+<ul>
+<li><p>PCA revealed that the dataset contains continuous gradients, not
+discrete clusters, causing us to refine our original clustering approach
+toward soft clustering and dimensionality-informed visualization rather
+than strict k-means segmentation.</p></li>
+<li><p>The strong separation between Legendary and non-Legendary Pokémon
+demonstrated that category variables are highly informative, motivating
+us to include category as a feature in later predictive models.</p></li>
+<li><p>The identification of offense–defense tradeoffs motivated the
+creation of composite metrics (e.g., offensive index, defensive index)
+to supplement PCA-derived insights.</p></li>
+</ul></li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li><strong>Summary</strong></li>
+</ol>
+<ul>
+<li>Overall, PCA validated that Pokémon design is multidimensional and
+strategically structured, with clear axes representing general power and
+combat roles. These insights guided both model selection and feature
+engineering in subsequent stages of analysis.</li>
+</ul>
 </div>
 </div>
 

@@ -133,7 +133,7 @@ Our exploratory analysis aimed to understand the structure, distribution, and in
 
 - A key exploratory step involved comparing Legendary vs non-Legendary Pokémon. A Welch’s t-test showed a highly significant difference in mean BST (>100-point gap), with Legendaries displaying much tighter and higher distributions. These differences justified treating category as a grouping variable during modeling and suggested that any predictive model involving BST must carefully consider category imbalance.
 
-6. **Summary of EDA Takeaways**
+6. **Summary**
 
 - Our exploratory work revealed several insights that shaped later analysis decisions:
 
@@ -146,3 +146,47 @@ Our exploratory analysis aimed to understand the structure, distribution, and in
   - Outliers meaningfully influence physical attribute scales and must be filtered or transformed for analysis.
 
 Collectively, the EDA provided the foundation for choosing dimensionality-reduction techniques, designing classification tasks, and constructing a rating metric that reflects Pokémon balance and design structure.
+
+## PCA
+
+To better understand the multivariate structure of Pokémon statistics and reduce dimensionality for downstream modeling, we conducted Principal Component Analysis (PCA) on standardized versions of the six base stats: HP, Attack, Defense, Special Attack, Special Defense, and Speed. Standardization was necessary because these attributes are measured on similar but not identical scales, and unscaled PCA would overweight variables with larger variance.
+
+1. **Variance Explained and Component Selection**
+
+- The scree plot showed that the first two principal components (PCs) captured a substantial proportion of total variance, with PC1 explaining the largest share. This justified using PC1 and PC2 for visualization and exploratory clustering. While later components each explained smaller amounts of variance, the first few PCs together captured the primary axes of differentiation across Pokémon.
+
+2. **Interpreting the Principal Components**
+
+- Examining the PCA loadings revealed distinct conceptual interpretations of the first two components:
+
+  - PC1 (Overall Power Axis):
+    - PC1 loaded positively on nearly all six stats, particularly Attack, Special Attack, and Speed. This suggests that PC1 represents a general strength or combat effectiveness dimension. Pokémon with high PC1 scores tend to be strong attackers or well-rounded fighters, whereas low-PC1 Pokémon tend to be weaker or early-stage forms.
+
+  - (Offense–Defense Tradeoff Axis):
+    - displayed contrasting loadings between offensive stats (Attack, Sp. Attack) and defensive stats (Defense, Sp. Defense). Positive PC2 values correspond to defensive-oriented Pokémon, while negative PC2 values correspond to offense-heavy species. This axis reflects a strategic design dichotomy within the Pokémon universe.
+
+3. **PCA Biplots and Group Structure**
+
+- The PCA scatterplot showed clear separation of Pokémon categories:
+
+  - Legendary and pseudo-legendary Pokémon cluster toward the upper-right region of the PC1–PC2 space, reflecting both high stats and more balanced distributions.
+
+  - Early-game or unevolved Pokémon cluster near the origin, indicating uniformly low stats.
+
+  - Specialized attackers (e.g., glass cannons) occupy extreme negative PC2 regions, while tanks and walls appear in high-PC2 regions.
+
+These patterns confirm that Pokémon occupy structured roles defined by statistical profiles, and that PCA successfully captures these underlying archetypes.
+
+4. **How PCA Informed Later Decisions**
+
+- Findings from PCA directly influenced our modeling choices:
+
+  - PCA revealed that the dataset contains continuous gradients, not discrete clusters, causing us to refine our original clustering approach toward soft clustering and dimensionality-informed visualization rather than strict k-means segmentation.
+
+  - The strong separation between Legendary and non-Legendary Pokémon demonstrated that category variables are highly informative, motivating us to include category as a feature in later predictive models.
+
+  - The identification of offense–defense tradeoffs motivated the creation of composite metrics (e.g., offensive index, defensive index) to supplement PCA-derived insights.
+
+5. **Summary**
+
+- Overall, PCA validated that Pokémon design is multidimensional and strategically structured, with clear axes representing general power and combat roles. These insights guided both model selection and feature engineering in subsequent stages of analysis.
