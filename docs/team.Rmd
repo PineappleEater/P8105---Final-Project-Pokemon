@@ -76,7 +76,7 @@ output: html_document
 <img src="assets/sprites/gif/togepi.gif" width="65" alt="Togepi" style="margin: 0 8px;">
 </div> -->
 
-## Meet Our Team
+## Meet Our Team   
 
 <div class="team-grid">
 
@@ -84,7 +84,7 @@ output: html_document
   <h3>Ruipeng Li</h3>
   <div class="uni">rl3616</div>
   <div class="contributions">
-![](assets/team/pichu.gif)
+![](assets/team/carbink.gif)
   </div>
 </div>
 
@@ -152,4 +152,8 @@ We would like to thank:
     </a>
   </p>
   <p>Full code, datasets, and documentation available</p>
+</div>
+
+<div style="text-align: center; padding: 20px; color: #999999;">
+Four teammates, three Fairy type!? Evolve your Eevee into Sylveon Yiwen!🤣
 </div>
