@@ -1,12 +1,14 @@
 ---
 title: "Pokemon EDA - Exploratory Data Analysis"
-date: "`r Sys.Date()`"
 output:
   html_document:
-    toc: true
-    toc_float: true
-    code_folding: show
     theme: cosmo
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    toc_depth: 2
+    code_folding: hide
     self_contained: false
 ---
 
@@ -20,12 +22,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-## 1. Load Libraries and Data
-
 ```{r libraries}
 library(tidyverse)
 library(ggplot2)
 library(knitr)
+library(fmsb)
 
 # Set ggplot theme
 theme_set(theme_minimal(base_size = 12))
@@ -38,7 +39,7 @@ has_kableExtra <- requireNamespace("kableExtra", quietly = TRUE)
 if (has_patchwork) library(patchwork)
 ```
 
-```{r load-data}
+```{r load-data, include=FALSE}
 # Load enriched dataset - FINAL EVOLUTIONS ONLY with all features pre-computed
 # Features include: category labels, generation, type one-hot encoding, is_dual_type
 pokemon_df <- read_csv("data/pokemon_data_final_evolutions_enriched.csv")
@@ -51,9 +52,6 @@ pokemon_df$category <- factor(pokemon_df$category,
   levels = c("Regular", "Legendary", "Mythical", "Paradox", "Ultra Beast")
 )
 
-# Display structure
-glimpse(pokemon_df)
-
 # Apply Factor Order
 type_order <- c(
   "Normal","Fire","Water","Electric","Grass","Ice",
@@ -65,54 +63,64 @@ pokemon_df$type_1 <- factor(pokemon_df$type_1, levels = type_order)
 pokemon_df$type_2 <- factor(pokemon_df$type_2, levels = type_order)
 ```
 
-## 2. Data Overview
+# Overview
 
-### 2.1 Basic Statistics
+<div style="text-align: center; margin: 20px 0;">
+<img src="assets/sprites/gif/wishiwashi-solo-form.gif" width="40" alt="Wishiwashi-solo-form" style="margin: 0 8px;">
+<img src="assets/sprites/gif/alcremie.gif" width="40" alt="Alcremie" style="margin: 0 8px;">
+<img src="assets/sprites/gif/cinccino.gif" width="70" alt="Cinccino" style="margin: 0 8px;">
+<img src="assets/sprites/gif/sprigatito.gif" width="40" alt="Sprigatito" style="margin: 0 8px;">
+<img src="assets/sprites/gif/pheromosa.gif" width="70" alt="Pheromosa" style="margin: 0 8px;">
+<img src="assets/sprites/gif/gardevoir-mega-gardevoir.gif" width="70" alt="Mega-Gardevoir" style="margin: 0 8px;">
+<img src="assets/sprites/gif/diancie-mega-diancie.gif" width="95" alt="Mega-Diancie" style="margin: 0 8px;">
+<img src="assets/sprites/gif/rayquaza-mega-rayquaza.gif" width="95" alt="Mega-Rayquaza" style="margin: 0 8px;">
+</div>
 
-```{r summary-stats}
-# Numeric columns
-num_cols <- c(
-  "total", "hp", "attack", "defense", "sp_atk", "sp_def", "speed",
-  "height_m", "weight_kgs", "bmi"
-)
+This page shows a cozy little collection of visualizations for all major **Pokémon stats** — including the **six base stats (BST)** of **fully-evolved Pokémon** from all nine generations, plus their **height**, **weight**, and **BMI**。
 
-# Summary table
-summary_stats <- pokemon_df |>
-  select(all_of(num_cols)) |>
-  summary()
+# Stats Analysis
 
-print(summary_stats)
-```
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 30px 0;">
+<div style="padding: 20px; background: linear-gradient(135deg, #F7D44A 0%, #2cd95c 50%, #F7D44A 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">`r min(pokemon_df$total, na.rm = TRUE)` - `r max(pokemon_df$total, na.rm = TRUE)`</div>
+<div>Pokémon Base Stat Total</div>
+<div>Mean: `r round(mean(pokemon_df$total, na.rm = TRUE),2)`</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">`r min(pokemon_df$hp, na.rm = TRUE)` - `r max(pokemon_df$hp, na.rm = TRUE)`</div>
+<div>Pokémon Hit Points</div>
+<div>Mean: `r round(mean(pokemon_df$hp, na.rm = TRUE),2)`</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">`r min(pokemon_df$attack, na.rm = TRUE)` - `r max(pokemon_df$attack, na.rm = TRUE)`</div>
+<div>Attack</div>
+<div>Mean: `r round(mean(pokemon_df$attack, na.rm = TRUE),2)`</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">`r min(pokemon_df$defense, na.rm = TRUE)` - `r max(pokemon_df$defense, na.rm = TRUE)`</div>
+<div>Defense</div>
+<div>Mean: `r round(mean(pokemon_df$defense, na.rm = TRUE),2)`</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #f76b1c 0%, #fcb045 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">`r min(pokemon_df$sp_atk, na.rm = TRUE)` - `r max(pokemon_df$sp_atk, na.rm = TRUE)`</div>
+<div>Special Attack</div>
+<div>Mean: `r round(mean(pokemon_df$sp_atk, na.rm = TRUE),2)`</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">`r min(pokemon_df$sp_def, na.rm = TRUE)` - `r max(pokemon_df$sp_def, na.rm = TRUE)`</div>
+<div>Special Defense</div>
+<div>Mean: `r round(mean(pokemon_df$sp_def, na.rm = TRUE),2)`</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">`r min(pokemon_df$speed, na.rm = TRUE)` - `r max(pokemon_df$speed, na.rm = TRUE)`</div>
+<div>Speed</div>
+<div>Mean: `r round(mean(pokemon_df$speed, na.rm = TRUE),2)`</div>
+</div>
+</div>
 
-### 2.2 Category Counts
+---
 
-```{r category-counts}
-# Count by category
-category_summary <- pokemon_df |>
-  count(category) |>
-  mutate(percentage = round(100 * n / sum(n), 2)) |>
-  arrange(desc(n))
-
-print(kable(category_summary, caption = "Pokemon by Category"))
-
-# Count by generation
-gen_summary <- pokemon_df |>
-  count(generation) |>
-  mutate(percentage = round(100 * n / sum(n), 2))
-
-print(kable(gen_summary, caption = "Pokemon by Generation"))
-
-# Type distribution (primary type)
-type_summary <- pokemon_df |>
-  count(type_1, sort = TRUE) |>
-  mutate(percentage = round(100 * n / sum(n), 2))
-
-print(kable(head(type_summary, 10), caption = "Pokemon by Primary Type (Top 10)"))
-```
-
-## 3. Univariate Analysis
-
-### 3.1 Base Stat Total Distribution
+## Base Stat Total Distribution
 
 ```{r total-dist}
 # Overall distribution
@@ -126,8 +134,9 @@ p1 <- ggplot(pokemon_df, aes(x = total)) +
     subtitle = paste("Mean:", round(mean(pokemon_df$total, na.rm = TRUE), 1)),
     x = "Total BST", y = "Count"
   )
+```
 
-# By category
+```{r}
 p2 <- ggplot(pokemon_df, aes(x = total, fill = category)) +
   geom_density(alpha = 0.5) +
   scale_fill_brewer(palette = "Set2") +
@@ -144,7 +153,14 @@ if (has_patchwork) {
 }
 ```
 
-### 3.2 Individual Stat Distributions
+**Finding**: BST shows a multi-modal distribution with noticeable right skewness,  
+indicating structured stat tiers rather than a continuous normal process.  
+
+This becomes more apparent in the “BST Distribution by Category” visualization.
+The Base Stat Totals of non-regular Pokémon cluster tightly around specific values,
+reflecting the intentional tiering in Pokémon design.
+
+## Individual Stat Distributions
 
 ```{r stat-distributions}
 stat_cols <- c("hp", "attack", "defense", "sp_atk", "sp_def", "speed")
@@ -168,7 +184,58 @@ ggplot(pokemon_long, aes(x = value, fill = stat)) +
   theme(legend.position = "none")
 ```
 
-### 3.3 Physical Attributes
+### Lowest<img src="assets/sprites/gif/wishiwashi-solo-form.gif" width="40" alt="Wishiwashi-solo-form" style="margin: 0 8px;"> vs. Highest<img src="assets/sprites/gif/rayquaza-mega-rayquaza.gif" width="95" alt="Charizard" style="margin: 0 8px;">(Outer Max by Mean of each stats)
+
+```{r}
+stats_cols <- c("hp", "attack", "defense", "speed", "sp_def", "sp_atk")
+
+p1 <- pokemon_df |> filter(name == "WishiwashiSolo Form") |> select(all_of(stats_cols))
+p2 <- pokemon_df |> filter(name == "RayquazaMega Rayquaza") |> select(all_of(stats_cols))
+
+# Set Max
+max_row <- pokemon_df |>
+  summarise(across(all_of(stats_cols), ~ mean(.x, na.rm = TRUE)))
+min_row <- rep(0, length(stats_cols))
+
+radar_data <- rbind(max_row, min_row, p1, p2)
+rownames(radar_data) <- c("Max", "Min", "WishiwashiSolo Form", "RayquazaMega Rayquaza")
+
+# Plot
+radarchart(radar_data,
+           axistype = 1,
+           pcol = c("#4FACFE", "#007F3A"),
+           pfcol = adjustcolor(c("#4FACFE", "#007F3A"), alpha.f = 0.3),
+           plwd = 3,
+           plty = 1,
+           cglcol = "grey", 
+           cglty = 1,
+  )
+legend("topright", legend = c("Wishiwashi Solo Form", "Mega Rayquaza"),
+       col = c("#4FACFE", "#007F3A"), pch = 19, bty = "n")
+
+```
+
+## Physical Attributes
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 30px 0;">
+<div style="padding: 20px; background: linear-gradient(135deg, #a1ffce 0%, #faffd1 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">`r min(pokemon_df$height_m, na.rm = TRUE)` - `r max(pokemon_df$height_m, na.rm = TRUE)`</div>
+<div>Pokémon Height</div>
+<div>Mean: `r round(mean(pokemon_df$height_m, na.rm = TRUE),2)`</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">`r min(pokemon_df$weight_kgs, na.rm = TRUE)` - `r max(pokemon_df$weight_kgs, na.rm = TRUE)`</div>
+<div>Pokémon Weight</div>
+<div>Mean: `r round(mean(pokemon_df$weight_kgs, na.rm = TRUE),2)`</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #e3a1ff 0%, #ffedbc 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">`r min(pokemon_df$bmi, na.rm = TRUE)` - `r max(pokemon_df$bmi, na.rm = TRUE)`</div>
+<div>Body Mass Index</div>
+<div>Mean: `r round(mean(pokemon_df$bmi, na.rm = TRUE),2)`</div>
+</div>
+</div>
+
+---
 
 ```{r physical-dist}
 p1 <- ggplot(pokemon_df, aes(x = height_m)) +
@@ -207,69 +274,7 @@ if (has_patchwork) {
 }
 ```
 
-## 4. Bivariate Analysis
-
-### 4.1 Correlation Matrix
-
-```{r correlation}
-# Compute correlation
-cor_matrix <- pokemon_df |>
-  select(all_of(num_cols)) |>
-  cor(use = "pairwise.complete.obs")
-
-# Visualize
-if (has_corrplot) {
-  corrplot::corrplot(cor_matrix,
-    method = "color",
-    type = "upper",
-    tl.col = "black",
-    tl.srt = 45,
-    addCoef.col = "black",
-    number.cex = 0.7,
-    title = "Correlation Matrix of Pokemon Attributes",
-    mar = c(0, 0, 2, 0)
-  )
-} else {
-  # Alternative: heatmap
-  cor_df <- as.data.frame(cor_matrix) |>
-    rownames_to_column("var1") |>
-    pivot_longer(-var1, names_to = "var2", values_to = "correlation")
-
-  ggplot(cor_df, aes(x = var1, y = var2, fill = correlation)) +
-    geom_tile() +
-    scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +
-    labs(title = "Correlation Matrix of Pokemon Attributes") +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-}
-```
-
-### 4.2 Attack vs Defense
-
-```{r attack-defense}
-ggplot(pokemon_df, aes(x = attack, y = defense, color = category)) +
-  geom_point(alpha = 0.6, size = 2) +
-  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
-  scale_color_brewer(palette = "Set2") +
-  labs(
-    title = "Attack vs Defense by Category",
-    x = "Attack", y = "Defense", color = "Category"
-  )
-```
-
-### 4.3 Special Attack vs Special Defense
-
-```{r sp-attack-defense}
-ggplot(pokemon_df, aes(x = sp_atk, y = sp_def, color = category)) +
-  geom_point(alpha = 0.6, size = 2) +
-  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
-  scale_color_brewer(palette = "Set2") +
-  labs(
-    title = "Special Attack vs Special Defense by Category",
-    x = "Special Attack", y = "Special Defense", color = "Category"
-  )
-```
-
-### 4.4 Height vs Weight
+### Weight vs. Height
 
 ```{r height-weight}
 ggplot(pokemon_df, aes(x = height_m, y = weight_kgs, color = type_1)) +
@@ -284,68 +289,22 @@ ggplot(pokemon_df, aes(x = height_m, y = weight_kgs, color = type_1)) +
   theme(legend.position = "right")
 ```
 
-## 5. Group Comparisons
+# Type Analysis  
 
-### 5.1 Stats by Category
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 30px 0;">
+<div style="padding: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">18</div>
+<div>Total Different Types</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">171</div>
+<div>Total Type Combination(Includ Mono-type)</div>
+</div>
+</div>
 
-```{r stats-by-category}
-# Box plots for each stat
-pokemon_long |>
-  ggplot(aes(x = category, y = value, fill = category)) +
-  geom_boxplot(alpha = 0.7) +
-  facet_wrap(~stat, scales = "free_y") +
-  scale_fill_brewer(palette = "Set2") +
-  labs(
-    title = "Base Stats by Pokemon Category",
-    x = "Category", y = "Stat Value"
-  ) +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "none"
-  )
-```
+---
 
-### 5.2 BST by Generation
-
-```{r bst-generation}
-ggplot(pokemon_df, aes(x = generation, y = total, fill = generation)) +
-  geom_violin(alpha = 0.7) +
-  geom_boxplot(width = 0.2, alpha = 0.5) +
-  scale_fill_brewer(palette = "Spectral") +
-  labs(
-    title = "Base Stat Total by Generation",
-    x = "Generation", y = "Total BST"
-  ) +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "none"
-  )
-```
-
-### 5.3 Stats by Primary Type (Top Types)
-
-```{r stats-by-type}
-# Get top 10 types
-top_types <- pokemon_df |>
-  count(type_1, sort = TRUE) |>
-  head(10) |>
-  pull(type_1)
-
-pokemon_df |>
-  filter(type_1 %in% top_types) |>
-  ggplot(aes(x = reorder(type_1, total, median), y = total, fill = type_1)) +
-  geom_boxplot(alpha = 0.7) +
-  coord_flip() +
-  labs(
-    title = "BST by Primary Type (Top 10 Most Common)",
-    x = "Primary Type", y = "Total BST"
-  ) +
-  theme(legend.position = "none")
-```
-
-## 6. Type Analysis
-
-### 6.1 Type Distribution
+## Type Distribution
 
 ```{r type-counts}
 # Official Type Color
@@ -405,7 +364,7 @@ if (has_patchwork) {
 }
 ```
 
-### 6.2 Type Combinations
+### Type Combinations
 
 ```{r type-combos}
 # Top type combinations
@@ -424,7 +383,34 @@ pokemon_df |>
   )
 ```
 
-### 6.3 Average Stats by Type
+## Stats by Type
+
+```{r stats-by-type}
+# Get types ranking
+top_types <- pokemon_df |>
+  pivot_longer(
+    cols = c(type_1, type_2),
+    names_to = "slot",
+    values_to = "type"
+  ) |>
+  filter(!is.na(type)) |>
+  count(type, sort = TRUE) |>
+  pull(type)
+
+pokemon_df |>
+  filter(type_1 %in% top_types) |>
+  ggplot(aes(x = reorder(type_1, total, median), y = total, fill = type_1)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = type_colors) +
+  coord_flip() +
+  labs(
+    title = "BST by Type(Most mean to least)",
+    x = "Owned Type", y = "Total BST"
+  ) +
+  theme(legend.position = "none")
+```
+
+### Average Stats by Type
 
 ```{r avg-stats-type}
 # Calculate average stats per type
@@ -448,11 +434,8 @@ type_stats <- pokemon_df |>
   ) |>
   arrange(desc(avg_total))
 
-print(kable(head(type_stats, 10), caption = "Top 10 Types by Average BST", digits = 1))
-
 # Heatmap
 type_stats |>
-  head(12) |>
   select(type, avg_hp, avg_attack, avg_sp_atk, avg_defense, avg_sp_def, avg_speed) |>
   pivot_longer(-type, names_to = "stat", values_to = "value") |>
   mutate(stat = str_remove(stat, "avg_")) |>
@@ -464,40 +447,12 @@ type_stats |>
   ) +
   labs(
     title = "Average Stats Heatmap (Top 12 Types by BST)",
-    x = "Stat", y = "Primary Type", fill = "Average Value"
+    x = "Stat", y = "Owned Type", fill = "Average Value"
   )
 ```
 
-## 7. Special Categories Deep Dive
-
-### 7.1 Legendary vs Regular Stats
-
-```{r legendary-comparison}
-# Statistical test
-legendary_test <- t.test(total ~ is_legendary, data = pokemon_df)
-
-cat("T-test: Legendary vs Regular BST\n")
-cat("p-value:", legendary_test$p.value, "\n")
-cat("Mean Regular:", legendary_test$estimate[1], "\n")
-cat("Mean Legendary:", legendary_test$estimate[2], "\n\n")
-
-# Violin plot
-pokemon_df |>
-  mutate(label = if_else(is_legendary, "Legendary", "Regular")) |>
-  ggplot(aes(x = label, y = total, fill = label)) +
-  geom_violin(alpha = 0.7) +
-  geom_boxplot(width = 0.2, alpha = 0.5) +
-  scale_fill_manual(values = c("Regular" = "steelblue", "Legendary" = "gold")) +
-  labs(
-    title = "BST: Legendary vs Regular Pokemon",
-    x = "", y = "Total BST"
-  ) +
-  theme(legend.position = "none")
-```
-
-### 7.2 All Special Categories
-
-```{r special-categories}
+# Special Categories Deep Dive
+```{r}
 category_stats <- pokemon_df |>
   group_by(category) |>
   summarise(
@@ -511,59 +466,70 @@ category_stats <- pokemon_df |>
     avg_speed = mean(speed, na.rm = TRUE)
   ) |>
   arrange(desc(avg_total))
-
-print(kable(category_stats, caption = "Average Stats by Category", digits = 1))
 ```
 
-## 8. Generation Evolution Analysis
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 30px 0;">
+<div style="padding: 20px; background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">`r category_stats$count[category_stats$category == "Legendary"]`</div>
+<div>Legendary Pokémons</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">`r category_stats$count[category_stats$category == "Mythical"]`</div>
+<div>Mythical Pokémons</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #7f7fd5 0%, #86a8e7 50%, #91eae4 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">`r category_stats$count[category_stats$category == "Paradox"]`</div>
+<div>Paradox Pokémons</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">`r category_stats$count[category_stats$category == "Ultra Beast"]`</div>
+<div>Ultra Beast Pokémons</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, #a1ffce 0%, #faffd1 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">`r category_stats$count[category_stats$category == "Regular"]`</div>
+<div>Regular Pokémons</div>
+</div>
+</div>
 
-### 8.1 Power Creep Over Generations
+---
 
-```{r generation-power-creep}
-gen_stats <- pokemon_df |>
-  group_by(generation) |>
-  summarise(
-    count = n(),
-    avg_total = mean(total, na.rm = TRUE),
-    median_total = median(total, na.rm = TRUE),
-    sd_total = sd(total, na.rm = TRUE)
-  )
+## Legendary vs all Others Stats
 
-ggplot(gen_stats, aes(x = generation)) +
-  geom_line(aes(y = avg_total, group = 1, color = "Average"), size = 1.2) +
-  geom_line(aes(y = median_total, group = 1, color = "Median"), size = 1.2) +
-  geom_point(aes(y = avg_total), size = 3) +
-  geom_point(aes(y = median_total), size = 3) +
-  scale_color_manual(values = c("Average" = "blue", "Median" = "red")) +
-  labs(
-    title = "Average & Median BST by Generation",
-    x = "Generation", y = "BST", color = "Metric"
-  ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```{r}
+# Statistical test
+legendary_test <- t.test(total ~ is_legendary, data = pokemon_df)
+legendary_test
 ```
 
-### 8.2 Type Diversity by Generation
-
-```{r type-diversity}
+```{r legendary-comparison}
+# Violin plot
 pokemon_df |>
-  pivot_longer(
-    cols = c(type_1, type_2),
-    names_to = "slot",
-    values_to = "type"
-  ) |>
-  filter(!is.na(type)) |>
-  mutate(type = factor(type, levels = type_order)) |> 
-  group_by(generation, type) |>
-  summarise(count = n(), .groups = "drop") |>
-  ggplot(aes(x = generation, y = count, fill = type)) +
-  geom_col(position = "stack") +
-  scale_fill_manual(values = type_colors) +
+  mutate(label = if_else(is_legendary, "Legendary", "Others")) |>
+  ggplot(aes(x = label, y = total, fill = label)) +
+  geom_violin(alpha = 0.7) +
+  geom_boxplot(width = 0.2, alpha = 0.5) +
+  scale_fill_manual(values = c("Others" = "steelblue", "Legendary" = "gold")) +
   labs(
-    title = "Type Distribution by Generation",
-    x = "Generation", y = "Count", fill = "Type"
+    title = "BST: Legendary vs Other Pokemons",
+    x = "", y = "Total BST"
   ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(legend.position = "none")
 ```
+
+**Finding**: Based on a Welch two-sample t-test (t = `r round(legendary_test$statistic, 2)`, 
+p < `r signif(legendary_test$p.value, 2)`), Legendary Pokémon have a significantly higher 
+mean BST (`r round(legendary_test$estimate[2],1)`) compared to non-Legendary Pokémon 
+(`r round(legendary_test$estimate[1],1)`).
+
+*The Violin plot gives same result*: Legendary Pokémon have significantly higher and more concentrated total base stats compared to all other Pokémon, whose BST values are far more diverse and widely spread.
+
+## All Special Categories
+
+```{r special-categories}
+kable(category_stats, caption = "Average Stats by Category", digits = 1)
+```
+
+
 
 ## 9. Key Findings Summary
 

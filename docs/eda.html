@@ -10,17 +10,16 @@
 
 
 
-<meta name="date" content="2025-12-04" />
 
 <title>Pokemon EDA - Exploratory Data Analysis</title>
 
-<script src="eda_files/header-attrs-2.29/header-attrs.js"></script>
-<script src="eda_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="eda_files/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
-<script src="eda_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="eda_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="eda_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <style>h1 {font-size: 34px;}
        h1.title {font-size: 38px;}
        h2 {font-size: 30px;}
@@ -30,15 +29,15 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="eda_files/jqueryui-1.13.2/jquery-ui.min.js"></script>
-<link href="eda_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="eda_files/tocify-1.9.1/jquery.tocify.js"></script>
-<script src="eda_files/navigation-1.1/tabsets.js"></script>
-<script src="eda_files/navigation-1.1/codefolding.js"></script>
-<link href="eda_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="eda_files/highlightjs-9.12.0/highlight.js"></script>
-<link href="eda_files/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
-<link href="eda_files/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -289,6 +288,12 @@ div.tocify {
   border-radius: 0px;
 }
 
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
 
 </style>
 
@@ -381,16 +386,14 @@ div.tocify {
 
 <h1 class="title toc-ignore">Pokemon EDA - Exploratory Data
 Analysis</h1>
-<h4 class="date">2025-12-04</h4>
 
 </div>
 
 
-<div id="load-libraries-and-data" class="section level2">
-<h2>1. Load Libraries and Data</h2>
 <pre class="r"><code>library(tidyverse)
 library(ggplot2)
 library(knitr)
+library(fmsb)
 
 # Set ggplot theme
 theme_set(theme_minimal(base_size = 12))
@@ -401,179 +404,116 @@ has_patchwork &lt;- requireNamespace(&quot;patchwork&quot;, quietly = TRUE)
 has_kableExtra &lt;- requireNamespace(&quot;kableExtra&quot;, quietly = TRUE)
 
 if (has_patchwork) library(patchwork)</code></pre>
-<pre class="r"><code># Load enriched dataset - FINAL EVOLUTIONS ONLY with all features pre-computed
-# Features include: category labels, generation, type one-hot encoding, is_dual_type
-pokemon_df &lt;- read_csv(&quot;data/pokemon_data_final_evolutions_enriched.csv&quot;)
-
-# Restore factor levels (lost during CSV export)
-pokemon_df$generation &lt;- factor(pokemon_df$generation,
-  levels = paste0(&quot;Gen &quot;, 1:9)
-)
-pokemon_df$category &lt;- factor(pokemon_df$category,
-  levels = c(&quot;Regular&quot;, &quot;Legendary&quot;, &quot;Mythical&quot;, &quot;Paradox&quot;, &quot;Ultra Beast&quot;)
-)
-
-# Display structure
-glimpse(pokemon_df)</code></pre>
-<pre><code>## Rows: 742
-## Columns: 40
-## $ dex            &lt;dbl&gt; 3, 3, 6, 6, 6, 9, 9, 12, 15, 15, 18, 18, 20, 20, 22, 24…
-## $ name           &lt;chr&gt; &quot;Venusaur&quot;, &quot;VenusaurMega Venusaur&quot;, &quot;Charizard&quot;, &quot;Char…
-## $ type_1         &lt;chr&gt; &quot;Grass&quot;, &quot;Grass&quot;, &quot;Fire&quot;, &quot;Fire&quot;, &quot;Fire&quot;, &quot;Water&quot;, &quot;Wat…
-## $ type_2         &lt;chr&gt; &quot;Poison&quot;, &quot;Poison&quot;, &quot;Flying&quot;, &quot;Flying&quot;, &quot;Dragon&quot;, NA, N…
-## $ total          &lt;dbl&gt; 525, 625, 534, 634, 634, 530, 630, 395, 495, 395, 579, …
-## $ hp             &lt;dbl&gt; 80, 80, 78, 78, 78, 79, 79, 60, 65, 65, 83, 83, 55, 75,…
-## $ attack         &lt;dbl&gt; 82, 100, 84, 104, 130, 83, 103, 45, 150, 90, 80, 80, 81…
-## $ defense        &lt;dbl&gt; 83, 123, 78, 78, 111, 100, 120, 50, 40, 40, 80, 75, 60,…
-## $ sp_atk         &lt;dbl&gt; 100, 122, 109, 159, 130, 85, 135, 90, 15, 45, 135, 70, …
-## $ sp_def         &lt;dbl&gt; 100, 120, 85, 115, 85, 105, 115, 80, 80, 80, 80, 70, 70…
-## $ speed          &lt;dbl&gt; 80, 80, 100, 100, 100, 78, 78, 70, 145, 75, 121, 101, 9…
-## $ height_m       &lt;dbl&gt; 2.0, 2.4, 1.7, 1.7, 1.7, 1.6, 1.6, 1.1, 1.4, 1.0, 2.2, …
-## $ weight_kgs     &lt;dbl&gt; 100.0, 155.5, 90.5, 100.5, 110.5, 85.5, 101.1, 32.0, 40…
-## $ bmi            &lt;dbl&gt; 25.0, 27.0, 31.3, 34.8, 38.2, 33.4, 39.5, 26.4, 20.7, 2…
-## $ is_legendary   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
-## $ is_mythical    &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
-## $ is_paradox     &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
-## $ is_ultra_beast &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
-## $ is_special     &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
-## $ category       &lt;fct&gt; Regular, Regular, Regular, Regular, Regular, Regular, R…
-## $ generation     &lt;fct&gt; Gen 1, Gen 1, Gen 1, Gen 1, Gen 1, Gen 1, Gen 1, Gen 1,…
-## $ has_bug        &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, TRUE, TRUE, …
-## $ has_dark       &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
-## $ has_dragon     &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, NA, NA, FALSE, FALSE,…
-## $ has_electric   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
-## $ has_fairy      &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
-## $ has_fighting   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
-## $ has_fire       &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, TRUE, NA, NA, FALSE, FALSE, F…
-## $ has_flying     &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, NA, NA, TRUE, FALSE, F…
-## $ has_ghost      &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
-## $ has_grass      &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE, …
-## $ has_ground     &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
-## $ has_ice        &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
-## $ has_normal     &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
-## $ has_poison     &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, NA, NA, FALSE, TRUE, T…
-## $ has_psychic    &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
-## $ has_rock       &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
-## $ has_steel      &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, FALSE, FALSE…
-## $ has_water      &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, F…
-## $ is_dual_type   &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE,…</code></pre>
-<pre class="r"><code># Apply Factor Order
-type_order &lt;- c(
-  &quot;Normal&quot;,&quot;Fire&quot;,&quot;Water&quot;,&quot;Electric&quot;,&quot;Grass&quot;,&quot;Ice&quot;,
-  &quot;Fighting&quot;,&quot;Poison&quot;,&quot;Ground&quot;,&quot;Flying&quot;,&quot;Psychic&quot;,&quot;Bug&quot;,
-  &quot;Rock&quot;,&quot;Ghost&quot;,&quot;Dragon&quot;,&quot;Dark&quot;,&quot;Steel&quot;,&quot;Fairy&quot;
-)
-
-pokemon_df$type_1 &lt;- factor(pokemon_df$type_1, levels = type_order)
-pokemon_df$type_2 &lt;- factor(pokemon_df$type_2, levels = type_order)</code></pre>
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<div style="text-align: center; margin: 20px 0;">
+<p><img src="assets/sprites/gif/wishiwashi-solo-form.gif" width="40" alt="Wishiwashi-solo-form" style="margin: 0 8px;">
+<img src="assets/sprites/gif/alcremie.gif" width="40" alt="Alcremie" style="margin: 0 8px;">
+<img src="assets/sprites/gif/cinccino.gif" width="70" alt="Cinccino" style="margin: 0 8px;">
+<img src="assets/sprites/gif/sprigatito.gif" width="40" alt="Sprigatito" style="margin: 0 8px;">
+<img src="assets/sprites/gif/pheromosa.gif" width="70" alt="Pheromosa" style="margin: 0 8px;">
+<img src="assets/sprites/gif/gardevoir-mega-gardevoir.gif" width="70" alt="Mega-Gardevoir" style="margin: 0 8px;">
+<img src="assets/sprites/gif/diancie-mega-diancie.gif" width="95" alt="Mega-Diancie" style="margin: 0 8px;">
+<img src="assets/sprites/gif/rayquaza-mega-rayquaza.gif" width="95" alt="Mega-Rayquaza" style="margin: 0 8px;"></p>
 </div>
-<div id="data-overview" class="section level2">
-<h2>2. Data Overview</h2>
-<div id="basic-statistics" class="section level3">
-<h3>2.1 Basic Statistics</h3>
-<pre class="r"><code># Numeric columns
-num_cols &lt;- c(
-  &quot;total&quot;, &quot;hp&quot;, &quot;attack&quot;, &quot;defense&quot;, &quot;sp_atk&quot;, &quot;sp_def&quot;, &quot;speed&quot;,
-  &quot;height_m&quot;, &quot;weight_kgs&quot;, &quot;bmi&quot;
-)
-
-# Summary table
-summary_stats &lt;- pokemon_df |&gt;
-  select(all_of(num_cols)) |&gt;
-  summary()
-
-print(summary_stats)</code></pre>
-<pre><code>##      total             hp             attack          defense      
-##  Min.   :175.0   Min.   :  1.00   Min.   : 10.00   Min.   : 10.00  
-##  1st Qu.:475.2   1st Qu.: 68.00   1st Qu.: 75.00   1st Qu.: 68.00  
-##  Median :505.0   Median : 80.00   Median : 95.00   Median : 80.00  
-##  Mean   :519.4   Mean   : 82.49   Mean   : 95.85   Mean   : 87.16  
-##  3rd Qu.:570.0   3rd Qu.: 95.00   3rd Qu.:115.00   3rd Qu.:100.00  
-##  Max.   :780.0   Max.   :255.00   Max.   :190.00   Max.   :230.00  
-##      sp_atk           sp_def           speed           height_m     
-##  Min.   : 10.00   Min.   : 20.00   Min.   :  5.00   Min.   : 0.100  
-##  1st Qu.: 60.00   1st Qu.: 70.00   1st Qu.: 60.00   1st Qu.: 1.000  
-##  Median : 85.00   Median : 82.00   Median : 84.00   Median : 1.400  
-##  Mean   : 87.19   Mean   : 85.36   Mean   : 81.37   Mean   : 1.704  
-##  3rd Qu.:108.75   3rd Qu.:100.00   3rd Qu.:100.00   3rd Qu.: 1.900  
-##  Max.   :194.00   Max.   :230.00   Max.   :200.00   Max.   :20.000  
-##    weight_kgs         bmi        
-##  Min.   :  0.1   Min.   :  0.40  
-##  1st Qu.: 24.5   1st Qu.: 16.82  
-##  Median : 52.1   Median : 26.50  
-##  Mean   :106.7   Mean   : 37.24  
-##  3rd Qu.:112.2   3rd Qu.: 40.00  
-##  Max.   :999.9   Max.   :644.00</code></pre>
+<p>This page shows a cozy little collection of visualizations for all
+major <strong>Pokémon stats</strong> — including the <strong>six base
+stats (BST)</strong> of <strong>fully-evolved Pokémon</strong> from all
+nine generations, plus their <strong>height</strong>,
+<strong>weight</strong>, and <strong>BMI</strong>。</p>
 </div>
-<div id="category-counts" class="section level3">
-<h3>2.2 Category Counts</h3>
-<pre class="r"><code># Count by category
-category_summary &lt;- pokemon_df |&gt;
-  count(category) |&gt;
-  mutate(percentage = round(100 * n / sum(n), 2)) |&gt;
-  arrange(desc(n))
-
-print(kable(category_summary, caption = &quot;Pokemon by Category&quot;))</code></pre>
-<pre><code>## 
-## 
-## Table: Pokemon by Category
-## 
-## |category    |   n| percentage|
-## |:-----------|---:|----------:|
-## |Regular     | 583|      78.57|
-## |Legendary   | 101|      13.61|
-## |Mythical    |  28|       3.77|
-## |Paradox     |  20|       2.70|
-## |Ultra Beast |  10|       1.35|</code></pre>
-<pre class="r"><code># Count by generation
-gen_summary &lt;- pokemon_df |&gt;
-  count(generation) |&gt;
-  mutate(percentage = round(100 * n / sum(n), 2))
-
-print(kable(gen_summary, caption = &quot;Pokemon by Generation&quot;))</code></pre>
-<pre><code>## 
-## 
-## Table: Pokemon by Generation
-## 
-## |generation |   n| percentage|
-## |:----------|---:|----------:|
-## |Gen 1      | 112|      15.09|
-## |Gen 2      |  60|       8.09|
-## |Gen 3      | 102|      13.75|
-## |Gen 4      |  84|      11.32|
-## |Gen 5      |  99|      13.34|
-## |Gen 6      |  52|       7.01|
-## |Gen 7      |  67|       9.03|
-## |Gen 8      |  72|       9.70|
-## |Gen 9      |  94|      12.67|</code></pre>
-<pre class="r"><code># Type distribution (primary type)
-type_summary &lt;- pokemon_df |&gt;
-  count(type_1, sort = TRUE) |&gt;
-  mutate(percentage = round(100 * n / sum(n), 2))
-
-print(kable(head(type_summary, 10), caption = &quot;Pokemon by Primary Type (Top 10)&quot;))</code></pre>
-<pre><code>## 
-## 
-## Table: Pokemon by Primary Type (Top 10)
-## 
-## |type_1   |  n| percentage|
-## |:--------|--:|----------:|
-## |Water    | 90|      12.13|
-## |Normal   | 78|      10.51|
-## |Grass    | 61|       8.22|
-## |Psychic  | 57|       7.68|
-## |Electric | 52|       7.01|
-## |Bug      | 50|       6.74|
-## |Fire     | 44|       5.93|
-## |Rock     | 40|       5.39|
-## |Dark     | 37|       4.99|
-## |Fighting | 35|       4.72|</code></pre>
+<div id="stats-analysis" class="section level1">
+<h1>Stats Analysis</h1>
+<div
+style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 30px 0;">
+<div
+style="padding: 20px; background: linear-gradient(135deg, #F7D44A 0%, #2cd95c 50%, #F7D44A 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">
+175 - 780
+</div>
+<div>
+Pokémon Base Stat Total
+</div>
+<div>
+Mean: 519.42
 </div>
 </div>
-<div id="univariate-analysis" class="section level2">
-<h2>3. Univariate Analysis</h2>
-<div id="base-stat-total-distribution" class="section level3">
-<h3>3.1 Base Stat Total Distribution</h3>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">
+1 - 255
+</div>
+<div>
+Pokémon Hit Points
+</div>
+<div>
+Mean: 82.49
+</div>
+</div>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">
+10 - 190
+</div>
+<div>
+Attack
+</div>
+<div>
+Mean: 95.85
+</div>
+</div>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">
+10 - 230
+</div>
+<div>
+Defense
+</div>
+<div>
+Mean: 87.16
+</div>
+</div>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #f76b1c 0%, #fcb045 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">
+10 - 194
+</div>
+<div>
+Special Attack
+</div>
+<div>
+Mean: 87.19
+</div>
+</div>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">
+20 - 230
+</div>
+<div>
+Special Defense
+</div>
+<div>
+Mean: 85.36
+</div>
+</div>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">
+5 - 200
+</div>
+<div>
+Speed
+</div>
+<div>
+Mean: 81.37
+</div>
+</div>
+</div>
+<hr />
+<div id="base-stat-total-distribution" class="section level2">
+<h2>Base Stat Total Distribution</h2>
 <pre class="r"><code># Overall distribution
 p1 &lt;- ggplot(pokemon_df, aes(x = total)) +
   geom_histogram(bins = 40, fill = &quot;steelblue&quot;, alpha = 0.7) +
@@ -584,10 +524,8 @@ p1 &lt;- ggplot(pokemon_df, aes(x = total)) +
     title = &quot;Distribution of Base Stat Total (BST)&quot;,
     subtitle = paste(&quot;Mean:&quot;, round(mean(pokemon_df$total, na.rm = TRUE), 1)),
     x = &quot;Total BST&quot;, y = &quot;Count&quot;
-  )
-
-# By category
-p2 &lt;- ggplot(pokemon_df, aes(x = total, fill = category)) +
+  )</code></pre>
+<pre class="r"><code>p2 &lt;- ggplot(pokemon_df, aes(x = total, fill = category)) +
   geom_density(alpha = 0.5) +
   scale_fill_brewer(palette = &quot;Set2&quot;) +
   labs(
@@ -601,10 +539,18 @@ if (has_patchwork) {
   print(p1)
   print(p2)
 }</code></pre>
-<p><img src="eda_files/figure-html/total-dist-1.png" width="960" /></p>
+<p><img src="eda_files/figure-html/unnamed-chunk-1-1.png" width="960" /></p>
+<p><strong>Finding</strong>: BST shows a multi-modal distribution with
+noticeable right skewness,<br />
+indicating structured stat tiers rather than a continuous normal
+process.</p>
+<p>This becomes more apparent in the “BST Distribution by Category”
+visualization. The Base Stat Totals of non-regular Pokémon cluster
+tightly around specific values, reflecting the intentional tiering in
+Pokémon design.</p>
 </div>
-<div id="individual-stat-distributions" class="section level3">
-<h3>3.2 Individual Stat Distributions</h3>
+<div id="individual-stat-distributions" class="section level2">
+<h2>Individual Stat Distributions</h2>
 <pre class="r"><code>stat_cols &lt;- c(&quot;hp&quot;, &quot;attack&quot;, &quot;defense&quot;, &quot;sp_atk&quot;, &quot;sp_def&quot;, &quot;speed&quot;)
 
 pokemon_long &lt;- pokemon_df |&gt;
@@ -625,9 +571,81 @@ ggplot(pokemon_long, aes(x = value, fill = stat)) +
   ) +
   theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="eda_files/figure-html/stat-distributions-1.png" width="960" /></p>
+<div id="lowest-vs.-highestouter-max-by-mean-of-each-stats"
+class="section level3">
+<h3>Lowest<img src="assets/sprites/gif/wishiwashi-solo-form.gif" width="40" alt="Wishiwashi-solo-form" style="margin: 0 8px;">
+vs. Highest<img src="assets/sprites/gif/rayquaza-mega-rayquaza.gif" width="95" alt="Charizard" style="margin: 0 8px;">(Outer
+Max by Mean of each stats)</h3>
+<pre class="r"><code>stats_cols &lt;- c(&quot;hp&quot;, &quot;attack&quot;, &quot;defense&quot;, &quot;speed&quot;, &quot;sp_def&quot;, &quot;sp_atk&quot;)
+
+p1 &lt;- pokemon_df |&gt; filter(name == &quot;WishiwashiSolo Form&quot;) |&gt; select(all_of(stats_cols))
+p2 &lt;- pokemon_df |&gt; filter(name == &quot;RayquazaMega Rayquaza&quot;) |&gt; select(all_of(stats_cols))
+
+# Set Max
+max_row &lt;- pokemon_df |&gt;
+  summarise(across(all_of(stats_cols), ~ mean(.x, na.rm = TRUE)))
+min_row &lt;- rep(0, length(stats_cols))
+
+radar_data &lt;- rbind(max_row, min_row, p1, p2)
+rownames(radar_data) &lt;- c(&quot;Max&quot;, &quot;Min&quot;, &quot;WishiwashiSolo Form&quot;, &quot;RayquazaMega Rayquaza&quot;)
+
+# Plot
+radarchart(radar_data,
+           axistype = 1,
+           pcol = c(&quot;#4FACFE&quot;, &quot;#007F3A&quot;),
+           pfcol = adjustcolor(c(&quot;#4FACFE&quot;, &quot;#007F3A&quot;), alpha.f = 0.3),
+           plwd = 3,
+           plty = 1,
+           cglcol = &quot;grey&quot;, 
+           cglty = 1,
+  )
+legend(&quot;topright&quot;, legend = c(&quot;Wishiwashi Solo Form&quot;, &quot;Mega Rayquaza&quot;),
+       col = c(&quot;#4FACFE&quot;, &quot;#007F3A&quot;), pch = 19, bty = &quot;n&quot;)</code></pre>
+<p><img src="eda_files/figure-html/unnamed-chunk-2-1.png" width="960" /></p>
 </div>
-<div id="physical-attributes" class="section level3">
-<h3>3.3 Physical Attributes</h3>
+</div>
+<div id="physical-attributes" class="section level2">
+<h2>Physical Attributes</h2>
+<div
+style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 30px 0;">
+<div
+style="padding: 20px; background: linear-gradient(135deg, #a1ffce 0%, #faffd1 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">
+0.1 - 20
+</div>
+<div>
+Pokémon Height
+</div>
+<div>
+Mean: 1.7
+</div>
+</div>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">
+0.1 - 999.9
+</div>
+<div>
+Pokémon Weight
+</div>
+<div>
+Mean: 106.73
+</div>
+</div>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #e3a1ff 0%, #ffedbc 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2em; font-weight: bold;">
+0.4 - 644
+</div>
+<div>
+Body Mass Index
+</div>
+<div>
+Mean: 37.24
+</div>
+</div>
+</div>
+<hr />
 <pre class="r"><code>p1 &lt;- ggplot(pokemon_df, aes(x = height_m)) +
   geom_histogram(bins = 40, fill = &quot;darkgreen&quot;, alpha = 0.7) +
   scale_x_log10() +
@@ -663,69 +681,8 @@ if (has_patchwork) {
   print(p3)
 }</code></pre>
 <p><img src="eda_files/figure-html/physical-dist-1.png" width="960" /></p>
-</div>
-</div>
-<div id="bivariate-analysis" class="section level2">
-<h2>4. Bivariate Analysis</h2>
-<div id="correlation-matrix" class="section level3">
-<h3>4.1 Correlation Matrix</h3>
-<pre class="r"><code># Compute correlation
-cor_matrix &lt;- pokemon_df |&gt;
-  select(all_of(num_cols)) |&gt;
-  cor(use = &quot;pairwise.complete.obs&quot;)
-
-# Visualize
-if (has_corrplot) {
-  corrplot::corrplot(cor_matrix,
-    method = &quot;color&quot;,
-    type = &quot;upper&quot;,
-    tl.col = &quot;black&quot;,
-    tl.srt = 45,
-    addCoef.col = &quot;black&quot;,
-    number.cex = 0.7,
-    title = &quot;Correlation Matrix of Pokemon Attributes&quot;,
-    mar = c(0, 0, 2, 0)
-  )
-} else {
-  # Alternative: heatmap
-  cor_df &lt;- as.data.frame(cor_matrix) |&gt;
-    rownames_to_column(&quot;var1&quot;) |&gt;
-    pivot_longer(-var1, names_to = &quot;var2&quot;, values_to = &quot;correlation&quot;)
-
-  ggplot(cor_df, aes(x = var1, y = var2, fill = correlation)) +
-    geom_tile() +
-    scale_fill_gradient2(low = &quot;blue&quot;, mid = &quot;white&quot;, high = &quot;red&quot;, midpoint = 0) +
-    labs(title = &quot;Correlation Matrix of Pokemon Attributes&quot;) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-}</code></pre>
-<p><img src="eda_files/figure-html/correlation-1.png" width="960" /></p>
-</div>
-<div id="attack-vs-defense" class="section level3">
-<h3>4.2 Attack vs Defense</h3>
-<pre class="r"><code>ggplot(pokemon_df, aes(x = attack, y = defense, color = category)) +
-  geom_point(alpha = 0.6, size = 2) +
-  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;black&quot;, linetype = &quot;dashed&quot;) +
-  scale_color_brewer(palette = &quot;Set2&quot;) +
-  labs(
-    title = &quot;Attack vs Defense by Category&quot;,
-    x = &quot;Attack&quot;, y = &quot;Defense&quot;, color = &quot;Category&quot;
-  )</code></pre>
-<p><img src="eda_files/figure-html/attack-defense-1.png" width="960" /></p>
-</div>
-<div id="special-attack-vs-special-defense" class="section level3">
-<h3>4.3 Special Attack vs Special Defense</h3>
-<pre class="r"><code>ggplot(pokemon_df, aes(x = sp_atk, y = sp_def, color = category)) +
-  geom_point(alpha = 0.6, size = 2) +
-  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;black&quot;, linetype = &quot;dashed&quot;) +
-  scale_color_brewer(palette = &quot;Set2&quot;) +
-  labs(
-    title = &quot;Special Attack vs Special Defense by Category&quot;,
-    x = &quot;Special Attack&quot;, y = &quot;Special Defense&quot;, color = &quot;Category&quot;
-  )</code></pre>
-<p><img src="eda_files/figure-html/sp-attack-defense-1.png" width="960" /></p>
-</div>
-<div id="height-vs-weight" class="section level3">
-<h3>4.4 Height vs Weight</h3>
+<div id="weight-vs.-height" class="section level3">
+<h3>Weight vs. Height</h3>
 <pre class="r"><code>ggplot(pokemon_df, aes(x = height_m, y = weight_kgs, color = type_1)) +
   geom_point(alpha = 0.6, size = 2) +
   scale_x_log10() +
@@ -739,67 +696,33 @@ if (has_corrplot) {
 <p><img src="eda_files/figure-html/height-weight-1.png" width="960" /></p>
 </div>
 </div>
-<div id="group-comparisons" class="section level2">
-<h2>5. Group Comparisons</h2>
-<div id="stats-by-category" class="section level3">
-<h3>5.1 Stats by Category</h3>
-<pre class="r"><code># Box plots for each stat
-pokemon_long |&gt;
-  ggplot(aes(x = category, y = value, fill = category)) +
-  geom_boxplot(alpha = 0.7) +
-  facet_wrap(~stat, scales = &quot;free_y&quot;) +
-  scale_fill_brewer(palette = &quot;Set2&quot;) +
-  labs(
-    title = &quot;Base Stats by Pokemon Category&quot;,
-    x = &quot;Category&quot;, y = &quot;Stat Value&quot;
-  ) +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = &quot;none&quot;
-  )</code></pre>
-<p><img src="eda_files/figure-html/stats-by-category-1.png" width="960" /></p>
 </div>
-<div id="bst-by-generation" class="section level3">
-<h3>5.2 BST by Generation</h3>
-<pre class="r"><code>ggplot(pokemon_df, aes(x = generation, y = total, fill = generation)) +
-  geom_violin(alpha = 0.7) +
-  geom_boxplot(width = 0.2, alpha = 0.5) +
-  scale_fill_brewer(palette = &quot;Spectral&quot;) +
-  labs(
-    title = &quot;Base Stat Total by Generation&quot;,
-    x = &quot;Generation&quot;, y = &quot;Total BST&quot;
-  ) +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = &quot;none&quot;
-  )</code></pre>
-<p><img src="eda_files/figure-html/bst-generation-1.png" width="960" /></p>
+<div id="type-analysis" class="section level1">
+<h1>Type Analysis</h1>
+<div
+style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 30px 0;">
+<div
+style="padding: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">
+18
 </div>
-<div id="stats-by-primary-type-top-types" class="section level3">
-<h3>5.3 Stats by Primary Type (Top Types)</h3>
-<pre class="r"><code># Get top 10 types
-top_types &lt;- pokemon_df |&gt;
-  count(type_1, sort = TRUE) |&gt;
-  head(10) |&gt;
-  pull(type_1)
-
-pokemon_df |&gt;
-  filter(type_1 %in% top_types) |&gt;
-  ggplot(aes(x = reorder(type_1, total, median), y = total, fill = type_1)) +
-  geom_boxplot(alpha = 0.7) +
-  coord_flip() +
-  labs(
-    title = &quot;BST by Primary Type (Top 10 Most Common)&quot;,
-    x = &quot;Primary Type&quot;, y = &quot;Total BST&quot;
-  ) +
-  theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="eda_files/figure-html/stats-by-type-1.png" width="960" /></p>
+<div>
+Total Different Types
 </div>
 </div>
-<div id="type-analysis" class="section level2">
-<h2>6. Type Analysis</h2>
-<div id="type-distribution" class="section level3">
-<h3>6.1 Type Distribution</h3>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">
+171
+</div>
+<div>
+Total Type Combination(Includ Mono-type)
+</div>
+</div>
+</div>
+<hr />
+<div id="type-distribution" class="section level2">
+<h2>Type Distribution</h2>
 <pre class="r"><code># Official Type Color
 type_colors &lt;- c(
   Normal   = &quot;#A8A77A&quot;,
@@ -856,9 +779,8 @@ if (has_patchwork) {
   print(p2)
 }</code></pre>
 <p><img src="eda_files/figure-html/type-counts-1.png" width="960" /></p>
-</div>
 <div id="type-combinations" class="section level3">
-<h3>6.2 Type Combinations</h3>
+<h3>Type Combinations</h3>
 <pre class="r"><code># Top type combinations
 pokemon_df |&gt;
   filter(!is.na(type_2)) |&gt;
@@ -875,8 +797,34 @@ pokemon_df |&gt;
   )</code></pre>
 <p><img src="eda_files/figure-html/type-combos-1.png" width="960" /></p>
 </div>
+</div>
+<div id="stats-by-type" class="section level2">
+<h2>Stats by Type</h2>
+<pre class="r"><code># Get types ranking
+top_types &lt;- pokemon_df |&gt;
+  pivot_longer(
+    cols = c(type_1, type_2),
+    names_to = &quot;slot&quot;,
+    values_to = &quot;type&quot;
+  ) |&gt;
+  filter(!is.na(type)) |&gt;
+  count(type, sort = TRUE) |&gt;
+  pull(type)
+
+pokemon_df |&gt;
+  filter(type_1 %in% top_types) |&gt;
+  ggplot(aes(x = reorder(type_1, total, median), y = total, fill = type_1)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = type_colors) +
+  coord_flip() +
+  labs(
+    title = &quot;BST by Type(Most mean to least)&quot;,
+    x = &quot;Owned Type&quot;, y = &quot;Total BST&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="eda_files/figure-html/stats-by-type-1.png" width="960" /></p>
 <div id="average-stats-by-type" class="section level3">
-<h3>6.3 Average Stats by Type</h3>
+<h3>Average Stats by Type</h3>
 <pre class="r"><code># Calculate average stats per type
 type_stats &lt;- pokemon_df |&gt;
   pivot_longer(
@@ -898,26 +846,8 @@ type_stats &lt;- pokemon_df |&gt;
   ) |&gt;
   arrange(desc(avg_total))
 
-print(kable(head(type_stats, 10), caption = &quot;Top 10 Types by Average BST&quot;, digits = 1))</code></pre>
-<pre><code>## 
-## 
-## Table: Top 10 Types by Average BST
-## 
-## |type     | count| avg_total| avg_hp| avg_attack| avg_sp_atk| avg_defense| avg_sp_def| avg_speed|
-## |:--------|-----:|---------:|------:|----------:|----------:|-----------:|----------:|---------:|
-## |Dragon   |    68|     600.3|   97.8|      108.2|      113.4|        95.1|       95.0|      90.9|
-## |Psychic  |    99|     550.4|   83.7|       88.9|      107.7|        85.1|       97.4|      87.6|
-## |Steel    |    60|     545.8|   79.2|      106.3|       81.3|       119.1|       90.0|      70.0|
-## |Fire     |    59|     539.7|   81.4|       98.3|      103.6|        85.2|       86.2|      85.1|
-## |Fighting |    69|     536.3|   84.5|      119.9|       72.4|        88.5|       81.1|      89.9|
-## |Fairy    |    49|     527.4|   74.9|       85.3|       95.9|        88.9|      100.8|      81.5|
-## |Ground   |    53|     526.5|   93.2|      106.6|       75.4|       103.4|       80.8|      67.0|
-## |Ice      |    45|     526.4|   88.3|       99.3|       85.4|        90.4|       85.1|      77.8|
-## |Dark     |    64|     523.9|   84.4|      106.2|       85.2|        82.0|       81.2|      84.8|
-## |Ghost    |    57|     519.3|   76.4|       91.3|       96.4|        87.8|       89.9|      77.5|</code></pre>
-<pre class="r"><code># Heatmap
+# Heatmap
 type_stats |&gt;
-  head(12) |&gt;
   select(type, avg_hp, avg_attack, avg_sp_atk, avg_defense, avg_sp_def, avg_speed) |&gt;
   pivot_longer(-type, names_to = &quot;stat&quot;, values_to = &quot;value&quot;) |&gt;
   mutate(stat = str_remove(stat, &quot;avg_&quot;)) |&gt;
@@ -929,42 +859,14 @@ type_stats |&gt;
   ) +
   labs(
     title = &quot;Average Stats Heatmap (Top 12 Types by BST)&quot;,
-    x = &quot;Stat&quot;, y = &quot;Primary Type&quot;, fill = &quot;Average Value&quot;
+    x = &quot;Stat&quot;, y = &quot;Owned Type&quot;, fill = &quot;Average Value&quot;
   )</code></pre>
 <p><img src="eda_files/figure-html/avg-stats-type-1.png" width="960" /></p>
 </div>
 </div>
-<div id="special-categories-deep-dive" class="section level2">
-<h2>7. Special Categories Deep Dive</h2>
-<div id="legendary-vs-regular-stats" class="section level3">
-<h3>7.1 Legendary vs Regular Stats</h3>
-<pre class="r"><code># Statistical test
-legendary_test &lt;- t.test(total ~ is_legendary, data = pokemon_df)
-
-cat(&quot;T-test: Legendary vs Regular BST\n&quot;)</code></pre>
-<pre><code>## T-test: Legendary vs Regular BST</code></pre>
-<pre class="r"><code>cat(&quot;p-value:&quot;, legendary_test$p.value, &quot;\n&quot;)</code></pre>
-<pre><code>## p-value: 2.768909e-34</code></pre>
-<pre class="r"><code>cat(&quot;Mean Regular:&quot;, legendary_test$estimate[1], &quot;\n&quot;)</code></pre>
-<pre><code>## Mean Regular: 502.9563</code></pre>
-<pre class="r"><code>cat(&quot;Mean Legendary:&quot;, legendary_test$estimate[2], &quot;\n\n&quot;)</code></pre>
-<pre><code>## Mean Legendary: 623.8911</code></pre>
-<pre class="r"><code># Violin plot
-pokemon_df |&gt;
-  mutate(label = if_else(is_legendary, &quot;Legendary&quot;, &quot;Regular&quot;)) |&gt;
-  ggplot(aes(x = label, y = total, fill = label)) +
-  geom_violin(alpha = 0.7) +
-  geom_boxplot(width = 0.2, alpha = 0.5) +
-  scale_fill_manual(values = c(&quot;Regular&quot; = &quot;steelblue&quot;, &quot;Legendary&quot; = &quot;gold&quot;)) +
-  labs(
-    title = &quot;BST: Legendary vs Regular Pokemon&quot;,
-    x = &quot;&quot;, y = &quot;Total BST&quot;
-  ) +
-  theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="eda_files/figure-html/legendary-comparison-1.png" width="960" /></p>
 </div>
-<div id="all-special-categories" class="section level3">
-<h3>7.2 All Special Categories</h3>
+<div id="special-categories-deep-dive" class="section level1">
+<h1>Special Categories Deep Dive</h1>
 <pre class="r"><code>category_stats &lt;- pokemon_df |&gt;
   group_by(category) |&gt;
   summarise(
@@ -977,70 +879,180 @@ pokemon_df |&gt;
     avg_sp_def = mean(sp_def, na.rm = TRUE),
     avg_speed = mean(speed, na.rm = TRUE)
   ) |&gt;
-  arrange(desc(avg_total))
-
-print(kable(category_stats, caption = &quot;Average Stats by Category&quot;, digits = 1))</code></pre>
+  arrange(desc(avg_total))</code></pre>
+<div
+style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 30px 0;">
+<div
+style="padding: 20px; background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">
+101
+</div>
+<div>
+Legendary Pokémons
+</div>
+</div>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">
+28
+</div>
+<div>
+Mythical Pokémons
+</div>
+</div>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #7f7fd5 0%, #86a8e7 50%, #91eae4 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">
+20
+</div>
+<div>
+Paradox Pokémons
+</div>
+</div>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">
+10
+</div>
+<div>
+Ultra Beast Pokémons
+</div>
+</div>
+<div
+style="padding: 20px; background: linear-gradient(135deg, #a1ffce 0%, #faffd1 100%); border-radius: 15px; color: white;">
+<div style="font-size: 2.5em; font-weight: bold;">
+583
+</div>
+<div>
+Regular Pokémons
+</div>
+</div>
+</div>
+<hr />
+<div id="legendary-vs-all-others-stats" class="section level2">
+<h2>Legendary vs all Others Stats</h2>
+<pre class="r"><code># Statistical test
+legendary_test &lt;- t.test(total ~ is_legendary, data = pokemon_df)
+legendary_test</code></pre>
 <pre><code>## 
+##  Welch Two Sample t-test
 ## 
-## Table: Average Stats by Category
-## 
-## |category    | count| avg_total| avg_hp| avg_attack| avg_defense| avg_sp_atk| avg_sp_def| avg_speed|
-## |:-----------|-----:|---------:|------:|----------:|-----------:|----------:|----------:|---------:|
-## |Legendary   |   101|     623.9|   98.3|      112.6|        99.4|      111.0|      103.4|      99.3|
-## |Mythical    |    28|     601.4|   83.9|      109.3|        98.5|      111.9|       96.2|     101.6|
-## |Paradox     |    20|     578.0|   95.9|      103.6|        94.5|       93.9|       90.7|      99.4|
-## |Ultra Beast |    10|     567.0|   93.6|      113.2|        91.8|      108.4|       73.0|      87.0|
-## |Regular     |   583|     494.6|   79.0|       91.7|        84.2|       81.3|       81.8|      76.6|</code></pre>
-</div>
-</div>
-<div id="generation-evolution-analysis" class="section level2">
-<h2>8. Generation Evolution Analysis</h2>
-<div id="power-creep-over-generations" class="section level3">
-<h3>8.1 Power Creep Over Generations</h3>
-<pre class="r"><code>gen_stats &lt;- pokemon_df |&gt;
-  group_by(generation) |&gt;
-  summarise(
-    count = n(),
-    avg_total = mean(total, na.rm = TRUE),
-    median_total = median(total, na.rm = TRUE),
-    sd_total = sd(total, na.rm = TRUE)
-  )
-
-ggplot(gen_stats, aes(x = generation)) +
-  geom_line(aes(y = avg_total, group = 1, color = &quot;Average&quot;), size = 1.2) +
-  geom_line(aes(y = median_total, group = 1, color = &quot;Median&quot;), size = 1.2) +
-  geom_point(aes(y = avg_total), size = 3) +
-  geom_point(aes(y = median_total), size = 3) +
-  scale_color_manual(values = c(&quot;Average&quot; = &quot;blue&quot;, &quot;Median&quot; = &quot;red&quot;)) +
+## data:  total by is_legendary
+## t = -16.771, df = 129.73, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means between group FALSE and group TRUE is not equal to 0
+## 95 percent confidence interval:
+##  -135.2013 -106.6682
+## sample estimates:
+## mean in group FALSE  mean in group TRUE 
+##            502.9563            623.8911</code></pre>
+<pre class="r"><code># Violin plot
+pokemon_df |&gt;
+  mutate(label = if_else(is_legendary, &quot;Legendary&quot;, &quot;Others&quot;)) |&gt;
+  ggplot(aes(x = label, y = total, fill = label)) +
+  geom_violin(alpha = 0.7) +
+  geom_boxplot(width = 0.2, alpha = 0.5) +
+  scale_fill_manual(values = c(&quot;Others&quot; = &quot;steelblue&quot;, &quot;Legendary&quot; = &quot;gold&quot;)) +
   labs(
-    title = &quot;Average &amp; Median BST by Generation&quot;,
-    x = &quot;Generation&quot;, y = &quot;BST&quot;, color = &quot;Metric&quot;
+    title = &quot;BST: Legendary vs Other Pokemons&quot;,
+    x = &quot;&quot;, y = &quot;Total BST&quot;
   ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-<p><img src="eda_files/figure-html/generation-power-creep-1.png" width="960" /></p>
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="eda_files/figure-html/legendary-comparison-1.png" width="960" /></p>
+<p><strong>Finding</strong>: Based on a Welch two-sample t-test (t =
+-16.77, p &lt; 2.8^{-34}), Legendary Pokémon have a significantly higher
+mean BST (623.9) compared to non-Legendary Pokémon (503).</p>
+<p><em>The Violin plot gives same result</em>: Legendary Pokémon have
+significantly higher and more concentrated total base stats compared to
+all other Pokémon, whose BST values are far more diverse and widely
+spread.</p>
 </div>
-<div id="type-diversity-by-generation" class="section level3">
-<h3>8.2 Type Diversity by Generation</h3>
-<pre class="r"><code>pokemon_df |&gt;
-  pivot_longer(
-    cols = c(type_1, type_2),
-    names_to = &quot;slot&quot;,
-    values_to = &quot;type&quot;
-  ) |&gt;
-  filter(!is.na(type)) |&gt;
-  mutate(type = factor(type, levels = type_order)) |&gt; 
-  group_by(generation, type) |&gt;
-  summarise(count = n(), .groups = &quot;drop&quot;) |&gt;
-  ggplot(aes(x = generation, y = count, fill = type)) +
-  geom_col(position = &quot;stack&quot;) +
-  scale_fill_manual(values = type_colors) +
-  labs(
-    title = &quot;Type Distribution by Generation&quot;,
-    x = &quot;Generation&quot;, y = &quot;Count&quot;, fill = &quot;Type&quot;
-  ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-<p><img src="eda_files/figure-html/type-diversity-1.png" width="960" /></p>
-</div>
+<div id="all-special-categories" class="section level2">
+<h2>All Special Categories</h2>
+<pre class="r"><code>kable(category_stats, caption = &quot;Average Stats by Category&quot;, digits = 1)</code></pre>
+<table>
+<caption>Average Stats by Category</caption>
+<colgroup>
+<col width="13%" />
+<col width="6%" />
+<col width="11%" />
+<col width="7%" />
+<col width="12%" />
+<col width="13%" />
+<col width="12%" />
+<col width="12%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">category</th>
+<th align="right">count</th>
+<th align="right">avg_total</th>
+<th align="right">avg_hp</th>
+<th align="right">avg_attack</th>
+<th align="right">avg_defense</th>
+<th align="right">avg_sp_atk</th>
+<th align="right">avg_sp_def</th>
+<th align="right">avg_speed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Legendary</td>
+<td align="right">101</td>
+<td align="right">623.9</td>
+<td align="right">98.3</td>
+<td align="right">112.6</td>
+<td align="right">99.4</td>
+<td align="right">111.0</td>
+<td align="right">103.4</td>
+<td align="right">99.3</td>
+</tr>
+<tr class="even">
+<td align="left">Mythical</td>
+<td align="right">28</td>
+<td align="right">601.4</td>
+<td align="right">83.9</td>
+<td align="right">109.3</td>
+<td align="right">98.5</td>
+<td align="right">111.9</td>
+<td align="right">96.2</td>
+<td align="right">101.6</td>
+</tr>
+<tr class="odd">
+<td align="left">Paradox</td>
+<td align="right">20</td>
+<td align="right">578.0</td>
+<td align="right">95.9</td>
+<td align="right">103.6</td>
+<td align="right">94.5</td>
+<td align="right">93.9</td>
+<td align="right">90.7</td>
+<td align="right">99.4</td>
+</tr>
+<tr class="even">
+<td align="left">Ultra Beast</td>
+<td align="right">10</td>
+<td align="right">567.0</td>
+<td align="right">93.6</td>
+<td align="right">113.2</td>
+<td align="right">91.8</td>
+<td align="right">108.4</td>
+<td align="right">73.0</td>
+<td align="right">87.0</td>
+</tr>
+<tr class="odd">
+<td align="left">Regular</td>
+<td align="right">583</td>
+<td align="right">494.6</td>
+<td align="right">79.0</td>
+<td align="right">91.7</td>
+<td align="right">84.2</td>
+<td align="right">81.3</td>
+<td align="right">81.8</td>
+<td align="right">76.6</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="key-findings-summary" class="section level2">
 <h2>9. Key Findings Summary</h2>
@@ -1109,6 +1121,7 @@ cat(glue(&quot;=== EDA KEY FINDINGS ===
 ##    - Weight range: 0.1 - 999.9 kg</code></pre>
 <hr />
 </div>
+</div>
 
 
 
@@ -1147,7 +1160,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeCodeFolding("show" === "show");
+  window.initializeCodeFolding("hide" === "show");
 });
 </script>
 
@@ -1164,7 +1177,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2,h3",
+      selectors: "h1,h2",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
@@ -1173,7 +1186,7 @@ $(document).ready(function ()  {
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
     };
-    options.showAndHide = true;
+    options.showAndHide = false;
     options.smoothScroll = true;
 
     // tocify
