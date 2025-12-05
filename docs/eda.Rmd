@@ -134,9 +134,7 @@ p1 <- ggplot(pokemon_df, aes(x = total)) +
     subtitle = paste("Mean:", round(mean(pokemon_df$total, na.rm = TRUE), 1)),
     x = "Total BST", y = "Count"
   )
-```
 
-```{r}
 p2 <- ggplot(pokemon_df, aes(x = total, fill = category)) +
   geom_density(alpha = 0.5) +
   scale_fill_brewer(palette = "Set2") +
@@ -153,7 +151,8 @@ if (has_patchwork) {
 }
 ```
 
-**Finding**: BST shows a multi-modal distribution with noticeable right skewness,  
+🌟 **Finding**: 
+BST shows a multi-modal distribution with noticeable right skewness,  
 indicating structured stat tiers rather than a continuous normal process.  
 
 This becomes more apparent in the “BST Distribution by Category” visualization.
@@ -274,6 +273,15 @@ if (has_patchwork) {
 }
 ```
 
+🌟 **Height Distribution (log scale)**  
+Most Pokémon heights follow a right-skewed distribution, with the majority falling between 0.5 and 2 meters. The log scale reveals the dense clustering of small to medium-sized Pokémon that would otherwise be compressed on a linear axis.
+
+🌟 **Weight Distribution (log scale)**  
+Pokémon weights span several orders of magnitude—from lightweight species to multi-ton legendaries. Using a log scale highlights this exponential spread and makes the central pattern easier to interpret.
+
+🌟 **BMI Distribution (filtered < 1000)**  
+After removing extreme outliers (e.g., Cosmoem), Pokémon BMI values primarily fall between 0 and 60. The distribution is heavily right-skewed, with a long tail representing unusually dense species.
+
 ### Weight vs. Height
 
 ```{r height-weight}
@@ -288,6 +296,11 @@ ggplot(pokemon_df, aes(x = height_m, y = weight_kgs, color = type_1)) +
   ) +
   theme(legend.position = "right")
 ```
+
+🌟 **Height vs. Weight (log–log scale)**  
+On a log–log scale, height and weight exhibit a near-linear relationship, suggesting that Pokémon size roughly follows a power-law growth pattern. Although different typings scatter around the trend line, they generally follow the same underlying scaling behavior.
+
+**Summary**: Overall, these physical metrics show that Pokémon exhibit highly varied body structures, but they still follow consistent biological scaling patterns when viewed under appropriate transformations.
 
 # Type Analysis  
 
@@ -364,6 +377,29 @@ if (has_patchwork) {
 }
 ```
 
+🌟 **Top 10 Types (Based on “has this type” counting rule)**
+
+**Note**: Since each Pokémon is counted once for every type it possesses, dual-type Pokémon contribute to **both** of their typings. Under this rule, the ranking reflects overall type prevalence in the **entire Pokédex**, not the number of Pokémon with exclusive types.
+
+**Key observations**:  
+*✔ 1. Water is the most common type overall*
+
+Water appears on the largest number of Pokémon, which aligns with franchise design—many species are water-based, and almost every generation introduces a substantial number of aquatic Pokémon.
+
+*✔ 2. Psychic and Flying follow closely*
+
+Psychic appears unusually often because many legendaries and special-form Pokémon use it.
+
+Flying is common because many Normal/Flying combinations exist, and Flying is frequently used as a secondary type.
+
+*✔ 3. “Classic” base types like Normal and Grass also remain very common*
+
+These types are widely used for early-route Pokémon or basic evolutionary stages.
+
+*✔ 4. Rarer types (Steel, Dark, Dragon) appear less frequently but still within top 10*
+
+Their lower counts reflect intentional design scarcity, especially Dragon and Steel, which tend to be reserved for special or powerful Pokémon.
+
 ### Type Combinations
 
 ```{r type-combos}
@@ -379,9 +415,11 @@ pokemon_df |>
   coord_flip() +
   labs(
     title = "Top 15 Type Combinations",
-    x = "Type Combination", y = "Count", fill = "Primary Type"
-  )
-```
+    x = "Type Combination", y = "Count"
+  ) +
+   theme(legend.position = "none")
+```  
+*Clearly, the Normal/Flying “starter bird” tradition is alive and well.*
 
 ## Stats by Type
 
@@ -410,8 +448,15 @@ pokemon_df |>
   theme(legend.position = "none")
 ```
 
-### Average Stats by Type
+🌟 **Analysis**:
+*Dragon-types* sit comfortably at the top of the BST chart—no surprise there. The type has basically become the franchise’s “stat type,” boosted every generation by at least one pseudo-legendary$^{(1)}$ line. These late-game, three-stage powerhouses (“big late bloomers”) dramatically raise the overall average for Dragons.
 
+In contrast, *Bug*, *Normal*, and *Poison* types sit much lower, reflecting their roles as early-route or concept-simple species. The spread in BST across types clearly mirrors long-standing design choices rather than randomness.
+
+*Pseudo-legendary (1): Traditionally Dragon-type “late bloomers”. Because they evolve much later in the game, they are granted significantly higher stats, typically reaching their final form only near the end of a playthrough.*
+
+<details>
+<summary><b>Click to expand: Average stats by type(detailed)</b></summary>
 ```{r avg-stats-type}
 # Calculate average stats per type
 type_stats <- pokemon_df |>
@@ -434,6 +479,8 @@ type_stats <- pokemon_df |>
   ) |>
   arrange(desc(avg_total))
 
+kable(type_stats, caption = "Average Stats by Tyoe", digits = 1)
+
 # Heatmap
 type_stats |>
   select(type, avg_hp, avg_attack, avg_sp_atk, avg_defense, avg_sp_def, avg_speed) |>
@@ -450,6 +497,7 @@ type_stats |>
     x = "Stat", y = "Owned Type", fill = "Average Value"
   )
 ```
+</details>
 
 # Special Categories Deep Dive
 ```{r}
@@ -495,11 +543,21 @@ category_stats <- pokemon_df |>
 
 ## Legendary vs all Others Stats
 
+<details>
+<summary><b>Welch Two Sample t-test Result</b></summary>
 ```{r}
 # Statistical test
 legendary_test <- t.test(total ~ is_legendary, data = pokemon_df)
 legendary_test
 ```
+</details>
+
+<details>
+<summary><b>Average Stats by Category</b></summary>
+```{r special-categories}
+kable(category_stats, caption = "Average Stats by Category", digits = 1)
+```
+</details>
 
 ```{r legendary-comparison}
 # Violin plot
@@ -516,58 +574,53 @@ pokemon_df |>
   theme(legend.position = "none")
 ```
 
-**Finding**: Based on a Welch two-sample t-test (t = `r round(legendary_test$statistic, 2)`, 
+🌟 **Finding**: 
+Based on a Welch two-sample t-test (t = `r round(legendary_test$statistic, 2)`, 
 p < `r signif(legendary_test$p.value, 2)`), Legendary Pokémon have a significantly higher 
 mean BST (`r round(legendary_test$estimate[2],1)`) compared to non-Legendary Pokémon 
-(`r round(legendary_test$estimate[1],1)`).
+(`r round(legendary_test$estimate[1],1)`), about `r round(((legendary_test$estimate[2]/legendary_test$estimate[1])-1)*100,1)`% higher.
 
 *The Violin plot gives same result*: Legendary Pokémon have significantly higher and more concentrated total base stats compared to all other Pokémon, whose BST values are far more diverse and widely spread.
 
-## All Special Categories
 
-```{r special-categories}
-kable(category_stats, caption = "Average Stats by Category", digits = 1)
-```
+# Summary
 
+<div style="text-align: center; margin: 20px 0;">
+<img src="assets/sprites/gif/wishiwashi-solo-form.gif" width="40" alt="Wishiwashi-solo-form" style="margin: 0 8px;">
+<img src="assets/sprites/gif/alcremie.gif" width="40" alt="Alcremie" style="margin: 0 8px;">
+<img src="assets/sprites/gif/cinccino.gif" width="70" alt="Cinccino" style="margin: 0 8px;">
+<img src="assets/sprites/gif/sprigatito.gif" width="40" alt="Sprigatito" style="margin: 0 8px;">
+<img src="assets/sprites/gif/pheromosa.gif" width="70" alt="Pheromosa" style="margin: 0 8px;">
+<img src="assets/sprites/gif/gardevoir-mega-gardevoir.gif" width="70" alt="Mega-Gardevoir" style="margin: 0 8px;">
+<img src="assets/sprites/gif/diancie-mega-diancie.gif" width="95" alt="Mega-Diancie" style="margin: 0 8px;">
+<img src="assets/sprites/gif/rayquaza-mega-rayquaza.gif" width="95" alt="Mega-Rayquaza" style="margin: 0 8px;">
+</div>
 
+<div style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">
 
-## 9. Key Findings Summary
+### EDA KEY FINDINGS
 
-```{r findings}
-library(glue)
+- **Stats Distribution**: The distribution of Pokémon's base stats is not normal, but rather a multi-modal distribution.
+- **"Stats Monster"**: "Has Dragon Type" pokemons owns greatest mean of BST.
+- **"Birds Everywhere Outside"**: Normal/Flying type Pokémon are the most numerous, followed by Bug/Flying type.
+- **"Pokémon Ecology"**: Despite their exaggerated scale, Pokémon size distributions share a similar right-skewed shape with real animals.
 
-cat(glue("=== EDA KEY FINDINGS ===
+### Key Statistics
 
-1. Dataset Overview:
-   - Total Pokemon: {nrow(pokemon_df)}
-   - Legendary: {sum(pokemon_df$is_legendary)}
-   - Mythical: {sum(pokemon_df$is_mythical)}
-   - Regular: {sum(!pokemon_df$is_special)}
+- Legendary vs Other(BST) 
+    - Difference(greater than other) is highly significant with p < `r signif(legendary_test$p.value, 2)`
+    - BST estimate was about `r round(((legendary_test$estimate[2]/legendary_test$estimate[1])-1)*100,1)`% higher than other pokemons.
 
-2. Base Stats:
-   - Mean BST: {round(mean(pokemon_df$total, na.rm = TRUE), 1)}
-   - BST Range: {min(pokemon_df$total, na.rm = TRUE)} - {max(pokemon_df$total, na.rm = TRUE)}
-
-3. Type Distribution:
-   - Unique primary types: {length(unique(pokemon_df$type_1))}
-   - Dual-type Pokemon: {sum(pokemon_df$is_dual_type)} ({round(100 * mean(pokemon_df$is_dual_type), 1)}%)
-
-4. Statistical Tests:
-   - Legendary vs Regular BST p-value: {format(legendary_test$p.value, scientific = TRUE, digits = 3)}
-   - Difference is {if_else(legendary_test$p.value < 0.001, 'highly', '')} significant
-
-5. Correlations:
-   - Total vs Attack: {round(cor(pokemon_df$total, pokemon_df$attack, use = 'complete.obs'), 3)}
-   - Attack vs Defense: {round(cor(pokemon_df$attack, pokemon_df$defense, use = 'complete.obs'), 3)}
-   - Height vs Weight: {round(cor(pokemon_df$height_m, pokemon_df$weight_kgs, use = 'complete.obs'), 3)}
-
-6. Physical Attributes:
-   - BMI Range (excluding outliers): {round(min(pokemon_df$bmi[pokemon_df$bmi < 1000], na.rm = TRUE), 1)} - {round(max(pokemon_df$bmi[pokemon_df$bmi < 1000], na.rm = TRUE), 1)}
-   - Extreme outlier: Cosmoem (BMI = 99,990) due to ultra-dense core
-   - Height range: {min(pokemon_df$height_m, na.rm = TRUE)} - {max(pokemon_df$height_m, na.rm = TRUE)} m
-   - Weight range: {min(pokemon_df$weight_kgs, na.rm = TRUE)} - {max(pokemon_df$weight_kgs, na.rm = TRUE)} kg
-"))
-```
+</div>
 
 ---
 
+<div style="text-align: center; padding: 20px; color: #666;">
+The statistical analysis includes only fully evolved Pokémon and special final forms. Unevolved species (e.g., Charmander) are excluded.
+</div>
+
+<div style="text-align: center; margin-top: 40px;">
+  <img src="assets/sprites/home/diancie.png" style="max-width: 60%;">
+</div>
+
+<div style="height: 150px;"></div>

@@ -524,8 +524,9 @@ p1 &lt;- ggplot(pokemon_df, aes(x = total)) +
     title = &quot;Distribution of Base Stat Total (BST)&quot;,
     subtitle = paste(&quot;Mean:&quot;, round(mean(pokemon_df$total, na.rm = TRUE), 1)),
     x = &quot;Total BST&quot;, y = &quot;Count&quot;
-  )</code></pre>
-<pre class="r"><code>p2 &lt;- ggplot(pokemon_df, aes(x = total, fill = category)) +
+  )
+
+p2 &lt;- ggplot(pokemon_df, aes(x = total, fill = category)) +
   geom_density(alpha = 0.5) +
   scale_fill_brewer(palette = &quot;Set2&quot;) +
   labs(
@@ -539,9 +540,9 @@ if (has_patchwork) {
   print(p1)
   print(p2)
 }</code></pre>
-<p><img src="eda_files/figure-html/unnamed-chunk-1-1.png" width="960" /></p>
-<p><strong>Finding</strong>: BST shows a multi-modal distribution with
-noticeable right skewness,<br />
+<p><img src="eda_files/figure-html/total-dist-1.png" width="960" /></p>
+<p>🌟 <strong>Finding</strong>: BST shows a multi-modal distribution
+with noticeable right skewness,<br />
 indicating structured stat tiers rather than a continuous normal
 process.</p>
 <p>This becomes more apparent in the “BST Distribution by Category”
@@ -601,7 +602,7 @@ radarchart(radar_data,
   )
 legend(&quot;topright&quot;, legend = c(&quot;Wishiwashi Solo Form&quot;, &quot;Mega Rayquaza&quot;),
        col = c(&quot;#4FACFE&quot;, &quot;#007F3A&quot;), pch = 19, bty = &quot;n&quot;)</code></pre>
-<p><img src="eda_files/figure-html/unnamed-chunk-2-1.png" width="960" /></p>
+<p><img src="eda_files/figure-html/unnamed-chunk-1-1.png" width="960" /></p>
 </div>
 </div>
 <div id="physical-attributes" class="section level2">
@@ -681,6 +682,20 @@ if (has_patchwork) {
   print(p3)
 }</code></pre>
 <p><img src="eda_files/figure-html/physical-dist-1.png" width="960" /></p>
+<p>🌟 <strong>Height Distribution (log scale)</strong><br />
+Most Pokémon heights follow a right-skewed distribution, with the
+majority falling between 0.5 and 2 meters. The log scale reveals the
+dense clustering of small to medium-sized Pokémon that would otherwise
+be compressed on a linear axis.</p>
+<p>🌟 <strong>Weight Distribution (log scale)</strong><br />
+Pokémon weights span several orders of magnitude—from lightweight
+species to multi-ton legendaries. Using a log scale highlights this
+exponential spread and makes the central pattern easier to
+interpret.</p>
+<p>🌟 <strong>BMI Distribution (filtered &lt; 1000)</strong><br />
+After removing extreme outliers (e.g., Cosmoem), Pokémon BMI values
+primarily fall between 0 and 60. The distribution is heavily
+right-skewed, with a long tail representing unusually dense species.</p>
 <div id="weight-vs.-height" class="section level3">
 <h3>Weight vs. Height</h3>
 <pre class="r"><code>ggplot(pokemon_df, aes(x = height_m, y = weight_kgs, color = type_1)) +
@@ -694,6 +709,15 @@ if (has_patchwork) {
   ) +
   theme(legend.position = &quot;right&quot;)</code></pre>
 <p><img src="eda_files/figure-html/height-weight-1.png" width="960" /></p>
+<p>🌟 <strong>Height vs. Weight (log–log scale)</strong><br />
+On a log–log scale, height and weight exhibit a near-linear
+relationship, suggesting that Pokémon size roughly follows a power-law
+growth pattern. Although different typings scatter around the trend
+line, they generally follow the same underlying scaling behavior.</p>
+<p><strong>Summary</strong>: Overall, these physical metrics show that
+Pokémon exhibit highly varied body structures, but they still follow
+consistent biological scaling patterns when viewed under appropriate
+transformations.</p>
 </div>
 </div>
 </div>
@@ -779,6 +803,32 @@ if (has_patchwork) {
   print(p2)
 }</code></pre>
 <p><img src="eda_files/figure-html/type-counts-1.png" width="960" /></p>
+<p>🌟 <strong>Top 10 Types (Based on “has this type” counting
+rule)</strong></p>
+<p><strong>Note</strong>: Since each Pokémon is counted once for every
+type it possesses, dual-type Pokémon contribute to <strong>both</strong>
+of their typings. Under this rule, the ranking reflects overall type
+prevalence in the <strong>entire Pokédex</strong>, not the number of
+Pokémon with exclusive types.</p>
+<p><strong>Key observations</strong>:<br />
+<em>✔ 1. Water is the most common type overall</em></p>
+<p>Water appears on the largest number of Pokémon, which aligns with
+franchise design—many species are water-based, and almost every
+generation introduces a substantial number of aquatic Pokémon.</p>
+<p><em>✔ 2. Psychic and Flying follow closely</em></p>
+<p>Psychic appears unusually often because many legendaries and
+special-form Pokémon use it.</p>
+<p>Flying is common because many Normal/Flying combinations exist, and
+Flying is frequently used as a secondary type.</p>
+<p><em>✔ 3. “Classic” base types like Normal and Grass also remain very
+common</em></p>
+<p>These types are widely used for early-route Pokémon or basic
+evolutionary stages.</p>
+<p><em>✔ 4. Rarer types (Steel, Dark, Dragon) appear less frequently but
+still within top 10</em></p>
+<p>Their lower counts reflect intentional design scarcity, especially
+Dragon and Steel, which tend to be reserved for special or powerful
+Pokémon.</p>
 <div id="type-combinations" class="section level3">
 <h3>Type Combinations</h3>
 <pre class="r"><code># Top type combinations
@@ -793,9 +843,12 @@ pokemon_df |&gt;
   coord_flip() +
   labs(
     title = &quot;Top 15 Type Combinations&quot;,
-    x = &quot;Type Combination&quot;, y = &quot;Count&quot;, fill = &quot;Primary Type&quot;
-  )</code></pre>
-<p><img src="eda_files/figure-html/type-combos-1.png" width="960" /></p>
+    x = &quot;Type Combination&quot;, y = &quot;Count&quot;
+  ) +
+   theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="eda_files/figure-html/type-combos-1.png" width="960" />
+<em>Clearly, the Normal/Flying “starter bird” tradition is alive and
+well.</em></p>
 </div>
 </div>
 <div id="stats-by-type" class="section level2">
@@ -823,8 +876,24 @@ pokemon_df |&gt;
   ) +
   theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="eda_files/figure-html/stats-by-type-1.png" width="960" /></p>
-<div id="average-stats-by-type" class="section level3">
-<h3>Average Stats by Type</h3>
+<p>🌟 <strong>Analysis</strong>: <em>Dragon-types</em> sit comfortably
+at the top of the BST chart—no surprise there. The type has basically
+become the franchise’s “stat type,” boosted every generation by at least
+one pseudo-legendary<span class="math inline">\(^{(1)}\)</span> line.
+These late-game, three-stage powerhouses (“big late bloomers”)
+dramatically raise the overall average for Dragons.</p>
+<p>In contrast, <em>Bug</em>, <em>Normal</em>, and <em>Poison</em> types
+sit much lower, reflecting their roles as early-route or concept-simple
+species. The spread in BST across types clearly mirrors long-standing
+design choices rather than randomness.</p>
+<p><em>Pseudo-legendary (1): Traditionally Dragon-type “late bloomers”.
+Because they evolve much later in the game, they are granted
+significantly higher stats, typically reaching their final form only
+near the end of a playthrough.</em></p>
+<details>
+<summary>
+<b>Click to expand: Average stats by type(detailed)</b>
+</summary>
 <pre class="r"><code># Calculate average stats per type
 type_stats &lt;- pokemon_df |&gt;
   pivot_longer(
@@ -846,7 +915,235 @@ type_stats &lt;- pokemon_df |&gt;
   ) |&gt;
   arrange(desc(avg_total))
 
-# Heatmap
+kable(type_stats, caption = &quot;Average Stats by Tyoe&quot;, digits = 1)</code></pre>
+<table style="width:100%;">
+<caption>Average Stats by Tyoe</caption>
+<colgroup>
+<col width="10%" />
+<col width="6%" />
+<col width="11%" />
+<col width="8%" />
+<col width="12%" />
+<col width="12%" />
+<col width="13%" />
+<col width="12%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">type</th>
+<th align="right">count</th>
+<th align="right">avg_total</th>
+<th align="right">avg_hp</th>
+<th align="right">avg_attack</th>
+<th align="right">avg_sp_atk</th>
+<th align="right">avg_defense</th>
+<th align="right">avg_sp_def</th>
+<th align="right">avg_speed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Dragon</td>
+<td align="right">68</td>
+<td align="right">600.3</td>
+<td align="right">97.8</td>
+<td align="right">108.2</td>
+<td align="right">113.4</td>
+<td align="right">95.1</td>
+<td align="right">95.0</td>
+<td align="right">90.9</td>
+</tr>
+<tr class="even">
+<td align="left">Psychic</td>
+<td align="right">99</td>
+<td align="right">550.4</td>
+<td align="right">83.7</td>
+<td align="right">88.9</td>
+<td align="right">107.7</td>
+<td align="right">85.1</td>
+<td align="right">97.4</td>
+<td align="right">87.6</td>
+</tr>
+<tr class="odd">
+<td align="left">Steel</td>
+<td align="right">60</td>
+<td align="right">545.8</td>
+<td align="right">79.2</td>
+<td align="right">106.3</td>
+<td align="right">81.3</td>
+<td align="right">119.1</td>
+<td align="right">90.0</td>
+<td align="right">70.0</td>
+</tr>
+<tr class="even">
+<td align="left">Fire</td>
+<td align="right">59</td>
+<td align="right">539.7</td>
+<td align="right">81.4</td>
+<td align="right">98.3</td>
+<td align="right">103.6</td>
+<td align="right">85.2</td>
+<td align="right">86.2</td>
+<td align="right">85.1</td>
+</tr>
+<tr class="odd">
+<td align="left">Fighting</td>
+<td align="right">69</td>
+<td align="right">536.3</td>
+<td align="right">84.5</td>
+<td align="right">119.9</td>
+<td align="right">72.4</td>
+<td align="right">88.5</td>
+<td align="right">81.1</td>
+<td align="right">89.9</td>
+</tr>
+<tr class="even">
+<td align="left">Fairy</td>
+<td align="right">49</td>
+<td align="right">527.4</td>
+<td align="right">74.9</td>
+<td align="right">85.3</td>
+<td align="right">95.9</td>
+<td align="right">88.9</td>
+<td align="right">100.8</td>
+<td align="right">81.5</td>
+</tr>
+<tr class="odd">
+<td align="left">Ground</td>
+<td align="right">53</td>
+<td align="right">526.5</td>
+<td align="right">93.2</td>
+<td align="right">106.6</td>
+<td align="right">75.4</td>
+<td align="right">103.4</td>
+<td align="right">80.8</td>
+<td align="right">67.0</td>
+</tr>
+<tr class="even">
+<td align="left">Ice</td>
+<td align="right">45</td>
+<td align="right">526.4</td>
+<td align="right">88.3</td>
+<td align="right">99.3</td>
+<td align="right">85.4</td>
+<td align="right">90.4</td>
+<td align="right">85.1</td>
+<td align="right">77.8</td>
+</tr>
+<tr class="odd">
+<td align="left">Dark</td>
+<td align="right">64</td>
+<td align="right">523.9</td>
+<td align="right">84.4</td>
+<td align="right">106.2</td>
+<td align="right">85.2</td>
+<td align="right">82.0</td>
+<td align="right">81.2</td>
+<td align="right">84.8</td>
+</tr>
+<tr class="even">
+<td align="left">Ghost</td>
+<td align="right">57</td>
+<td align="right">519.3</td>
+<td align="right">76.4</td>
+<td align="right">91.3</td>
+<td align="right">96.4</td>
+<td align="right">87.8</td>
+<td align="right">89.9</td>
+<td align="right">77.5</td>
+</tr>
+<tr class="odd">
+<td align="left">Flying</td>
+<td align="right">93</td>
+<td align="right">518.2</td>
+<td align="right">81.1</td>
+<td align="right">93.3</td>
+<td align="right">91.1</td>
+<td align="right">77.9</td>
+<td align="right">80.6</td>
+<td align="right">94.2</td>
+</tr>
+<tr class="even">
+<td align="left">Rock</td>
+<td align="right">53</td>
+<td align="right">518.2</td>
+<td align="right">79.6</td>
+<td align="right">103.5</td>
+<td align="right">69.1</td>
+<td align="right">113.5</td>
+<td align="right">86.5</td>
+<td align="right">66.1</td>
+</tr>
+<tr class="odd">
+<td align="left">Grass</td>
+<td align="right">80</td>
+<td align="right">513.0</td>
+<td align="right">79.7</td>
+<td align="right">95.9</td>
+<td align="right">87.4</td>
+<td align="right">87.6</td>
+<td align="right">86.6</td>
+<td align="right">75.8</td>
+</tr>
+<tr class="even">
+<td align="left">Water</td>
+<td align="right">107</td>
+<td align="right">510.7</td>
+<td align="right">83.5</td>
+<td align="right">90.5</td>
+<td align="right">88.6</td>
+<td align="right">87.3</td>
+<td align="right">84.5</td>
+<td align="right">76.3</td>
+</tr>
+<tr class="odd">
+<td align="left">Electric</td>
+<td align="right">60</td>
+<td align="right">508.1</td>
+<td align="right">74.8</td>
+<td align="right">84.7</td>
+<td align="right">98.3</td>
+<td align="right">77.4</td>
+<td align="right">79.8</td>
+<td align="right">93.1</td>
+</tr>
+<tr class="even">
+<td align="left">Poison</td>
+<td align="right">53</td>
+<td align="right">503.6</td>
+<td align="right">80.2</td>
+<td align="right">89.1</td>
+<td align="right">87.3</td>
+<td align="right">80.5</td>
+<td align="right">85.2</td>
+<td align="right">81.3</td>
+</tr>
+<tr class="odd">
+<td align="left">Normal</td>
+<td align="right">90</td>
+<td align="right">482.6</td>
+<td align="right">88.6</td>
+<td align="right">88.0</td>
+<td align="right">72.2</td>
+<td align="right">73.7</td>
+<td align="right">77.5</td>
+<td align="right">82.6</td>
+</tr>
+<tr class="even">
+<td align="left">Bug</td>
+<td align="right">54</td>
+<td align="right">472.5</td>
+<td align="right">68.1</td>
+<td align="right">91.5</td>
+<td align="right">72.2</td>
+<td align="right">84.2</td>
+<td align="right">81.9</td>
+<td align="right">74.5</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Heatmap
 type_stats |&gt;
   select(type, avg_hp, avg_attack, avg_sp_atk, avg_defense, avg_sp_def, avg_speed) |&gt;
   pivot_longer(-type, names_to = &quot;stat&quot;, values_to = &quot;value&quot;) |&gt;
@@ -861,8 +1158,8 @@ type_stats |&gt;
     title = &quot;Average Stats Heatmap (Top 12 Types by BST)&quot;,
     x = &quot;Stat&quot;, y = &quot;Owned Type&quot;, fill = &quot;Average Value&quot;
   )</code></pre>
-<p><img src="eda_files/figure-html/avg-stats-type-1.png" width="960" /></p>
-</div>
+<img src="eda_files/figure-html/avg-stats-type-1.png" width="960" />
+</details>
 </div>
 </div>
 <div id="special-categories-deep-dive" class="section level1">
@@ -931,6 +1228,10 @@ Regular Pokémons
 <hr />
 <div id="legendary-vs-all-others-stats" class="section level2">
 <h2>Legendary vs all Others Stats</h2>
+<details>
+<summary>
+<b>Welch Two Sample t-test Result</b>
+</summary>
 <pre class="r"><code># Statistical test
 legendary_test &lt;- t.test(total ~ is_legendary, data = pokemon_df)
 legendary_test</code></pre>
@@ -945,29 +1246,11 @@ legendary_test</code></pre>
 ## sample estimates:
 ## mean in group FALSE  mean in group TRUE 
 ##            502.9563            623.8911</code></pre>
-<pre class="r"><code># Violin plot
-pokemon_df |&gt;
-  mutate(label = if_else(is_legendary, &quot;Legendary&quot;, &quot;Others&quot;)) |&gt;
-  ggplot(aes(x = label, y = total, fill = label)) +
-  geom_violin(alpha = 0.7) +
-  geom_boxplot(width = 0.2, alpha = 0.5) +
-  scale_fill_manual(values = c(&quot;Others&quot; = &quot;steelblue&quot;, &quot;Legendary&quot; = &quot;gold&quot;)) +
-  labs(
-    title = &quot;BST: Legendary vs Other Pokemons&quot;,
-    x = &quot;&quot;, y = &quot;Total BST&quot;
-  ) +
-  theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="eda_files/figure-html/legendary-comparison-1.png" width="960" /></p>
-<p><strong>Finding</strong>: Based on a Welch two-sample t-test (t =
--16.77, p &lt; 2.8^{-34}), Legendary Pokémon have a significantly higher
-mean BST (623.9) compared to non-Legendary Pokémon (503).</p>
-<p><em>The Violin plot gives same result</em>: Legendary Pokémon have
-significantly higher and more concentrated total base stats compared to
-all other Pokémon, whose BST values are far more diverse and widely
-spread.</p>
-</div>
-<div id="all-special-categories" class="section level2">
-<h2>All Special Categories</h2>
+</details>
+<details>
+<summary>
+<b>Average Stats by Category</b>
+</summary>
 <pre class="r"><code>kable(category_stats, caption = &quot;Average Stats by Category&quot;, digits = 1)</code></pre>
 <table>
 <caption>Average Stats by Category</caption>
@@ -1053,73 +1336,81 @@ spread.</p>
 </tr>
 </tbody>
 </table>
+</details>
+<pre class="r"><code># Violin plot
+pokemon_df |&gt;
+  mutate(label = if_else(is_legendary, &quot;Legendary&quot;, &quot;Others&quot;)) |&gt;
+  ggplot(aes(x = label, y = total, fill = label)) +
+  geom_violin(alpha = 0.7) +
+  geom_boxplot(width = 0.2, alpha = 0.5) +
+  scale_fill_manual(values = c(&quot;Others&quot; = &quot;steelblue&quot;, &quot;Legendary&quot; = &quot;gold&quot;)) +
+  labs(
+    title = &quot;BST: Legendary vs Other Pokemons&quot;,
+    x = &quot;&quot;, y = &quot;Total BST&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="eda_files/figure-html/legendary-comparison-1.png" width="960" /></p>
+<p>🌟 <strong>Finding</strong>: Based on a Welch two-sample t-test (t =
+-16.77, p &lt; 2.8^{-34}), Legendary Pokémon have a significantly higher
+mean BST (623.9) compared to non-Legendary Pokémon (503), about 24%
+higher.</p>
+<p><em>The Violin plot gives same result</em>: Legendary Pokémon have
+significantly higher and more concentrated total base stats compared to
+all other Pokémon, whose BST values are far more diverse and widely
+spread.</p>
 </div>
-<div id="key-findings-summary" class="section level2">
-<h2>9. Key Findings Summary</h2>
-<pre class="r"><code>library(glue)
-
-cat(glue(&quot;=== EDA KEY FINDINGS ===
-
-1. Dataset Overview:
-   - Total Pokemon: {nrow(pokemon_df)}
-   - Legendary: {sum(pokemon_df$is_legendary)}
-   - Mythical: {sum(pokemon_df$is_mythical)}
-   - Regular: {sum(!pokemon_df$is_special)}
-
-2. Base Stats:
-   - Mean BST: {round(mean(pokemon_df$total, na.rm = TRUE), 1)}
-   - BST Range: {min(pokemon_df$total, na.rm = TRUE)} - {max(pokemon_df$total, na.rm = TRUE)}
-
-3. Type Distribution:
-   - Unique primary types: {length(unique(pokemon_df$type_1))}
-   - Dual-type Pokemon: {sum(pokemon_df$is_dual_type)} ({round(100 * mean(pokemon_df$is_dual_type), 1)}%)
-
-4. Statistical Tests:
-   - Legendary vs Regular BST p-value: {format(legendary_test$p.value, scientific = TRUE, digits = 3)}
-   - Difference is {if_else(legendary_test$p.value &lt; 0.001, &#39;highly&#39;, &#39;&#39;)} significant
-
-5. Correlations:
-   - Total vs Attack: {round(cor(pokemon_df$total, pokemon_df$attack, use = &#39;complete.obs&#39;), 3)}
-   - Attack vs Defense: {round(cor(pokemon_df$attack, pokemon_df$defense, use = &#39;complete.obs&#39;), 3)}
-   - Height vs Weight: {round(cor(pokemon_df$height_m, pokemon_df$weight_kgs, use = &#39;complete.obs&#39;), 3)}
-
-6. Physical Attributes:
-   - BMI Range (excluding outliers): {round(min(pokemon_df$bmi[pokemon_df$bmi &lt; 1000], na.rm = TRUE), 1)} - {round(max(pokemon_df$bmi[pokemon_df$bmi &lt; 1000], na.rm = TRUE), 1)}
-   - Extreme outlier: Cosmoem (BMI = 99,990) due to ultra-dense core
-   - Height range: {min(pokemon_df$height_m, na.rm = TRUE)} - {max(pokemon_df$height_m, na.rm = TRUE)} m
-   - Weight range: {min(pokemon_df$weight_kgs, na.rm = TRUE)} - {max(pokemon_df$weight_kgs, na.rm = TRUE)} kg
-&quot;))</code></pre>
-<pre><code>## === EDA KEY FINDINGS ===
-## 
-## 1. Dataset Overview:
-##    - Total Pokemon: 742
-##    - Legendary: 101
-##    - Mythical: 28
-##    - Regular: 583
-## 
-## 2. Base Stats:
-##    - Mean BST: 519.4
-##    - BST Range: 175 - 780
-## 
-## 3. Type Distribution:
-##    - Unique primary types: 18
-##    - Dual-type Pokemon: 471 (63.5%)
-## 
-## 4. Statistical Tests:
-##    - Legendary vs Regular BST p-value: 2.77e-34
-##    - Difference is highly significant
-## 
-## 5. Correlations:
-##    - Total vs Attack: 0.545
-##    - Attack vs Defense: 0.216
-##    - Height vs Weight: 0.631
-## 
-## 6. Physical Attributes:
-##    - BMI Range (excluding outliers): 0.4 - 644
-##    - Extreme outlier: Cosmoem (BMI = 99,990) due to ultra-dense core
-##    - Height range: 0.1 - 20 m
-##    - Weight range: 0.1 - 999.9 kg</code></pre>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<div style="text-align: center; margin: 20px 0;">
+<p><img src="assets/sprites/gif/wishiwashi-solo-form.gif" width="40" alt="Wishiwashi-solo-form" style="margin: 0 8px;">
+<img src="assets/sprites/gif/alcremie.gif" width="40" alt="Alcremie" style="margin: 0 8px;">
+<img src="assets/sprites/gif/cinccino.gif" width="70" alt="Cinccino" style="margin: 0 8px;">
+<img src="assets/sprites/gif/sprigatito.gif" width="40" alt="Sprigatito" style="margin: 0 8px;">
+<img src="assets/sprites/gif/pheromosa.gif" width="70" alt="Pheromosa" style="margin: 0 8px;">
+<img src="assets/sprites/gif/gardevoir-mega-gardevoir.gif" width="70" alt="Mega-Gardevoir" style="margin: 0 8px;">
+<img src="assets/sprites/gif/diancie-mega-diancie.gif" width="95" alt="Mega-Diancie" style="margin: 0 8px;">
+<img src="assets/sprites/gif/rayquaza-mega-rayquaza.gif" width="95" alt="Mega-Rayquaza" style="margin: 0 8px;"></p>
+</div>
+<div
+style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">
+<div id="eda-key-findings" class="section level3">
+<h3>EDA KEY FINDINGS</h3>
+<ul>
+<li><strong>Stats Distribution</strong>: The distribution of Pokémon’s
+base stats is not normal, but rather a multi-modal distribution.</li>
+<li><strong>“Stats Monster”</strong>: “Has Dragon Type” pokemons owns
+greatest mean of BST.</li>
+<li><strong>“Birds Everywhere Outside”</strong>: Normal/Flying type
+Pokémon are the most numerous, followed by Bug/Flying type.</li>
+<li><strong>“Pokémon Ecology”</strong>: Despite their exaggerated scale,
+Pokémon size distributions share a similar right-skewed shape with real
+animals.</li>
+</ul>
+</div>
+<div id="key-statistics" class="section level3">
+<h3>Key Statistics</h3>
+<ul>
+<li>Legendary vs Other(BST)
+<ul>
+<li>Difference(greater than other) is highly significant with p &lt;
+2.8^{-34}</li>
+<li>BST estimate was about 24% higher than other pokemons.</li>
+</ul></li>
+</ul>
+</div>
+</div>
 <hr />
+<div style="text-align: center; padding: 20px; color: #666;">
+<p>The statistical analysis includes only fully evolved Pokémon and
+special final forms. Unevolved species (e.g., Charmander) are
+excluded.</p>
+</div>
+<div style="text-align: center; margin-top: 40px;">
+<p><img src="assets/sprites/home/diancie.png" style="max-width: 60%;"></p>
+</div>
+<div style="height: 150px;">
+
 </div>
 </div>
 
