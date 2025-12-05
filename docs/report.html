@@ -624,6 +624,112 @@ height(m)²</li>
 </ul>
 </div>
 </div>
+<div id="exploratory-analysis" class="section level1">
+<h1>Exploratory Analysis</h1>
+<div id="eda" class="section level2">
+<h2>EDA</h2>
+<p>Our exploratory analysis aimed to understand the structure,
+distribution, and internal relationships of key Pokémon attributes
+before proceeding to modeling. We focused on visual diagnostics, summary
+statistics, and transformation-based exploration to uncover patterns
+that informed later methodological choices.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Overview of Pokémon Statistics</strong></li>
+</ol>
+<ul>
+<li><p>We began by examining the six base stats (HP, Attack, Defense,
+Special Attack, Special Defense, Speed) and the total Base Stat Total
+(BST). The histogram of BST revealed a multi-modal distribution rather
+than a unimodal or normal structure, suggesting intentional “tiering” in
+Pokémon design rather than random natural variation. This supported the
+decision to avoid parametric modeling that assumes normality when
+analyzing BST directly.</p></li>
+<li><p>The distributions of individual stats displayed varied shapes and
+ranges—HP and Defense showing heavier right tails, Speed being more
+evenly spread. These differences highlighted the need to treat stats
+independently during later PCA and clustering steps rather than relying
+solely on BST.</p></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Comparing Extreme and Typical Pokémon</strong></li>
+</ol>
+<ul>
+<li>To better understand variation in stat profiles, we created radar
+plots comparing one of the weakest fully evolved Pokémon (Wishiwashi
+Solo Form) with one of the strongest (Mega Rayquaza). This qualitative
+comparison illustrated how extreme Pokémon deviate from population means
+across all six stats, reinforcing that Pokémon design follows
+distinctive archetypes. This motivated us to later examine whether PCA
+would capture these archetypal differences.</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Physical Attributes: Height, Weight, and BMI</strong></li>
+</ol>
+<ul>
+<li><p>Height and weight showed heavily right-skewed distributions,
+spanning several orders of magnitude. Applying log transformations
+revealed smooth, interpretable patterns, indicating biological scaling
+relationships similar to those observed in real animal species. The
+height–weight scatterplot on a log–log scale suggested a near-linear
+relationship, consistent with power-law scaling.</p></li>
+<li><p>BMI contained extreme outliers (e.g., Cosmoem), so we applied a
+data filter to visualize the meaningful distribution. This step was
+necessary to prevent single outliers from compressing the rest of the
+data—a decision that also informed later modeling, where we excluded
+non-representative extreme physical measurements.</p></li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Typing Structure and Prevalence</strong></li>
+</ol>
+<ul>
+<li><p>We explored Pokémon type diversity by counting primary and
+secondary types. Water, Flying, and Psychic emerged as the most common,
+while combinations like Normal/Flying dominated dual-type frequencies—a
+pattern consistent with game design traditions. These findings justified
+including type as a categorical predictor in later classification
+models, since type prevalence clearly drives structural differences
+across populations.</p></li>
+<li><p>Type-based BST boxplots revealed systematic differences: Dragon
+and Psychic Pokémon possess notably higher average BST, whereas Bug and
+Normal types tend to be lower. This supported the hypothesis that type
+encodes meaningful structural information that PCA and downstream
+supervised learning methods could exploit.</p></li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li><strong>Special Categories (Legendary, Mythical, Paradox,
+etc.)</strong></li>
+</ol>
+<ul>
+<li>A key exploratory step involved comparing Legendary vs non-Legendary
+Pokémon. A Welch’s t-test showed a highly significant difference in mean
+BST (&gt;100-point gap), with Legendaries displaying much tighter and
+higher distributions. These differences justified treating category as a
+grouping variable during modeling and suggested that any predictive
+model involving BST must carefully consider category imbalance.</li>
+</ul>
+<ol start="6" style="list-style-type: decimal">
+<li><strong>Summary of EDA Takeaways</strong></li>
+</ol>
+<ul>
+<li><p>Our exploratory work revealed several insights that shaped later
+analysis decisions:</p>
+<ul>
+<li><p>Pokémon stats are structured, not random, with clear modes and
+archetypes.</p></li>
+<li><p>Scaling transformations (e.g., log height/weight) are necessary
+for meaningful visualization and PCA.</p></li>
+<li><p>Type and special categories encode strong statistical signals and
+must be included in predictive models.</p></li>
+<li><p>Outliers meaningfully influence physical attribute scales and
+must be filtered or transformed for analysis.</p></li>
+</ul></li>
+</ul>
+<p>Collectively, the EDA provided the foundation for choosing
+dimensionality-reduction techniques, designing classification tasks, and
+constructing a rating metric that reflects Pokémon balance and design
+structure.</p>
+</div>
+</div>
 
 
 
