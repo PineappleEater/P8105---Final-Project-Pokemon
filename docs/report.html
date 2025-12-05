@@ -729,6 +729,9 @@ dimensionality-reduction techniques, designing classification tasks, and
 constructing a rating metric that reflects Pokémon balance and design
 structure.</p>
 </div>
+</div>
+<div id="additonal-analysis" class="section level1">
+<h1>Additonal Analysis</h1>
 <div id="pca" class="section level2">
 <h2>PCA</h2>
 <p>To better understand the multivariate structure of Pokémon statistics
@@ -821,6 +824,54 @@ strategically structured, with clear axes representing general power and
 combat roles. These insights guided both model selection and feature
 engineering in subsequent stages of analysis.</li>
 </ul>
+</div>
+</div>
+<div id="discussion" class="section level1">
+<h1>Discussion</h1>
+<div
+style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">
+<div id="eda-key-findings" class="section level3">
+<h3>EDA KEY FINDINGS</h3>
+<ul>
+<li><strong>Stats Distribution</strong>: The distribution of Pokémon’s
+base stats is not normal, but rather a multi-modal distribution.</li>
+<li><strong>“Stats Monster”</strong>: “Has Dragon Type” pokemons owns
+greatest mean of BST.</li>
+<li><strong>“Birds Everywhere Outside”</strong>: Normal/Flying type
+Pokémon are the most numerous, followed by Bug/Flying type.</li>
+<li><strong>“Pokémon Ecology”</strong>: Despite their exaggerated scale,
+Pokémon size distributions share a similar right-skewed shape with real
+animals.</li>
+</ul>
+</div>
+<div id="pca-results" class="section level3">
+<h3>PCA Results</h3>
+<ul>
+<li>First 3 components capture ~70% of variance</li>
+<li>PC1 represents battle effectiveness, PC2 represents physical
+size</li>
+<li>Legendary Pokémon clearly separated in principal component
+space</li>
+</ul>
+</div>
+<div id="clustering-results" class="section level3">
+<h3>Clustering Results</h3>
+<ul>
+<li>4 distinct archetypes identified</li>
+<li>Elite tier (high BST, 35% legendary) vs casual tier (low BST, 0%
+legendary)</li>
+<li>Balanced distribution across defensive, balanced, and offensive
+clusters</li>
+</ul>
+</div>
+<div id="classification-results" class="section level3">
+<h3>Classification Results</h3>
+<ul>
+<li>Random Forest achieves 99.5% AUC (near-perfect classification)</li>
+<li>Legendary Pokémon are 99% separable by base stats alone</li>
+<li>Total BST is the single most important feature</li>
+</ul>
+</div>
 </div>
 </div>
 

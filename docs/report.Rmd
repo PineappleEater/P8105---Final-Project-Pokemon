@@ -147,6 +147,8 @@ Our exploratory analysis aimed to understand the structure, distribution, and in
 
 Collectively, the EDA provided the foundation for choosing dimensionality-reduction techniques, designing classification tasks, and constructing a rating metric that reflects Pokémon balance and design structure.
 
+# Additonal Analysis
+
 ## PCA
 
 To better understand the multivariate structure of Pokémon statistics and reduce dimensionality for downstream modeling, we conducted Principal Component Analysis (PCA) on standardized versions of the six base stats: HP, Attack, Defense, Special Attack, Special Defense, and Speed. Standardization was necessary because these attributes are measured on similar but not identical scales, and unscaled PCA would overweight variables with larger variance.
@@ -190,3 +192,31 @@ These patterns confirm that Pokémon occupy structured roles defined by statisti
 5. **Summary**
 
 - Overall, PCA validated that Pokémon design is multidimensional and strategically structured, with clear axes representing general power and combat roles. These insights guided both model selection and feature engineering in subsequent stages of analysis.
+
+# Discussion
+
+<div style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">
+
+### EDA KEY FINDINGS
+
+- **Stats Distribution**: The distribution of Pokémon's base stats is not normal, but rather a multi-modal distribution.
+- **"Stats Monster"**: "Has Dragon Type" pokemons owns greatest mean of BST.
+- **"Birds Everywhere Outside"**: Normal/Flying type Pokémon are the most numerous, followed by Bug/Flying type.
+- **"Pokémon Ecology"**: Despite their exaggerated scale, Pokémon size distributions share a similar right-skewed shape with real animals.
+
+### PCA Results
+- First 3 components capture ~70% of variance
+- PC1 represents battle effectiveness, PC2 represents physical size
+- Legendary Pokémon clearly separated in principal component space
+
+### Clustering Results
+- 4 distinct archetypes identified
+- Elite tier (high BST, 35% legendary) vs casual tier (low BST, 0% legendary)
+- Balanced distribution across defensive, balanced, and offensive clusters
+
+### Classification Results
+- Random Forest achieves 99.5% AUC (near-perfect classification)
+- Legendary Pokémon are 99% separable by base stats alone
+- Total BST is the single most important feature
+
+</div>
