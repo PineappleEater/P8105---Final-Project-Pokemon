@@ -1,5 +1,104 @@
 ---
-title: "report"
-output: html_document
+title: "Report: The Story and Mystery of Pokémon — A Comprehensive Data Science Exploration"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    toc_depth: 3
+    theme: cosmo
+    code_folding: hide
+    self_contained: false
+---
+*Team Members: Leah Li (yl5828), Ruipeng Li (rl3616), Xuange Liang (xl3493), Yiwen Zhang (yz4994)* 
+
+### Motivation & Background
+- **Dataset**: 1,025 Pokémon species across 9 generations (1996-2025)
+- **Why Pokémon?**
+  - Rich, structured dataset with quantitative and categorical features
+  - Perfect case study for demonstrating complete data science workflow
+  - Combines statistical rigor with creative exploration
+  - Practical application for competitive play and team building
+- **Motiviation**
+The Pokémon dataset offers a rich and structured environment for applying data science methods to explore relationships between attributes, performance, and design balance. Each Pokémon is described by a variety of quantitative and categorical features—such as type, stats, generation, and legendary status—making it an excellent case study for classification, clustering, and predictive modeling. Analyzing this dataset allows us to practice fundamental data science workflows, including data cleaning, feature engineering, visualization, and model evaluation, while also addressing interesting questions such as: What characteristics make a Pokémon strong? Are legendary Pokémon statistically distinct from others? By combining statistical reasoning with creative curiosity, this project aims to turn a familiar and entertaining topic into a meaningful data-driven exploration.
+
+### Related Work
+
+Prior analyses of the Pokémon dataset have appeared in a variety of data science blogs, Kaggle kernels, and academic teaching materials, demonstrating its popularity as a case study for statistical learning. Kaggle’s “Complete Pokémon Dataset” has inspired numerous exploratory and predictive modeling projects that examine type advantages, stat distributions, and the distinctiveness of legendary Pokémon. Several tutorials—including those discussed in class—use this dataset to illustrate concepts such as principal component analysis, clustering, and classification algorithms due to its clean structure and intuitive domain. Additionally, online communities like Towards Data Science and r/datascience frequently feature Pokémon-themed analyses that highlight best practices in visualization, feature engineering, and model evaluation. These prior works inform our project by showcasing the dataset’s versatility and by motivating deeper investigation into what features drive Pokémon performance, balance, and design across generations.
+
+### Research Questions
+
+**Core Questions:**
+
+- **Legendary Classification**: Is it possible to build a classifier to identify legendary Pokémon?
+- **Physical Attributes Analysis**: How does height and weight of a Pokémon correlate with its various base stats?
+- **Type Effectiveness**: Which type (or type combination) is the strongest overall? Which is the weakest?
+- **Type-Legendary Relationship**: Which type is the most likely to be a legendary Pokémon?
+- **Rating System Development**: Based on Pokémon type and stats, can we provide a Pokémon rating system for beginners?
+
+**Extended Questions:**
+
+- **System Validation**: Does the "best" Pokémon team selected through this rating system actually match competitive standards (based on "Pokémon Masters" reviews)?
+- **Team Building Utility**: Can you build a "best" Pokémon team based on this rating system? In other words, is this system reliable or useful as a reference?
+
+## Dataset
+
+### Data
+
+| Source | Description | URL |
+|--------|-------------|-----|
+| **Kaggle** | Community-curated Pokémon dataset | [rounakbanik/pokemon](https://www.kaggle.com/datasets/rounakbanik/pokemon) |
+| **PokémonDB** | Official stats scraped from web | [pokemondb.net](https://pokemondb.net) |
+| **Veekun/PokéAPI** | Metadata & move databases | [GitHub](https://github.com/veekun/pokedex) |
+
+### Dataset Overview
+
+<div align="center">
+
+| Metric | Value |
+|--------|-------|
+| **Species Count** | 1,025 Pokémon |
+| **Generations** | Gen 1–9 (1996–2025) |
+| **Features** | 30+ attributes |
+
+</div>
+
+### Key Variables
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `dex` | Integer | National Pokédex number |
+| `name` | String | Official species name |
+| `type_1` / `type_2` | Categorical | Primary and secondary types |
+| `total` | Integer | Base Stat Total (BST) |
+| `hp` ... `speed` | Integer | Individual base stats |
+| `is_legendary` | Boolean | Legendary status flag |
+| `category` | Factor | Regular / Legendary / Mythical / Paradox / Ultra Beast |
+
 ---
 
+### Web Scraping Implementation
+```r
+# Scraped three HTML tables from PokémonDB
+raw_state_df <- read_html("data/raw-data/Pokemon.html") |> html_table()
+raw_wh_df <- read_html("data/raw-data/Pokemon by height and weight.html") |> html_table()
+raw_evolved_df <- read_html("data/raw-data/Pokemon fully evolved.html") |> html_table()
+```
+
+### Data Cleaning Highlights
+1. **Table Joining**: Merged stats, dimensions, and evolution data by Pokédex number
+2. **Type Parsing**: Split combined type strings into `type_1` and `type_2`
+3. **Special Case Handling**:
+   - **Eternatus Eternamax**: No official data exists
+   - Assigned estimated dimensions based on lore: 999.9m / 9999.9kg
+   - Calculated BMI = 0.01 (representing non-physical energy entity)
+4. **Derived Variables**: BMI = weight(kg) / height(m)²
+
+### Final Clean Dataset
+- **Dimensions**: 1,025 rows × 14 core columns
+- **Variables**: 
+  - `dex` (National Pokédex #), `name`, `type_1`, `type_2`
+  - Base stats: `hp`, `attack`, `defense`, `sp_atk`, `sp_def`, `speed`, `total`
+  - Physical: `height_m`, `weight_kgs`, `bmi`
+- **Output**: `pokemon_data.csv`
