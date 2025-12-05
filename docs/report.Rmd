@@ -13,7 +13,7 @@ output:
 ---
 *Team Members: Leah Li (yl5828), Ruipeng Li (rl3616), Xuange Liang (xl3493), Yiwen Zhang (yz4994)* 
 
-### Motivation & Background
+# Motivation
 - **Dataset**: 1,025 Pokémon species across 9 generations (1996-2025)
 - **Why Pokémon?**
   - Rich, structured dataset with quantitative and categorical features
@@ -23,11 +23,11 @@ output:
 - **Motiviation**
 The Pokémon dataset offers a rich and structured environment for applying data science methods to explore relationships between attributes, performance, and design balance. Each Pokémon is described by a variety of quantitative and categorical features—such as type, stats, generation, and legendary status—making it an excellent case study for classification, clustering, and predictive modeling. Analyzing this dataset allows us to practice fundamental data science workflows, including data cleaning, feature engineering, visualization, and model evaluation, while also addressing interesting questions such as: What characteristics make a Pokémon strong? Are legendary Pokémon statistically distinct from others? By combining statistical reasoning with creative curiosity, this project aims to turn a familiar and entertaining topic into a meaningful data-driven exploration.
 
-### Related Work
+# Related Work
 
 Prior analyses of the Pokémon dataset have appeared in a variety of data science blogs, Kaggle kernels, and academic teaching materials, demonstrating its popularity as a case study for statistical learning. Kaggle’s “Complete Pokémon Dataset” has inspired numerous exploratory and predictive modeling projects that examine type advantages, stat distributions, and the distinctiveness of legendary Pokémon. Several tutorials—including those discussed in class—use this dataset to illustrate concepts such as principal component analysis, clustering, and classification algorithms due to its clean structure and intuitive domain. Additionally, online communities like Towards Data Science and r/datascience frequently feature Pokémon-themed analyses that highlight best practices in visualization, feature engineering, and model evaluation. These prior works inform our project by showcasing the dataset’s versatility and by motivating deeper investigation into what features drive Pokémon performance, balance, and design across generations.
 
-### Research Questions
+# Initial Questions
 
 **Core Questions:**
 
@@ -42,9 +42,7 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 - **System Validation**: Does the "best" Pokémon team selected through this rating system actually match competitive standards (based on "Pokémon Masters" reviews)?
 - **Team Building Utility**: Can you build a "best" Pokémon team based on this rating system? In other words, is this system reliable or useful as a reference?
 
-## Dataset
-
-### Data
+# Data
 
 | Source | Description | URL |
 |--------|-------------|-----|
@@ -52,7 +50,7 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 | **PokémonDB** | Official stats scraped from web | [pokemondb.net](https://pokemondb.net) |
 | **Veekun/PokéAPI** | Metadata & move databases | [GitHub](https://github.com/veekun/pokedex) |
 
-### Dataset Overview
+## Dataset Overview
 
 <div align="center">
 
@@ -64,7 +62,7 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 
 </div>
 
-### Key Variables
+## Key Variables
 
 | Variable | Type | Description |
 |----------|------|-------------|
@@ -78,7 +76,7 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 
 ---
 
-### Web Scraping Implementation
+## Web Scraping Implementation
 ```r
 # Scraped three HTML tables from PokémonDB
 raw_state_df <- read_html("data/raw-data/Pokemon.html") |> html_table()
@@ -86,7 +84,7 @@ raw_wh_df <- read_html("data/raw-data/Pokemon by height and weight.html") |> htm
 raw_evolved_df <- read_html("data/raw-data/Pokemon fully evolved.html") |> html_table()
 ```
 
-### Data Cleaning Highlights
+## Data Cleaning Highlights
 1. **Table Joining**: Merged stats, dimensions, and evolution data by Pokédex number
 2. **Type Parsing**: Split combined type strings into `type_1` and `type_2`
 3. **Special Case Handling**:
@@ -95,7 +93,7 @@ raw_evolved_df <- read_html("data/raw-data/Pokemon fully evolved.html") |> html_
    - Calculated BMI = 0.01 (representing non-physical energy entity)
 4. **Derived Variables**: BMI = weight(kg) / height(m)²
 
-### Final Clean Dataset
+## Final Clean Dataset
 - **Dimensions**: 1,025 rows × 14 core columns
 - **Variables**: 
   - `dex` (National Pokédex #), `name`, `type_1`, `type_2`

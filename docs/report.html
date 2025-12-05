@@ -392,8 +392,8 @@ A Comprehensive Data Science Exploration</h1>
 
 <p><em>Team Members: Leah Li (yl5828), Ruipeng Li (rl3616), Xuange Liang
 (xl3493), Yiwen Zhang (yz4994)</em></p>
-<div id="motivation-background" class="section level3">
-<h3>Motivation &amp; Background</h3>
+<div id="motivation" class="section level1">
+<h1>Motivation</h1>
 <ul>
 <li><strong>Dataset</strong>: 1,025 Pokémon species across 9 generations
 (1996-2025)</li>
@@ -422,8 +422,8 @@ a familiar and entertaining topic into a meaningful data-driven
 exploration.</li>
 </ul>
 </div>
-<div id="related-work" class="section level3">
-<h3>Related Work</h3>
+<div id="related-work" class="section level1">
+<h1>Related Work</h1>
 <p>Prior analyses of the Pokémon dataset have appeared in a variety of
 data science blogs, Kaggle kernels, and academic teaching materials,
 demonstrating its popularity as a case study for statistical learning.
@@ -441,8 +441,8 @@ dataset’s versatility and by motivating deeper investigation into what
 features drive Pokémon performance, balance, and design across
 generations.</p>
 </div>
-<div id="research-questions" class="section level3">
-<h3>Research Questions</h3>
+<div id="initial-questions" class="section level1">
+<h1>Initial Questions</h1>
 <p><strong>Core Questions:</strong></p>
 <ul>
 <li><strong>Legendary Classification</strong>: Is it possible to build a
@@ -466,10 +466,8 @@ Pokémon team based on this rating system? In other words, is this system
 reliable or useful as a reference?</li>
 </ul>
 </div>
-<div id="dataset" class="section level2">
-<h2>Dataset</h2>
-<div id="data" class="section level3">
-<h3>Data</h3>
+<div id="data" class="section level1">
+<h1>Data</h1>
 <table>
 <colgroup>
 <col width="30%" />
@@ -502,9 +500,8 @@ href="https://www.kaggle.com/datasets/rounakbanik/pokemon">rounakbanik/pokemon</
 </tr>
 </tbody>
 </table>
-</div>
-<div id="dataset-overview" class="section level3">
-<h3>Dataset Overview</h3>
+<div id="dataset-overview" class="section level2">
+<h2>Dataset Overview</h2>
 <div align="center">
 <table>
 <thead>
@@ -530,8 +527,8 @@ href="https://www.kaggle.com/datasets/rounakbanik/pokemon">rounakbanik/pokemon</
 </table>
 </div>
 </div>
-<div id="key-variables" class="section level3">
-<h3>Key Variables</h3>
+<div id="key-variables" class="section level2">
+<h2>Key Variables</h2>
 <table>
 <colgroup>
 <col width="34%" />
@@ -585,15 +582,15 @@ href="https://www.kaggle.com/datasets/rounakbanik/pokemon">rounakbanik/pokemon</
 </table>
 <hr />
 </div>
-<div id="web-scraping-implementation" class="section level3">
-<h3>Web Scraping Implementation</h3>
+<div id="web-scraping-implementation" class="section level2">
+<h2>Web Scraping Implementation</h2>
 <pre class="r"><code># Scraped three HTML tables from PokémonDB
 raw_state_df &lt;- read_html(&quot;data/raw-data/Pokemon.html&quot;) |&gt; html_table()
 raw_wh_df &lt;- read_html(&quot;data/raw-data/Pokemon by height and weight.html&quot;) |&gt; html_table()
 raw_evolved_df &lt;- read_html(&quot;data/raw-data/Pokemon fully evolved.html&quot;) |&gt; html_table()</code></pre>
 </div>
-<div id="data-cleaning-highlights" class="section level3">
-<h3>Data Cleaning Highlights</h3>
+<div id="data-cleaning-highlights" class="section level2">
+<h2>Data Cleaning Highlights</h2>
 <ol style="list-style-type: decimal">
 <li><strong>Table Joining</strong>: Merged stats, dimensions, and
 evolution data by Pokédex number</li>
@@ -609,8 +606,8 @@ evolution data by Pokédex number</li>
 height(m)²</li>
 </ol>
 </div>
-<div id="final-clean-dataset" class="section level3">
-<h3>Final Clean Dataset</h3>
+<div id="final-clean-dataset" class="section level2">
+<h2>Final Clean Dataset</h2>
 <ul>
 <li><strong>Dimensions</strong>: 1,025 rows × 14 core columns</li>
 <li><strong>Variables</strong>:
