@@ -41,12 +41,12 @@ raw_evolved_df <- read_html("data/raw-data/Pokemon fully evolved.html") |>
 ```
 
 ```{r}
-pokemon_state_df <- as_tibble(raw_state_df[[1]]) |>
+pokemon_stats_df <- as_tibble(raw_state_df[[1]]) |>
   janitor::clean_names()
 
 pokemon_df <- as_tibble(raw_wh_df[[1]]) |>
   janitor::clean_names() |>
-  right_join(pokemon_state_df, by = c("name", "type", "number")) |>
+  right_join(pokemon_stats_df, by = c("name", "type", "number")) |>
   mutate(type_split = str_extract_all(type, "[A-Z][a-z]+")) |>
   mutate(
     type_1 = map_chr(type_split, ~ .x[1] %||% NA_character_),
@@ -65,6 +65,21 @@ pokemon_df <- as_tibble(raw_wh_df[[1]]) |>
 ```
 
 Note: For "Eternamax" Eternatus, no official height or weight data exists. Because it cannot be used in normal Pokémon games and cannot be analyzed conventionally, we have removed it.
+
+```{r pokename fix}
+write.csv(pokemon_df, ("data/raw-data/pokeraw_df.csv")) # Only for making Pokémon names more readable, can be ignored during reproduction.
+pokemon_df <- read.csv("data/raw-data/pokeraw_df_fixed.csv") |> 
+  select(
+    dex, name, name_fix, type_1, type_2,
+    total, hp, attack, defense, sp_atk, sp_def, speed,
+    height_m, weight_kgs, bmi
+  ) |> 
+  mutate(
+    type_2 = na_if(type_2, "")
+  )
+```
+
+**Note**: Due to the complex naming conventions mixed in with the data exported from HTML, the official names of the Pokémon appeared partially garbled and overlapping. I tried many R-based methods to uniformly fix this, but none could accurately reproduce the official names. Therefore, on the last day, I reluctantly used ChatGPT to rename them line by line.
 
 ### About Special Pokemons  
 Since there aren't many special Pokémon, we didn't need to import a separate table; therefore, we created the table by filtering the Pokédex numbers.  
@@ -156,16 +171,6 @@ pokemon_df_final <- pokemon_df |>
 
 pokemon_evolved_df <- pokemon_df_final |>
   filter(dex %in% pokemon_evolved_n$dex)
-
-# 这段暂定，应该不需要
-# Type One-Hot Encoding
-all_types <- sort(unique(na.omit(c(pokemon_evolved_df$type_1, pokemon_evolved_df$type_2))))
-
-for (type in all_types) {
-  col_name <- paste0("has_", tolower(type))
-  pokemon_evolved_df[[col_name]] <- (pokemon_evolved_df$type_1 == type |
-                                      pokemon_evolved_df$type_2 == type)
-}
   
 # Add dual-type indicator
 pokemon_evolved_df <- pokemon_evolved_df |>

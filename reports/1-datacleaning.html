@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2025-12-03" />
+<meta name="date" content="2025-12-06" />
 
 <title>Data Source and Data Cleaning Process</title>
 
@@ -1585,7 +1585,7 @@ border-radius: 0px;
 
 
 <h1 class="title toc-ignore">Data Source and Data Cleaning Process</h1>
-<h4 class="date">2025-12-03</h4>
+<h4 class="date">2025-12-06</h4>
 
 </div>
 
@@ -1617,12 +1617,12 @@ raw_wh_df &lt;- read_html(&quot;data/raw-data/Pokemon by height and weight.html&
 
 raw_evolved_df &lt;- read_html(&quot;data/raw-data/Pokemon fully evolved.html&quot;) |&gt;
   html_table()</code></pre>
-<pre class="r"><code>pokemon_state_df &lt;- as_tibble(raw_state_df[[1]]) |&gt;
+<pre class="r"><code>pokemon_stats_df &lt;- as_tibble(raw_state_df[[1]]) |&gt;
   janitor::clean_names()
 
 pokemon_df &lt;- as_tibble(raw_wh_df[[1]]) |&gt;
   janitor::clean_names() |&gt;
-  right_join(pokemon_state_df, by = c(&quot;name&quot;, &quot;type&quot;, &quot;number&quot;)) |&gt;
+  right_join(pokemon_stats_df, by = c(&quot;name&quot;, &quot;type&quot;, &quot;number&quot;)) |&gt;
   mutate(type_split = str_extract_all(type, &quot;[A-Z][a-z]+&quot;)) |&gt;
   mutate(
     type_1 = map_chr(type_split, ~ .x[1] %||% NA_character_),
@@ -1631,11 +1631,7 @@ pokemon_df &lt;- as_tibble(raw_wh_df[[1]]) |&gt;
   rename(
     dex = number
   ) |&gt;
-  mutate(
-    weight_kgs = ifelse(name == &quot;EternatusEternamax&quot;, 9999.9, weight_kgs),
-    height_m = ifelse(name == &quot;EternatusEternamax&quot;, 999.9, height_m),
-    bmi = ifelse(name == &quot;EternatusEternamax&quot;, round(9999.9 / (999.9^2), 1), bmi)
-  ) |&gt;
+  filter(name != &quot;EternatusEternamax&quot;) |&gt; 
   select(
     dex, name, type_1, type_2,
     total, hp, attack, defense, sp_atk, sp_def, speed,
@@ -1643,13 +1639,24 @@ pokemon_df &lt;- as_tibble(raw_wh_df[[1]]) |&gt;
     -height_ft, -weight_lbs, -type_split, -type
   )</code></pre>
 <p>Note: For “Eternamax” Eternatus, no official height or weight data
-exists. Based on its in-game appearance and the way it is portrayed in
-the anime—as a colossal, rift-like dragon composed of red energy,
-fractures, and crystalline lines—I set its size to 999.9 meters tall and
-9999.9 kilograms in weight. The resulting BMI is effectively zero,
-perfectly matching the idea of a non-physical energy entity. This also
-aligns with how the anime almost never shows its full body, only
-fragmented sections of its form.</p>
+exists. Because it cannot be used in normal Pokémon games and cannot be
+analyzed conventionally, we have removed it.</p>
+<pre class="r"><code>write.csv(pokemon_df, (&quot;data/raw-data/pokeraw_df.csv&quot;)) # Only for making Pokémon names more readable, can be ignored during reproduction.
+pokemon_df &lt;- read.csv(&quot;data/raw-data/pokeraw_df_fixed.csv&quot;) |&gt; 
+  select(
+    dex, name, name_fix, type_1, type_2,
+    total, hp, attack, defense, sp_atk, sp_def, speed,
+    height_m, weight_kgs, bmi
+  ) |&gt; 
+  mutate(
+    type_2 = na_if(type_2, &quot;&quot;)
+  )</code></pre>
+<p><strong>Note</strong>: Due to the complex naming conventions mixed in
+with the data exported from HTML, the official names of the Pokémon
+appeared partially garbled and overlapping. I tried many R-based methods
+to uniformly fix this, but none could accurately reproduce the official
+names. Therefore, on the last day, I reluctantly used ChatGPT to rename
+them line by line.</p>
 </div>
 <div id="about-special-pokemons" class="section level3">
 <h3>About Special Pokemons</h3>
@@ -1744,16 +1751,6 @@ pokemon_df_final &lt;- pokemon_df |&gt;
 
 pokemon_evolved_df &lt;- pokemon_df_final |&gt;
   filter(dex %in% pokemon_evolved_n$dex)
-
-# 这段暂定，应该不需要
-# Type One-Hot Encoding
-all_types &lt;- sort(unique(na.omit(c(pokemon_evolved_df$type_1, pokemon_evolved_df$type_2))))
-
-for (type in all_types) {
-  col_name &lt;- paste0(&quot;has_&quot;, tolower(type))
-  pokemon_evolved_df[[col_name]] &lt;- (pokemon_evolved_df$type_1 == type |
-                                      pokemon_evolved_df$type_2 == type)
-}
   
 # Add dual-type indicator
 pokemon_evolved_df &lt;- pokemon_evolved_df |&gt;
