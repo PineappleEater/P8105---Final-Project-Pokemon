@@ -26,7 +26,6 @@ knitr::opts_chunk$set(
 library(tidyverse)
 library(ggplot2)
 library(knitr)
-library(fmsb)
 
 # Set ggplot theme
 theme_set(theme_minimal(base_size = 12))
@@ -188,8 +187,8 @@ ggplot(pokemon_long, aes(x = value, fill = stat)) +
 ```{r}
 stats_cols <- c("hp", "attack", "defense", "speed", "sp_def", "sp_atk")
 
-p1 <- pokemon_df |> filter(name == "WishiwashiSolo Form") |> select(all_of(stats_cols))
-p2 <- pokemon_df |> filter(name == "RayquazaMega Rayquaza") |> select(all_of(stats_cols))
+p1 <- pokemon_df |> filter(name == "Wishiwashi Solo Form") |> select(all_of(stats_cols))
+p2 <- pokemon_df |> filter(name == "Mega Rayquaza") |> select(all_of(stats_cols))
 
 # Set Max
 max_row <- pokemon_df |>
@@ -197,10 +196,10 @@ max_row <- pokemon_df |>
 min_row <- rep(0, length(stats_cols))
 
 radar_data <- rbind(max_row, min_row, p1, p2)
-rownames(radar_data) <- c("Max", "Min", "WishiwashiSolo Form", "RayquazaMega Rayquaza")
+rownames(radar_data) <- c("Max", "Min", "Wishiwashi Solo Form", "Mega Rayquaza")
 
 # Plot
-radarchart(radar_data,
+fmsb::radarchart(radar_data,
            axistype = 1,
            pcol = c("#4FACFE", "#007F3A"),
            pfcol = adjustcolor(c("#4FACFE", "#007F3A"), alpha.f = 0.3),

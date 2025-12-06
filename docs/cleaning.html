@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Data Source and Data Cleaning Process</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Homekachu</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="report.html">Report</a>
+</li>
+<li>
+  <a href="cleaning.html">Data Cleaning</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis Hub
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="eda.html">Exploratory Data Analysis</a>
+    </li>
+    <li>
+      <a href="analysis.html">ML &amp; Statistical Analysis</a>
+    </li>
+    <li>
+      <a href="rating.html">Rating System</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="shiny.html">Interactive Explorer</a>
+</li>
+<li>
+  <a href="https://github.com/PineappleEater/P8105---Final-Project-Pokemon/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="team.html">
+    <span class="fa fa-regular fa-address-card"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://www.youtube.com/watch?v=8SJSS_CB6jE">
+    <span class="fa fa-brands fa-youtube"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Data Source and Data Cleaning Process</h1>
+
+</div>
+
+
+<pre class="r"><code>library(rvest)
+library(tidyverse)
+library(janitor)</code></pre>
+<div id="cleaning-process" class="section level2">
+<h2>Cleaning Process</h2>
+<div id="data-source" class="section level3">
+<h3>Data Source</h3>
+<p>The data used in this project were scraped from pokemondb.net, a
+resource that maintains one of the most complete collections of Pokémon
+information to date, encompassing all nine generations (1,025 Pokémon
+species including alternate forms).<br />
+The dataset includes variables such as base statistics, physical
+dimensions (height and weight), and type attributes.<br />
+A portion of the metadata is sourced from the Veekun database, with
+additional details compiled by community contributors based on in-game
+data.</p>
+<p>I used <code>read_html()</code>, <code>html_table()</code>, and
+<code>as_tibble()</code> converted web page data into a tabular
+format.</p>
+<pre class="r"><code>raw_state_df &lt;- read_html(&quot;data/raw-data/Pokemon.html&quot;) |&gt;
+  html_table()
+
+raw_wh_df &lt;- read_html(&quot;data/raw-data/Pokemon by height and weight.html&quot;) |&gt;
+  html_table()
+
+raw_evolved_df &lt;- read_html(&quot;data/raw-data/Pokemon fully evolved.html&quot;) |&gt;
+  html_table()</code></pre>
+<pre class="r"><code>pokemon_stats_df &lt;- as_tibble(raw_state_df[[1]]) |&gt;
+  janitor::clean_names()
+
+pokemon_df &lt;- as_tibble(raw_wh_df[[1]]) |&gt;
+  janitor::clean_names() |&gt;
+  right_join(pokemon_stats_df, by = c(&quot;name&quot;, &quot;type&quot;, &quot;number&quot;)) |&gt;
+  mutate(type_split = str_extract_all(type, &quot;[A-Z][a-z]+&quot;)) |&gt;
+  mutate(
+    type_1 = map_chr(type_split, ~ .x[1] %||% NA_character_),
+    type_2 = map_chr(type_split, ~ .x[2] %||% NA_character_)
+  ) |&gt;
+  rename(
+    dex = number
+  ) |&gt;
+  filter(name != &quot;EternatusEternamax&quot;) |&gt; 
+  select(
+    dex, name, type_1, type_2,
+    total, hp, attack, defense, sp_atk, sp_def, speed,
+    height_m, weight_kgs, bmi,
+    -height_ft, -weight_lbs, -type_split, -type
+  )</code></pre>
+<p>Note: For “Eternamax” Eternatus, no official height or weight data
+exists. Because it cannot be used in normal Pokémon games and cannot be
+analyzed conventionally, we have removed it.</p>
+<pre class="r"><code>write.csv(pokemon_df, (&quot;data/raw-data/pokeraw_df.csv&quot;)) # Only for making Pokémon names more readable, can be ignored during reproduction.
+pokemon_df &lt;- read.csv(&quot;data/raw-data/pokeraw_df_fixed.csv&quot;) |&gt; 
+  select(
+    dex, name, name_fix, type_1, type_2,
+    total, hp, attack, defense, sp_atk, sp_def, speed,
+    height_m, weight_kgs, bmi
+  ) |&gt; 
+  mutate(
+    type_2 = na_if(type_2, &quot;&quot;)
+  )
+
+pokemon_df &lt;- pokemon_df |&gt; 
+  select(-name) |&gt; 
+  rename(name = name_fix)  # Successfully completed manual correction.</code></pre>
+<p><strong>Note</strong>: Due to the complex naming conventions mixed in
+with the data exported from HTML, the official names of the Pokémon
+appeared partially garbled and overlapping. I tried many R-based methods
+to uniformly fix this, but none could accurately reproduce the official
+names. Therefore, on the last day, I reluctantly used ChatGPT to rename
+them line by line.</p>
+</div>
+<div id="about-special-pokemons" class="section level3">
+<h3>About Special Pokemons</h3>
+<p>Since there aren’t many special Pokémon, we didn’t need to import a
+separate table; therefore, we created the table by filtering the Pokédex
+numbers.</p>
+<pre class="r"><code># About Legendary of Pokémon:
+pokemon_legend &lt;- pokemon_df |&gt;
+  filter(dex %in% c(
+    144, 145, 146, 150,
+    243, 244, 245, 249, 250,
+    377, 378, 379, 380, 381, 382, 383, 384,
+    480, 481, 482, 483, 484, 485, 486, 487, 488,
+    638, 639, 640, 641, 642, 643, 644, 645, 646,
+    716, 717, 718,
+    772, 773, 785, 786, 787, 788, 789, 790, 791, 792,
+    800, 888, 889, 890, 891, 892, 894, 895, 896, 897, 898, 905,
+    1001, 1002, 1003, 1004, 1007, 1008, 1014, 1015, 1016, 1017, 1024
+  ))
+
+
+# About Mythical of Pokémon:
+pokemon_myth &lt;- pokemon_df |&gt;
+  filter(dex %in% c(
+    151,
+    251,
+    385, 386,
+    489, 490, 491, 492, 493,
+    494, 647, 684, 689,
+    719, 720, 721,
+    801, 802, 807, 808, 809,
+    893,
+    1025
+  ))
+
+
+# About Paradox of Pokémon:
+pokemon_para &lt;- pokemon_df |&gt;
+  filter(dex %in% c(984:995, 1005:1010, 1020:1023))
+
+
+# About Ultra Beast of Pokémon:
+pokemon_ub &lt;- pokemon_df |&gt;
+  filter(dex %in% c(793:799, 803:806))</code></pre>
+</div>
+<div id="final-pokémon-dataset" class="section level3">
+<h3>Final Pokémon dataset</h3>
+<p>Using a list of fully evolved Pokémon from the new dataset to filter
+our Pokémon list for further analysis.<br />
+Furthermore, we have created tags for all Pokémon based on their
+specific species and generation.</p>
+<pre class="r"><code># About Final form list of Pokémon:
+pokemon_evolved_n &lt;- raw_evolved_df[[1]] |&gt;
+  as_tibble(.name_repair = &quot;unique&quot;) |&gt;
+  janitor::clean_names() |&gt;
+  rename(dex = number) |&gt;
+  select(dex)
+
+# Add category columns
+pokemon_df_final &lt;- pokemon_df |&gt;
+  mutate(
+    is_legendary = dex %in% pokemon_legend$dex,
+    is_mythical = dex %in% pokemon_myth$dex,
+    is_paradox = dex %in% pokemon_para$dex,
+    is_ultra_beast = dex %in% pokemon_ub$dex,
+    # Combined special category
+    is_special = is_legendary | is_mythical | is_paradox | is_ultra_beast,
+    # Category label for plotting
+    category = case_when(
+      is_legendary ~ &quot;Legendary&quot;,
+      is_mythical ~ &quot;Mythical&quot;,
+      is_paradox ~ &quot;Paradox&quot;,
+      is_ultra_beast ~ &quot;Ultra Beast&quot;,
+      TRUE ~ &quot;Regular&quot;
+    )
+  ) |&gt; 
+  # Generation Assignment
+  mutate(
+    generation = case_when(
+      dex &lt;= 151 ~ &quot;Gen 1&quot;,
+      dex &lt;= 251 ~ &quot;Gen 2&quot;,
+      dex &lt;= 386 ~ &quot;Gen 3&quot;,
+      dex &lt;= 493 ~ &quot;Gen 4&quot;,
+      dex &lt;= 649 ~ &quot;Gen 5&quot;,
+      dex &lt;= 721 ~ &quot;Gen 6&quot;,
+      dex &lt;= 809 ~ &quot;Gen 7&quot;,
+      dex &lt;= 905 ~ &quot;Gen 8&quot;,
+      TRUE ~ &quot;Gen 9&quot;
+    )
+  ) |&gt; 
+  select(-is_mythical, -is_paradox, -is_ultra_beast)
+
+
+pokemon_evolved_df &lt;- pokemon_df_final |&gt;
+  filter(dex %in% pokemon_evolved_n$dex)
+  
+# Add dual-type indicator
+pokemon_evolved_df &lt;- pokemon_evolved_df |&gt;
+  mutate(is_dual_type = !is.na(type_2))
+
+# Set factor order
+pokemon_evolved_df$generation &lt;- factor(pokemon_evolved_df$generation,
+  levels = paste0(&quot;Gen &quot;, 1:9)
+)
+pokemon_evolved_df$category &lt;- factor(pokemon_evolved_df$category,
+  levels = c(&quot;Regular&quot;, &quot;Legendary&quot;, &quot;Mythical&quot;, &quot;Paradox&quot;, &quot;Ultra Beast&quot;)
+)</code></pre>
+</div>
+<div id="type-chart" class="section level3">
+<h3>Type chart</h3>
+<p>We expanded the single-type matchup table into a combined table that
+includes both single-type and dual-type defenses. To better reflect real
+battle mechanics, the defensive side includes both single and dual
+types, whereas the attacking side remains single-type only.</p>
+<pre class="r"><code>raw_type_df &lt;- read_html(&quot;data/raw-data/Pokemon Type.html&quot;) |&gt; 
+  html_table()
+
+pokemon_type_df &lt;- raw_type_df[[1]] |&gt; 
+  as_tibble(.name_repair = &quot;unique&quot;) |&gt; 
+  rename(atk_type = 1) |&gt; 
+  janitor::clean_names() |&gt; 
+  mutate(across(-1, ~ case_when(
+    .x == &quot;0&quot; ~ 0,
+    .x == &quot;2&quot; ~ 2,
+    .x == &quot;&quot;  ~ 1,
+    is.na(.x) ~ 1,
+    TRUE      ~ 0.5
+  ))) |&gt; 
+  rename(
+    atk_type = 1,
+    Normal = nor,
+    Fire = fir,
+    Water = wat,
+    Electric = ele,
+    Grass = gra,
+    Ice = ice,
+    Fighting = fig,
+    Poison = poi,
+    Ground = gro,
+    Flying = fly,
+    Psychic = psy,
+    Bug = bug,
+    Rock = roc,
+    Ghost = gho,
+    Dragon = dra,
+    Dark = dar,
+    Steel = ste,
+    Fairy = fai
+  )
+
+types &lt;- colnames(pokemon_type_df)[-1]
+
+single_def &lt;- pokemon_type_df |&gt; 
+  pivot_longer(
+    cols = -atk_type,          
+    names_to = &quot;def_type&quot;,     
+    values_to = &quot;multiplier&quot;   
+  ) |&gt; 
+  mutate(
+    def_type = factor(def_type, levels = unique(atk_type))
+  ) |&gt; 
+  arrange(def_type, atk_type) |&gt; 
+  select(def_type, atk_type, multiplier)
+
+dual_def &lt;- map_dfr(combn(types, 2, simplify = FALSE), \(pair) {
+  combo_name &lt;- paste(pair, collapse = &quot;/&quot;)
+  pokemon_type_df |&gt;
+    transmute(
+      atk_type,
+      def_type = combo_name,
+      multiplier = .data[[pair[1]]] * .data[[pair[2]]]
+    )
+}) |&gt; 
+  select(def_type, atk_type, multiplier)
+
+def_type_df &lt;- bind_rows(single_def, dual_def)</code></pre>
+</div>
+<div id="export" class="section level3">
+<h3>Export</h3>
+<pre class="r"><code># Export final evolution dataset with all enrichments (primary dataset for all downstream analysis)
+write_csv(pokemon_evolved_df, &quot;data/pokemon_data_final_evolutions_enriched.csv&quot;)
+
+# Export final type dataset(primary dataset for type analysis)
+write_csv(def_type_df, &quot;data/def_type_df.csv&quot;)
+
+# Export raw dataset (before category labeling, for reference only)
+write_csv(pokemon_df, &quot;data/pokemon_data_raw.csv&quot;)
+
+# Export complete dataset (all evolution stages, for reference only)
+write_csv(pokemon_df_final, &quot;data/pokemon_data_all.csv&quot;)</code></pre>
+<hr />
+</div>
+</div>
+<div id="cleaned-datasets-summary" class="section level2">
+<h2>Cleaned Datasets Summary</h2>
+<div id="exported-csv-files" class="section level3">
+<h3>Exported CSV Files</h3>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="27%" />
+<col width="23%" />
+<col width="29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>File Name</th>
+<th>Pokémon Count</th>
+<th>Description</th>
+<th>Recommended Use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>pokemon_data_raw.csv</code></td>
+<td>1,218</td>
+<td>Raw dataset (basic stats only)</td>
+<td>Reference</td>
+</tr>
+<tr class="even">
+<td><code>pokemon_data_all.csv</code></td>
+<td>1,218</td>
+<td>Complete dataset with category labels</td>
+<td>Reference, comprehensive analysis</td>
+</tr>
+<tr class="odd">
+<td><code>pokemon_data_final_evolutions_enriched.csv</code></td>
+<td>743</td>
+<td><strong>Final evolutions with all features</strong></td>
+<td>Statistical analysis &amp; ML modeling</td>
+</tr>
+</tbody>
+</table>
+<p><code>def_type_df</code>: Dataset that included all <strong>Defence
+Type</strong> possible of Pokémon, and it’s efficiency in defending
+against different <strong>Attack Types</strong></p>
+<hr />
+</div>
+<div id="in-memory-r-objects" class="section level3">
+<h3>In-Memory R Objects</h3>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="17%" />
+<col width="15%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Object Name</th>
+<th>Count</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><code>pokemon_df</code></strong></td>
+<td>1,219</td>
+<td>Primary</td>
+<td>Complete dataset (all evolution stages)</td>
+</tr>
+<tr class="even">
+<td><strong><code>pokemon_evolved_df</code></strong></td>
+<td>743</td>
+<td>Primary</td>
+<td>Final evolutions only (recommended)</td>
+</tr>
+<tr class="odd">
+<td><code>pokemon_legend</code></td>
+<td>varies</td>
+<td>Subset</td>
+<td>Legendary Pokemon (all stages)</td>
+</tr>
+<tr class="even">
+<td><code>pokemon_myth</code></td>
+<td>varies</td>
+<td>Subset</td>
+<td>Mythical Pokemon (all stages)</td>
+</tr>
+<tr class="odd">
+<td><code>pokemon_para</code></td>
+<td>varies</td>
+<td>Subset</td>
+<td>Paradox Pokemon (all stages)</td>
+</tr>
+<tr class="even">
+<td><code>pokemon_ub</code></td>
+<td>varies</td>
+<td>Subset</td>
+<td>Ultra Beast Pokemon (all stages)</td>
+</tr>
+<tr class="odd">
+<td><code>pokemon_evolved_n</code></td>
+<td>743</td>
+<td>Lookup</td>
+<td>Dex numbers of final evolution forms</td>
+</tr>
+<tr class="even">
+<td><code>legend_evolved_df</code></td>
+<td>varies</td>
+<td>Auxiliary</td>
+<td>Final evolution Legendary (in-memory)</td>
+</tr>
+<tr class="odd">
+<td><code>myth_evolved_df</code></td>
+<td>varies</td>
+<td>Auxiliary</td>
+<td>Final evolution Mythical (in-memory)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+<div id="data-dictionary" class="section level2">
+<h2>Data Dictionary</h2>
+<p>All datasets share the same <strong>14-variable tidy
+structure</strong>, organized into four categories:</p>
+<div id="identification-variables" class="section level3">
+<h3>Identification Variables</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>dex</code></td>
+<td>Integer</td>
+<td>National Pokedex number (unique identifier)</td>
+</tr>
+<tr class="even">
+<td><code>name</code></td>
+<td>Character</td>
+<td>Official English species name</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="type-classification" class="section level3">
+<h3>Type Classification</h3>
+<table>
+<colgroup>
+<col width="34%" />
+<col width="20%" />
+<col width="44%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>type_1</code></td>
+<td>Character</td>
+<td>Primary elemental type (Fire, Water, Grass, etc.)</td>
+</tr>
+<tr class="even">
+<td><code>type_2</code></td>
+<td>Character</td>
+<td>Secondary type (NA if monotype)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="battle-statistics-base-stats" class="section level3">
+<h3>Battle Statistics (Base Stats)</h3>
+<table>
+<colgroup>
+<col width="22%" />
+<col width="13%" />
+<col width="34%" />
+<col width="29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Type</th>
+<th>Typical Range</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>total</code></td>
+<td>Integer</td>
+<td>180-1125</td>
+<td>Base Stat Total (BST) - sum of all 6 stats</td>
+</tr>
+<tr class="even">
+<td><code>hp</code></td>
+<td>Integer</td>
+<td>1-255</td>
+<td>Hit Points - damage capacity before fainting</td>
+</tr>
+<tr class="odd">
+<td><code>attack</code></td>
+<td>Integer</td>
+<td>5-190</td>
+<td>Physical move power</td>
+</tr>
+<tr class="even">
+<td><code>defense</code></td>
+<td>Integer</td>
+<td>5-250</td>
+<td>Physical damage reduction</td>
+</tr>
+<tr class="odd">
+<td><code>sp_atk</code></td>
+<td>Integer</td>
+<td>10-194</td>
+<td>Special move power</td>
+</tr>
+<tr class="even">
+<td><code>sp_def</code></td>
+<td>Integer</td>
+<td>20-250</td>
+<td>Special damage reduction</td>
+</tr>
+<tr class="odd">
+<td><code>speed</code></td>
+<td>Integer</td>
+<td>5-200</td>
+<td>Turn order determinant (higher = faster)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="physical-attributes" class="section level3">
+<h3>Physical Attributes</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Type</th>
+<th>Units</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>height_m</code></td>
+<td>Numeric</td>
+<td>meters</td>
+<td>Official Pokedex height</td>
+</tr>
+<tr class="even">
+<td><code>weight_kgs</code></td>
+<td>Numeric</td>
+<td>kilograms</td>
+<td>Official Pokedex weight</td>
+</tr>
+<tr class="odd">
+<td><code>bmi</code></td>
+<td>Numeric</td>
+<td>kg/m^2</td>
+<td>Body Mass Index: weight / (height^2)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

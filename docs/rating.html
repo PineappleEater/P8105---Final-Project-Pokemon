@@ -13,13 +13,13 @@
 
 <title>Pokémon Dual Rating System</title>
 
-<script src="rating_files/header-attrs-2.29/header-attrs.js"></script>
-<script src="rating_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="rating_files/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
-<script src="rating_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="rating_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="rating_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <style>h1 {font-size: 34px;}
        h1.title {font-size: 38px;}
        h2 {font-size: 30px;}
@@ -29,15 +29,15 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="rating_files/jqueryui-1.13.2/jquery-ui.min.js"></script>
-<link href="rating_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="rating_files/tocify-1.9.1/jquery.tocify.js"></script>
-<script src="rating_files/navigation-1.1/tabsets.js"></script>
-<script src="rating_files/navigation-1.1/codefolding.js"></script>
-<link href="rating_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="rating_files/highlightjs-9.12.0/highlight.js"></script>
-<link href="rating_files/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
-<link href="rating_files/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -338,13 +338,25 @@ div.tocify {
   <a href="report.html">Report</a>
 </li>
 <li>
-  <a href="eda.html">Exploratory Data Analysis</a>
+  <a href="cleaning.html">Data Cleaning</a>
 </li>
-<li>
-  <a href="analysis.html">ML &amp; Statistical Analysis</a>
-</li>
-<li>
-  <a href="rating.html">Rating System</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis Hub
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="eda.html">Exploratory Data Analysis</a>
+    </li>
+    <li>
+      <a href="analysis.html">ML &amp; Statistical Analysis</a>
+    </li>
+    <li>
+      <a href="rating.html">Rating System</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="shiny.html">Interactive Explorer</a>
@@ -901,10 +913,10 @@ kable(top_offensive,
       caption = &quot;Top 20 Offensive Pokémon&quot;,
       digits = 1,
       align = &quot;lllcccc&quot;)</code></pre>
-<table style="width:100%;">
+<table>
 <caption>Top 20 Offensive Pokémon</caption>
 <colgroup>
-<col width="25%" />
+<col width="26%" />
 <col width="9%" />
 <col width="9%" />
 <col width="11%" />
@@ -925,7 +937,7 @@ kable(top_offensive,
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">MewtwoMega Mewtwo Y</td>
+<td align="left">Mega Mewtwo Y</td>
 <td align="left">Psychic</td>
 <td align="left">NA</td>
 <td align="center">Offensive</td>
@@ -934,7 +946,7 @@ kable(top_offensive,
 <td align="center">SS</td>
 </tr>
 <tr class="even">
-<td align="left">RayquazaMega Rayquaza</td>
+<td align="left">Mega Rayquaza</td>
 <td align="left">Dragon</td>
 <td align="left">Flying</td>
 <td align="center">Offensive</td>
@@ -943,7 +955,7 @@ kable(top_offensive,
 <td align="center">SS</td>
 </tr>
 <tr class="odd">
-<td align="left">NecrozmaUltra Necrozma</td>
+<td align="left">Ultra Necrozma</td>
 <td align="left">Psychic</td>
 <td align="left">Dragon</td>
 <td align="center">Offensive</td>
@@ -952,7 +964,7 @@ kable(top_offensive,
 <td align="center">SS</td>
 </tr>
 <tr class="even">
-<td align="left">MewtwoMega Mewtwo X</td>
+<td align="left">Mega Mewtwo X</td>
 <td align="left">Psychic</td>
 <td align="left">Fighting</td>
 <td align="center">Offensive</td>
@@ -961,7 +973,7 @@ kable(top_offensive,
 <td align="center">SS</td>
 </tr>
 <tr class="odd">
-<td align="left">CalyrexShadow Rider</td>
+<td align="left">Shadow Rider Calyrex</td>
 <td align="left">Psychic</td>
 <td align="left">Ghost</td>
 <td align="center">Offensive</td>
@@ -970,7 +982,7 @@ kable(top_offensive,
 <td align="center">SS</td>
 </tr>
 <tr class="even">
-<td align="left">ZacianCrowned Sword</td>
+<td align="left">Zacian Crowned Sword</td>
 <td align="left">Fairy</td>
 <td align="left">Steel</td>
 <td align="center">Balanced</td>
@@ -979,7 +991,7 @@ kable(top_offensive,
 <td align="center">SS</td>
 </tr>
 <tr class="odd">
-<td align="left">AlakazamMega Alakazam</td>
+<td align="left">Mega Alakazam</td>
 <td align="left">Psychic</td>
 <td align="left">NA</td>
 <td align="center">Offensive</td>
@@ -997,7 +1009,7 @@ kable(top_offensive,
 <td align="center">SS</td>
 </tr>
 <tr class="odd">
-<td align="left">DiancieMega Diancie</td>
+<td align="left">Mega Diancie</td>
 <td align="left">Rock</td>
 <td align="left">Fairy</td>
 <td align="center">Offensive</td>
@@ -1015,7 +1027,7 @@ kable(top_offensive,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">KyogrePrimal Kyogre</td>
+<td align="left">Primal Kyogre</td>
 <td align="left">Water</td>
 <td align="left">NA</td>
 <td align="center">Balanced</td>
@@ -1024,7 +1036,7 @@ kable(top_offensive,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">GroudonPrimal Groudon</td>
+<td align="left">Primal Groudon</td>
 <td align="left">Ground</td>
 <td align="left">Fire</td>
 <td align="center">Balanced</td>
@@ -1060,7 +1072,7 @@ kable(top_offensive,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">PalkiaOrigin Forme</td>
+<td align="left">Palkia Origin Forme</td>
 <td align="left">Water</td>
 <td align="left">Dragon</td>
 <td align="center">Offensive</td>
@@ -1069,7 +1081,7 @@ kable(top_offensive,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">ZamazentaCrowned Shield</td>
+<td align="left">Zamazenta Crowned Shield</td>
 <td align="left">Fighting</td>
 <td align="left">Steel</td>
 <td align="center">Balanced</td>
@@ -1087,7 +1099,7 @@ kable(top_offensive,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">KyuremWhite Kyurem</td>
+<td align="left">White Kyurem</td>
 <td align="left">Dragon</td>
 <td align="left">Ice</td>
 <td align="center">Offensive</td>
@@ -1096,7 +1108,7 @@ kable(top_offensive,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">KyuremBlack Kyurem</td>
+<td align="left">Black Kyurem</td>
 <td align="left">Dragon</td>
 <td align="left">Ice</td>
 <td align="center">Offensive</td>
@@ -1121,7 +1133,7 @@ kable(top_defensive,
 <table>
 <caption>Top 20 Defensive Pokémon</caption>
 <colgroup>
-<col width="27%" />
+<col width="26%" />
 <col width="9%" />
 <col width="8%" />
 <col width="11%" />
@@ -1142,7 +1154,7 @@ kable(top_defensive,
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">ZygardeComplete Forme</td>
+<td align="left">Zygarde Complete Forme</td>
 <td align="left">Dragon</td>
 <td align="left">Ground</td>
 <td align="center">Balanced</td>
@@ -1151,7 +1163,7 @@ kable(top_defensive,
 <td align="center">SS</td>
 </tr>
 <tr class="even">
-<td align="left">GiratinaAltered Forme</td>
+<td align="left">Giratina Altered Forme</td>
 <td align="left">Ghost</td>
 <td align="left">Dragon</td>
 <td align="center">Balanced</td>
@@ -1160,7 +1172,7 @@ kable(top_defensive,
 <td align="center">SS</td>
 </tr>
 <tr class="odd">
-<td align="left">ZacianCrowned Sword</td>
+<td align="left">Zacian Crowned Sword</td>
 <td align="left">Fairy</td>
 <td align="left">Steel</td>
 <td align="center">Balanced</td>
@@ -1169,7 +1181,7 @@ kable(top_defensive,
 <td align="center">SS</td>
 </tr>
 <tr class="even">
-<td align="left">ZamazentaCrowned Shield</td>
+<td align="left">Zamazenta Crowned Shield</td>
 <td align="left">Fighting</td>
 <td align="left">Steel</td>
 <td align="center">Balanced</td>
@@ -1178,7 +1190,7 @@ kable(top_defensive,
 <td align="center">SS</td>
 </tr>
 <tr class="odd">
-<td align="left">DialgaOrigin Forme</td>
+<td align="left">Dialga Origin Forme</td>
 <td align="left">Steel</td>
 <td align="left">Dragon</td>
 <td align="center">Balanced</td>
@@ -1187,7 +1199,7 @@ kable(top_defensive,
 <td align="center">SS</td>
 </tr>
 <tr class="even">
-<td align="left">GiratinaOrigin Forme</td>
+<td align="left">Giratina Origin Forme</td>
 <td align="left">Ghost</td>
 <td align="left">Dragon</td>
 <td align="center">Balanced</td>
@@ -1214,7 +1226,7 @@ kable(top_defensive,
 <td align="center">SS</td>
 </tr>
 <tr class="odd">
-<td align="left">TerapagosStellar Form</td>
+<td align="left">Terapagos Stellar Form</td>
 <td align="left">Normal</td>
 <td align="left">NA</td>
 <td align="center">Balanced</td>
@@ -1223,7 +1235,7 @@ kable(top_defensive,
 <td align="center">SS</td>
 </tr>
 <tr class="even">
-<td align="left">GroudonPrimal Groudon</td>
+<td align="left">Primal Groudon</td>
 <td align="left">Ground</td>
 <td align="left">Fire</td>
 <td align="center">Balanced</td>
@@ -1232,7 +1244,7 @@ kable(top_defensive,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">MetagrossMega Metagross</td>
+<td align="left">Mega Metagross</td>
 <td align="left">Steel</td>
 <td align="left">Psychic</td>
 <td align="center">Balanced</td>
@@ -1241,7 +1253,7 @@ kable(top_defensive,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">NecrozmaDusk Mane Necrozma</td>
+<td align="left">Dusk Mane Necrozma</td>
 <td align="left">Psychic</td>
 <td align="left">Steel</td>
 <td align="center">Balanced</td>
@@ -1259,7 +1271,7 @@ kable(top_defensive,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">KyogrePrimal Kyogre</td>
+<td align="left">Primal Kyogre</td>
 <td align="left">Water</td>
 <td align="left">NA</td>
 <td align="center">Balanced</td>
@@ -1268,7 +1280,7 @@ kable(top_defensive,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">AggronMega Aggron</td>
+<td align="left">Mega Aggron</td>
 <td align="left">Steel</td>
 <td align="left">NA</td>
 <td align="center">Balanced</td>
@@ -1277,7 +1289,7 @@ kable(top_defensive,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">RayquazaMega Rayquaza</td>
+<td align="left">Mega Rayquaza</td>
 <td align="left">Dragon</td>
 <td align="left">Flying</td>
 <td align="center">Offensive</td>
@@ -1295,7 +1307,7 @@ kable(top_defensive,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">TyranitarMega Tyranitar</td>
+<td align="left">Mega Tyranitar</td>
 <td align="left">Rock</td>
 <td align="left">Dark</td>
 <td align="center">Balanced</td>
@@ -1336,10 +1348,10 @@ kable(top_regular,
       caption = &quot;Top 20 Regular Pokémon (Accessible for Beginners)&quot;,
       digits = 1,
       align = &quot;lllcccc&quot;)</code></pre>
-<table style="width:100%;">
+<table>
 <caption>Top 20 Regular Pokémon (Accessible for Beginners)</caption>
 <colgroup>
-<col width="28%" />
+<col width="29%" />
 <col width="8%" />
 <col width="9%" />
 <col width="11%" />
@@ -1360,7 +1372,7 @@ kable(top_regular,
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">AlakazamMega Alakazam</td>
+<td align="left">Mega Alakazam</td>
 <td align="left">Psychic</td>
 <td align="left">NA</td>
 <td align="center">Offensive</td>
@@ -1369,7 +1381,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">MetagrossMega Metagross</td>
+<td align="left">Mega Metagross</td>
 <td align="left">Steel</td>
 <td align="left">Psychic</td>
 <td align="center">Balanced</td>
@@ -1378,7 +1390,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">AggronMega Aggron</td>
+<td align="left">Mega Aggron</td>
 <td align="left">Steel</td>
 <td align="left">NA</td>
 <td align="center">Balanced</td>
@@ -1387,7 +1399,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">TyranitarMega Tyranitar</td>
+<td align="left">Mega Tyranitar</td>
 <td align="left">Rock</td>
 <td align="left">Dark</td>
 <td align="center">Balanced</td>
@@ -1396,7 +1408,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">SteelixMega Steelix</td>
+<td align="left">Mega Steelix</td>
 <td align="left">Steel</td>
 <td align="left">Ground</td>
 <td align="center">Balanced</td>
@@ -1405,7 +1417,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">GyaradosMega Gyarados</td>
+<td align="left">Mega Gyarados</td>
 <td align="left">Water</td>
 <td align="left">Dark</td>
 <td align="center">Balanced</td>
@@ -1414,7 +1426,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">SalamenceMega Salamence</td>
+<td align="left">Mega Salamence</td>
 <td align="left">Dragon</td>
 <td align="left">Flying</td>
 <td align="center">Offensive</td>
@@ -1423,7 +1435,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">GengarMega Gengar</td>
+<td align="left">Mega Gengar</td>
 <td align="left">Ghost</td>
 <td align="left">Poison</td>
 <td align="center">Offensive</td>
@@ -1432,7 +1444,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">GreninjaAsh-Greninja</td>
+<td align="left">Ash-Greninja</td>
 <td align="left">Water</td>
 <td align="left">Dark</td>
 <td align="center">Offensive</td>
@@ -1441,7 +1453,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">GarchompMega Garchomp</td>
+<td align="left">Mega Garchomp</td>
 <td align="left">Dragon</td>
 <td align="left">Ground</td>
 <td align="center">Offensive</td>
@@ -1450,7 +1462,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">AerodactylMega Aerodactyl</td>
+<td align="left">Mega Aerodactyl</td>
 <td align="left">Rock</td>
 <td align="left">Flying</td>
 <td align="center">Offensive</td>
@@ -1468,7 +1480,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">DragoniteMega Dragonite</td>
+<td align="left">Mega Dragonite</td>
 <td align="left">Dragon</td>
 <td align="left">Flying</td>
 <td align="center">Balanced</td>
@@ -1477,7 +1489,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">GalladeMega Gallade</td>
+<td align="left">Mega Gallade</td>
 <td align="left">Psychic</td>
 <td align="left">Fighting</td>
 <td align="center">Offensive</td>
@@ -1486,7 +1498,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">GoodraHisuian Goodra</td>
+<td align="left">Hisuian Goodra</td>
 <td align="left">Steel</td>
 <td align="left">Dragon</td>
 <td align="center">Balanced</td>
@@ -1495,7 +1507,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">ScizorMega Scizor</td>
+<td align="left">Mega Scizor</td>
 <td align="left">Bug</td>
 <td align="left">Steel</td>
 <td align="center">Balanced</td>
@@ -1504,7 +1516,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">HeracrossMega Heracross</td>
+<td align="left">Mega Heracross</td>
 <td align="left">Bug</td>
 <td align="left">Fighting</td>
 <td align="center">Offensive</td>
@@ -1513,7 +1525,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">SwampertMega Swampert</td>
+<td align="left">Mega Swampert</td>
 <td align="left">Water</td>
 <td align="left">Ground</td>
 <td align="center">Balanced</td>
@@ -1522,7 +1534,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="odd">
-<td align="left">SceptileMega Sceptile</td>
+<td align="left">Mega Sceptile</td>
 <td align="left">Grass</td>
 <td align="left">Dragon</td>
 <td align="center">Offensive</td>
@@ -1531,7 +1543,7 @@ kable(top_regular,
 <td align="center">S</td>
 </tr>
 <tr class="even">
-<td align="left">DarmanitanGalarian Zen Mode</td>
+<td align="left">Galarian Darmanitan Zen Mode</td>
 <td align="left">Ice</td>
 <td align="left">Fire</td>
 <td align="center">Offensive</td>

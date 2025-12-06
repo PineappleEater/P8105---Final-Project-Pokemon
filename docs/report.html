@@ -338,13 +338,25 @@ div.tocify {
   <a href="report.html">Report</a>
 </li>
 <li>
-  <a href="eda.html">Exploratory Data Analysis</a>
+  <a href="cleaning.html">Data Cleaning</a>
 </li>
-<li>
-  <a href="analysis.html">ML &amp; Statistical Analysis</a>
-</li>
-<li>
-  <a href="rating.html">Rating System</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis Hub
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="eda.html">Exploratory Data Analysis</a>
+    </li>
+    <li>
+      <a href="analysis.html">ML &amp; Statistical Analysis</a>
+    </li>
+    <li>
+      <a href="rating.html">Rating System</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="shiny.html">Interactive Explorer</a>
@@ -392,6 +404,9 @@ A Comprehensive Data Science Exploration</h1>
 
 <p><em>Team Members: Leah Li (yl5828), Ruipeng Li (rl3616), Xuange Liang
 (xl3493), Yiwen Zhang (yz4994)</em></p>
+<pre class="r"><code>library(rvest)
+library(tidyverse)
+library(janitor)</code></pre>
 <div id="motivation" class="section level1">
 <h1>Motivation</h1>
 <ul>
@@ -483,25 +498,22 @@ reliable or useful as a reference?</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Kaggle</strong></td>
-<td>Community-curated Pokémon dataset</td>
-<td><a
-href="https://www.kaggle.com/datasets/rounakbanik/pokemon">rounakbanik/pokemon</a></td>
+<td><strong>PokémonDB</strong></td>
+<td>Complete Pokémon Stats and Physical Attributes scraped from web</td>
+<td>(<a href="https://pokemondb.net/pokedex/all">Complete Pokémon
+Pokédex</a>)(<a href="https://pokemondb.net/pokedex/stats/height-weight">List
+of Pokémon by height and weight</a>)</td>
 </tr>
 <tr class="even">
-<td><strong>PokémonDB</strong></td>
-<td>Official stats scraped from web</td>
-<td><a href="https://pokemondb.net">pokemondb.net</a></td>
-</tr>
-<tr class="odd">
-<td><strong>Veekun/PokéAPI</strong></td>
-<td>Metadata &amp; move databases</td>
-<td><a href="https://github.com/veekun/pokedex">GitHub</a></td>
+<td><strong>BULBAGARDEN</strong></td>
+<td>“Fully evolved Pokémon only list” scraped from web</td>
+<td>(<a href="https://bulbapedia.bulbagarden.net/wiki/List_of_fully_evolved_Pok%C3%A9mon_by_base_stats">Fully
+evolved Pokémon List</a>)</td>
 </tr>
 </tbody>
 </table>
-<div id="dataset-overview" class="section level2">
-<h2>Dataset Overview</h2>
+<div id="pokémon-dataset-overview-full-version" class="section level2">
+<h2>Pokémon Dataset Overview (Full Version)</h2>
 <div align="center">
 <table>
 <thead>
@@ -525,10 +537,61 @@ href="https://www.kaggle.com/datasets/rounakbanik/pokemon">rounakbanik/pokemon</
 </tr>
 </tbody>
 </table>
+<p><a href="https://raw.githubusercontent.com/PineappleEater/P8105---Final-Project-Pokemon/main/data/pokemon_data_all.csv"
+     download
+     style="
+       display: inline-block;
+       padding: 6px 12px;
+       border-radius: 999px;
+       background: #ffb3d9;
+       color: #442233;
+       text-decoration: none;
+       font-weight: 600;
+       font-size: 13px;
+     "> 📥 Download Full CSV </a></p>
 </div>
 </div>
-<div id="key-variables" class="section level2">
-<h2>Key Variables</h2>
+<div id="pokémon-dataset-overview-evolved-pokémon-only"
+class="section level2">
+<h2>Pokémon Dataset Overview (Evolved Pokémon Only)</h2>
+<div align="center">
+<table>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Species Count</strong></td>
+<td>1,025 Pokémon</td>
+</tr>
+<tr class="even">
+<td><strong>Generations</strong></td>
+<td>Gen 1–9 (1996–2025)</td>
+</tr>
+<tr class="odd">
+<td><strong>Features</strong></td>
+<td>30+ attributes</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://raw.githubusercontent.com/PineappleEater/P8105---Final-Project-Pokemon/main/data/pokemon_data_final_evolutions_enriched.csv"
+     download
+     style="
+       display: inline-block;
+       padding: 6px 12px;
+       border-radius: 999px;
+       background: #ffb3d9;
+       color: #442233;
+       text-decoration: none;
+       font-weight: 600;
+       font-size: 13px;
+     "> 📥 Download Full CSV </a></p>
+</div>
+<div id="key-variables" class="section level3">
+<h3>Key Variables</h3>
 <table>
 <colgroup>
 <col width="34%" />
@@ -574,20 +637,29 @@ href="https://www.kaggle.com/datasets/rounakbanik/pokemon">rounakbanik/pokemon</
 <td>Legendary status flag</td>
 </tr>
 <tr class="odd">
+<td><code>is_special</code></td>
+<td>Boolean</td>
+<td>Legendary status flag</td>
+</tr>
+<tr class="even">
 <td><code>category</code></td>
 <td>Factor</td>
 <td>Regular / Legendary / Mythical / Paradox / Ultra Beast</td>
+</tr>
+<tr class="odd">
+<td><code>generation</code></td>
+<td>character</td>
+<td>Pokémon Game Generation Number</td>
+</tr>
+<tr class="even">
+<td><code>is_dual_type</code></td>
+<td>Boolean</td>
+<td>Dual Type Identifier</td>
 </tr>
 </tbody>
 </table>
 <hr />
 </div>
-<div id="web-scraping-implementation" class="section level2">
-<h2>Web Scraping Implementation</h2>
-<pre class="r"><code># Scraped three HTML tables from PokémonDB
-raw_state_df &lt;- read_html(&quot;data/raw-data/Pokemon.html&quot;) |&gt; html_table()
-raw_wh_df &lt;- read_html(&quot;data/raw-data/Pokemon by height and weight.html&quot;) |&gt; html_table()
-raw_evolved_df &lt;- read_html(&quot;data/raw-data/Pokemon fully evolved.html&quot;) |&gt; html_table()</code></pre>
 </div>
 <div id="data-cleaning-highlights" class="section level2">
 <h2>Data Cleaning Highlights</h2>
@@ -605,23 +677,10 @@ evolution data by Pokédex number</li>
 <li><strong>Derived Variables</strong>: BMI = weight(kg) /
 height(m)²</li>
 </ol>
-</div>
-<div id="final-clean-dataset" class="section level2">
-<h2>Final Clean Dataset</h2>
-<ul>
-<li><strong>Dimensions</strong>: 1,025 rows × 14 core columns</li>
-<li><strong>Variables</strong>:
-<ul>
-<li><code>dex</code> (National Pokédex #), <code>name</code>,
-<code>type_1</code>, <code>type_2</code></li>
-<li>Base stats: <code>hp</code>, <code>attack</code>,
-<code>defense</code>, <code>sp_atk</code>, <code>sp_def</code>,
-<code>speed</code>, <code>total</code></li>
-<li>Physical: <code>height_m</code>, <code>weight_kgs</code>,
-<code>bmi</code></li>
-</ul></li>
-<li><strong>Output</strong>: <code>pokemon_data.csv</code></li>
-</ul>
+<p><a href="https://pineappleeater.github.io/P8105---Final-Project-Pokemon/cleaning.html"
+   target="_blank"
+   style="padding: 4px 8px; border-radius: 6px; background:#fff7fb; text-decoration:none; color:#444;">
+(Click here to view the detailed cleaning process) </a></p>
 </div>
 </div>
 <div id="exploratory-analysis" class="section level1">

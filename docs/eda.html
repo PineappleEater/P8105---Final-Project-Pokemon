@@ -338,13 +338,25 @@ div.tocify {
   <a href="report.html">Report</a>
 </li>
 <li>
-  <a href="eda.html">Exploratory Data Analysis</a>
+  <a href="cleaning.html">Data Cleaning</a>
 </li>
-<li>
-  <a href="analysis.html">ML &amp; Statistical Analysis</a>
-</li>
-<li>
-  <a href="rating.html">Rating System</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis Hub
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="eda.html">Exploratory Data Analysis</a>
+    </li>
+    <li>
+      <a href="analysis.html">ML &amp; Statistical Analysis</a>
+    </li>
+    <li>
+      <a href="rating.html">Rating System</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="shiny.html">Interactive Explorer</a>
@@ -393,7 +405,6 @@ Analysis</h1>
 <pre class="r"><code>library(tidyverse)
 library(ggplot2)
 library(knitr)
-library(fmsb)
 
 # Set ggplot theme
 theme_set(theme_minimal(base_size = 12))
@@ -579,8 +590,8 @@ vs. Highest<img src="assets/sprites/gif/rayquaza-mega-rayquaza.gif" width="95" 
 Max by Mean of each stats)</h3>
 <pre class="r"><code>stats_cols &lt;- c(&quot;hp&quot;, &quot;attack&quot;, &quot;defense&quot;, &quot;speed&quot;, &quot;sp_def&quot;, &quot;sp_atk&quot;)
 
-p1 &lt;- pokemon_df |&gt; filter(name == &quot;WishiwashiSolo Form&quot;) |&gt; select(all_of(stats_cols))
-p2 &lt;- pokemon_df |&gt; filter(name == &quot;RayquazaMega Rayquaza&quot;) |&gt; select(all_of(stats_cols))
+p1 &lt;- pokemon_df |&gt; filter(name == &quot;Wishiwashi Solo Form&quot;) |&gt; select(all_of(stats_cols))
+p2 &lt;- pokemon_df |&gt; filter(name == &quot;Mega Rayquaza&quot;) |&gt; select(all_of(stats_cols))
 
 # Set Max
 max_row &lt;- pokemon_df |&gt;
@@ -588,10 +599,10 @@ max_row &lt;- pokemon_df |&gt;
 min_row &lt;- rep(0, length(stats_cols))
 
 radar_data &lt;- rbind(max_row, min_row, p1, p2)
-rownames(radar_data) &lt;- c(&quot;Max&quot;, &quot;Min&quot;, &quot;WishiwashiSolo Form&quot;, &quot;RayquazaMega Rayquaza&quot;)
+rownames(radar_data) &lt;- c(&quot;Max&quot;, &quot;Min&quot;, &quot;Wishiwashi Solo Form&quot;, &quot;Mega Rayquaza&quot;)
 
 # Plot
-radarchart(radar_data,
+fmsb::radarchart(radar_data,
            axistype = 1,
            pcol = c(&quot;#4FACFE&quot;, &quot;#007F3A&quot;),
            pfcol = adjustcolor(c(&quot;#4FACFE&quot;, &quot;#007F3A&quot;), alpha.f = 0.3),

@@ -13,6 +13,12 @@ output:
 ---
 *Team Members: Leah Li (yl5828), Ruipeng Li (rl3616), Xuange Liang (xl3493), Yiwen Zhang (yz4994)* 
 
+```{r, message=FALSE, warning=FALSE}
+library(rvest)
+library(tidyverse)
+library(janitor)
+```
+
 # Motivation
 - **Dataset**: 1,025 Pokémon species across 9 generations (1996-2025)
 - **Why Pokémon?**
@@ -46,11 +52,10 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 
 | Source | Description | URL |
 |--------|-------------|-----|
-| **Kaggle** | Community-curated Pokémon dataset | [rounakbanik/pokemon](https://www.kaggle.com/datasets/rounakbanik/pokemon) |
-| **PokémonDB** | Official stats scraped from web | [pokemondb.net](https://pokemondb.net) |
-| **Veekun/PokéAPI** | Metadata & move databases | [GitHub](https://github.com/veekun/pokedex) |
+| **PokémonDB** | Complete Pokémon Stats and Physical Attributes scraped from web | (<a href="https://pokemondb.net/pokedex/all">Complete Pokémon Pokédex</a>)(<a href="https://pokemondb.net/pokedex/stats/height-weight">List of Pokémon by height and weight</a>) |
+| **BULBAGARDEN** | "Fully evolved Pokémon only list" scraped from web | (<a href="https://bulbapedia.bulbagarden.net/wiki/List_of_fully_evolved_Pok%C3%A9mon_by_base_stats">Fully evolved Pokémon List</a>) |
 
-## Dataset Overview
+## Pokémon Dataset Overview (Full Version)
 
 <div align="center">
 
@@ -60,9 +65,49 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 | **Generations** | Gen 1–9 (1996–2025) |
 | **Features** | 30+ attributes |
 
+  <a href="https://raw.githubusercontent.com/PineappleEater/P8105---Final-Project-Pokemon/main/data/pokemon_data_all.csv"
+     download
+     style="
+       display: inline-block;
+       padding: 6px 12px;
+       border-radius: 999px;
+       background: #ffb3d9;
+       color: #442233;
+       text-decoration: none;
+       font-weight: 600;
+       font-size: 13px;
+     ">
+    📥 Download Full CSV
+  </a>
 </div>
 
-## Key Variables
+## Pokémon Dataset Overview (Evolved Pokémon Only)
+
+<div align="center">
+
+| Metric | Value |
+|--------|-------|
+| **Species Count** | 1,025 Pokémon |
+| **Generations** | Gen 1–9 (1996–2025) |
+| **Features** | 30+ attributes |
+
+<a href="https://raw.githubusercontent.com/PineappleEater/P8105---Final-Project-Pokemon/main/data/pokemon_data_final_evolutions_enriched.csv"
+     download
+     style="
+       display: inline-block;
+       padding: 6px 12px;
+       border-radius: 999px;
+       background: #ffb3d9;
+       color: #442233;
+       text-decoration: none;
+       font-weight: 600;
+       font-size: 13px;
+     ">
+    📥 Download Full CSV
+  </a>
+</div>
+
+### Key Variables
 
 | Variable | Type | Description |
 |----------|------|-------------|
@@ -72,17 +117,12 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 | `total` | Integer | Base Stat Total (BST) |
 | `hp` ... `speed` | Integer | Individual base stats |
 | `is_legendary` | Boolean | Legendary status flag |
+| `is_special` | Boolean | Legendary status flag |
 | `category` | Factor | Regular / Legendary / Mythical / Paradox / Ultra Beast |
+| `generation` | character | Pokémon Game Generation Number |
+| `is_dual_type` | Boolean | Dual Type Identifier |
 
 ---
-
-## Web Scraping Implementation
-```r
-# Scraped three HTML tables from PokémonDB
-raw_state_df <- read_html("data/raw-data/Pokemon.html") |> html_table()
-raw_wh_df <- read_html("data/raw-data/Pokemon by height and weight.html") |> html_table()
-raw_evolved_df <- read_html("data/raw-data/Pokemon fully evolved.html") |> html_table()
-```
 
 ## Data Cleaning Highlights
 1. **Table Joining**: Merged stats, dimensions, and evolution data by Pokédex number
@@ -93,13 +133,11 @@ raw_evolved_df <- read_html("data/raw-data/Pokemon fully evolved.html") |> html_
    - Calculated BMI = 0.01 (representing non-physical energy entity)
 4. **Derived Variables**: BMI = weight(kg) / height(m)²
 
-## Final Clean Dataset
-- **Dimensions**: 1,025 rows × 14 core columns
-- **Variables**: 
-  - `dex` (National Pokédex #), `name`, `type_1`, `type_2`
-  - Base stats: `hp`, `attack`, `defense`, `sp_atk`, `sp_def`, `speed`, `total`
-  - Physical: `height_m`, `weight_kgs`, `bmi`
-- **Output**: `pokemon_data.csv`
+<a href="https://pineappleeater.github.io/P8105---Final-Project-Pokemon/cleaning.html"
+   target="_blank"
+   style="padding: 4px 8px; border-radius: 6px; background:#fff7fb; text-decoration:none; color:#444;">
+   (Click here to view the detailed cleaning process)
+</a>
 
 # Exploratory Analysis
 

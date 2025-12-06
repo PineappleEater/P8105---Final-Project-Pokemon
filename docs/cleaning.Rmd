@@ -2,18 +2,14 @@
 title: "Data Source and Data Cleaning Process"
 output:
   html_document:
-    toc: true
-    toc_float: true
-    code_folding: hide
     theme: cosmo
-    self_contained: true
-knit: (function(input, ...) {
-    rmarkdown::render(
-      input,
-      output_file = "1-datacleaning.html",
-      output_dir = "reports"
-    )
-  })
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    toc_depth: 2
+    code_folding: hide
+    self_contained: false
 ---
 ```{r, message=FALSE, warning=FALSE}
 library(rvest)

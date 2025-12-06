@@ -5,12 +5,16 @@ navbar:
   right:
     - text: "Report"
       href: report.html
-    - text: "Exploratory Data Analysis"
-      href: eda.html
-    - text: "ML & Statistical Analysis"
-      href: analysis.html
-    - text: "Rating System"
-      href: rating.html
+    - text: "Data Cleaning"
+      href: cleaning.html
+    - text: "Analysis Hub"
+      menu:
+        - text: "Exploratory Data Analysis"
+          href: eda.html
+        - text: "ML & Statistical Analysis"
+          href: analysis.html
+        - text: "Rating System"
+          href: rating.html
     - text: "Interactive Explorer"
       href: shiny.html
     - icon: fa-github fa-lg
