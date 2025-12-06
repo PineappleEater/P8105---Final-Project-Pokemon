@@ -10,6 +10,13 @@ output:
     toc_depth: 2
     code_folding: hide
     self_contained: false
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_file = "2-eda.html",
+      output_dir = "reports"
+    )
+  })
 ---
 
 ```{r setup, include=FALSE}
@@ -188,8 +195,8 @@ ggplot(pokemon_long, aes(x = value, fill = stat)) +
 ```{r}
 stats_cols <- c("hp", "attack", "defense", "speed", "sp_def", "sp_atk")
 
-p1 <- pokemon_df |> filter(name == "WishiwashiSolo Form") |> select(all_of(stats_cols))
-p2 <- pokemon_df |> filter(name == "RayquazaMega Rayquaza") |> select(all_of(stats_cols))
+p1 <- pokemon_df |> filter(name == "Wishiwashi Solo Form") |> select(all_of(stats_cols))
+p2 <- pokemon_df |> filter(name == "Mega Rayquaza") |> select(all_of(stats_cols))
 
 # Set Max
 max_row <- pokemon_df |>
@@ -197,7 +204,7 @@ max_row <- pokemon_df |>
 min_row <- rep(0, length(stats_cols))
 
 radar_data <- rbind(max_row, min_row, p1, p2)
-rownames(radar_data) <- c("Max", "Min", "WishiwashiSolo Form", "RayquazaMega Rayquaza")
+rownames(radar_data) <- c("Max", "Min", "Wishiwashi Solo Form", "Mega Rayquaza")
 
 # Plot
 radarchart(radar_data,

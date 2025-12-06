@@ -1,5 +1,7 @@
 # The Story and Mystery of Pokémon — Data Science Project
 
+# !!**Note: Please check the website or the docs folder for the latest data.**!!
+
 <div align="center">
 
 <!-- Hero Banner with animated GIFs - varying sizes for visual hierarchy -->
@@ -45,11 +47,11 @@ This repository presents a comprehensive data science investigation into the Pok
 
 **Core Research Questions**
 
-1. **Legendary Classification**: Can we build a classifier to identify legendary Pokémon based on their stats?
-2. **Physical Attributes Analysis**: How do height and weight correlate with base stats?
-3. **Type Effectiveness**: Which type (or type combination) is the strongest/weakest overall?
-4. **Type-Legendary Relationship**: Which types are most likely to be legendary Pokémon?
-5. **Rating System Development**: Can we create a Pokémon rating system for beginners based on type and stats?
+1. **Pokémon Base Data Analysis**: Is there any pattern in the distribution of Pokémon types and stats?
+2. **Physical Attributes Analysis**: Do Pokémon ecosystems or their height-weight distributions have any real-world analogues?
+3. **Type Effectiveness**: Which type (or type combination) is the strongest overall? Which is the weakest?
+4. **Legendary Classification**: Is it possible to build a classifier to identify legendary Pokémon?
+5. **Rating System Development**: Based on Pokémon type and stats, can we provide a Pokémon rating system for beginners?
 
 ### Academic Context
 
@@ -65,9 +67,8 @@ This repository presents a comprehensive data science investigation into the Pok
 
 | Source | Description | URL |
 |--------|-------------|-----|
-| **Kaggle** | Community-curated Pokémon dataset | [rounakbanik/pokemon](https://www.kaggle.com/datasets/rounakbanik/pokemon) |
-| **PokémonDB** | Official stats scraped from web | [pokemondb.net](https://pokemondb.net) |
-| **Veekun/PokéAPI** | Metadata & move databases | [GitHub](https://github.com/veekun/pokedex) |
+| **PokémonDB** | Complete Pokémon Stats and Physical Attributes scraped from web | (<a href="https://pokemondb.net/pokedex/all">Complete Pokémon Pokédex</a>)(<a href="https://pokemondb.net/pokedex/stats/height-weight">List of Pokémon by height and weight</a>) |
+| **BULBAGARDEN** | "Fully evolved Pokémon only list" scraped from web | (<a href="https://bulbapedia.bulbagarden.net/wiki/List_of_fully_evolved_Pok%C3%A9mon_by_base_stats">Fully evolved Pokémon List</a>) |
 
 ### Dataset Overview
 
@@ -106,8 +107,6 @@ This repository presents a comprehensive data science investigation into the Pok
 
 </div>
 
-### Key Variables
-
 | Variable | Type | Description |
 |----------|------|-------------|
 | `dex` | Integer | National Pokédex number |
@@ -116,7 +115,10 @@ This repository presents a comprehensive data science investigation into the Pok
 | `total` | Integer | Base Stat Total (BST) |
 | `hp` ... `speed` | Integer | Individual base stats |
 | `is_legendary` | Boolean | Legendary status flag |
+| `is_special` | Boolean | Legendary status flag |
 | `category` | Factor | Regular / Legendary / Mythical / Paradox / Ultra Beast |
+| `generation` | character | Pokémon Game Generation Number |
+| `is_dual_type` | Boolean | Dual Type Identifier |
 
 ---
 
@@ -137,6 +139,8 @@ graph LR
     style D fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
     style E fill:#fce4ec,stroke:#c2185b,stroke-width:2px
 ```
+
+# !!**Note: Please check the website or the docs folder for the latest data.**!!
 
 ### 1. Data Cleaning & Preprocessing
 
@@ -198,7 +202,7 @@ graph LR
 
 <img align="right" src="assets/sprites/gif/tyranitar.gif" width="90" alt="Tyranitar">
 
-**File**: `3-rating_system.Rmd`
+**File**: `5-rating_system.Rmd`
 
 **Dual Rating System** (100-point scale each):
 

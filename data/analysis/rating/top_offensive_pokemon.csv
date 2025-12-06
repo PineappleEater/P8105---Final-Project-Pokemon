@@ -1,21 +1,21 @@
-name,type_1,type_2,role,offensive_rating,defensive_rating,tier,eff_atk
-MewtwoMega Mewtwo Y,Psychic,NA,Offensive,80.41679191186944,51.52738917773613,A,194
-RayquazaMega Rayquaza,Dragon,Flying,Offensive,80.03253144203757,59.176724503877686,A,216
-EternatusEternamax,Poison,Dragon,Balanced,79.58298059606452,84.14708316016709,S,144
-NecrozmaUltra Necrozma,Psychic,Dragon,Offensive,79.27893460862808,55.4586703552344,A,200.4
-MewtwoMega Mewtwo X,Psychic,Fighting,Offensive,78.31195811445238,53.52712151314519,A,190
-CalyrexShadow Rider,Psychic,Ghost,Offensive,76.24186029002746,53.100635103831145,B,165
-ZacianCrowned Sword,Fairy,Steel,Balanced,75.19870529142165,75.25266607573536,S,150
-AlakazamMega Alakazam,Psychic,NA,Offensive,74.00028382166373,44.2746767758963,B,175
-DiancieMega Diancie,Rock,Fairy,Offensive,72.27016741397505,53.41285218018923,B,192
-Eternatus,Poison,Dragon,Balanced,71.4174560750923,61.62574164573081,A,145
-KyogrePrimal Kyogre,Water,NA,Offensive,70.87337799127081,59.12058764436283,B,180
-GroudonPrimal Groudon,Ground,Fire,Balanced,70.87337799127081,62.774433798208975,A,180
-Arceus,Normal,NA,Offensive,70.71795407123813,56.6812723216152,B,144
-Mewtwo,Psychic,NA,Offensive,70.20247223555415,47.19526459352297,B,154
-Koraidon,Fighting,Dragon,Offensive,69.42851388874786,54.661540059456385,B,135
-Miraidon,Electric,Dragon,Offensive,69.42851388874786,56.96923236714869,B,135
-GengarMega Gengar,Ghost,Poison,Offensive,68.95705243174922,51.80147132367024,B,170
-GreninjaAsh-Greninja,Water,Dark,Offensive,68.91079532438793,50.405243046328536,B,178.79999999999998
-PalkiaOrigin Forme,Water,Dragon,Offensive,68.88166955876247,54.434619679078324,B,150
-ZamazentaCrowned Shield,Fighting,Steel,Balanced,68.27415023863131,68.3621381722663,A,120
+name,type_1,type_2,role,offensive_rating,defensive_rating,eff_atk,tier
+Mega Mewtwo Y,Psychic,NA,Offensive,82.01946402020143,59.85307761106408,194,SS
+Mega Rayquaza,Dragon,Flying,Offensive,81.76469329360026,63.52191037166689,216,SS
+Ultra Necrozma,Psychic,Dragon,Offensive,80.83111659542362,61.52662907164739,200.4,SS
+Mega Mewtwo X,Psychic,Fighting,Offensive,80.06061674555377,60.51367911447379,190,SS
+Shadow Rider Calyrex,Psychic,Ghost,Offensive,77.7173771083612,56.97193314639688,165,SS
+Zacian Crowned Sword,Fairy,Steel,Balanced,76.94406456661528,68.65910317650993,150,SS
+Mega Alakazam,Psychic,NA,Offensive,74.74985553284081,49.18796362060463,175,S
+Eternatus,Poison,Dragon,Balanced,73.61152775373837,65.33318220646893,145,SS
+Mega Diancie,Rock,Fairy,Offensive,73.17749028860312,54.608682140239985,192,S
+Arceus,Normal,NA,Offensive,73.0934903248098,63.47341733590193,144,S
+Primal Kyogre,Water,NA,Balanced,72.85299153591389,64.00404182293511,180,S
+Primal Groudon,Ground,Fire,Balanced,72.85299153591389,64.7990418229351,180,S
+Mewtwo,Psychic,NA,Offensive,71.77626500354539,55.405435665487936,154,S
+Koraidon,Fighting,Dragon,Offensive,71.19759640638362,59.574408591537875,135,S
+Miraidon,Electric,Dragon,Offensive,71.19759640638362,60.29440859153788,135,S
+Palkia Origin Forme,Water,Dragon,Offensive,70.50808804907813,57.5768321018794,150,S
+Zamazenta Crowned Shield,Fighting,Steel,Balanced,70.39893544321487,67.41935591367746,120,SS
+Regigigas,Normal,NA,Offensive,70.12148835619635,59.91030701099403,160,S
+White Kyurem,Dragon,Ice,Offensive,70.08596756843367,58.73458949554091,170,S
+Black Kyurem,Dragon,Ice,Offensive,70.08596756843367,58.73458949554091,170,S

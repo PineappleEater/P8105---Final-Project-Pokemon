@@ -1,0 +1,643 @@
+---
+title: "Pokemon Classification - Legendary Prediction"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+    theme: cosmo
+    self_contained: true
+knit: (function(input, ...) {
+    rmarkdown::render(
+      input,
+      output_dir = "reports"
+    )
+  })
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 10,
+  fig.height = 6
+)
+```
+
+## 1. Load Libraries and Data
+
+```{r libraries}
+library(tidyverse)
+library(caret)
+library(pROC)
+library(randomForest)
+library(rpart)
+library(rpart.plot)
+library(glue)
+
+# Note: XGBoost library commented out (beyond course scope)
+# library(xgboost)
+
+set.seed(123)
+theme_set(theme_minimal())
+```
+
+```{r load-data}
+# Load enriched dataset with features - FINAL EVOLUTIONS ONLY
+# Using only final forms eliminates downward bias from unevolved Pokemon
+pokemon_df <- read_csv("data/pokemon_data_final_evolutions_enriched.csv")
+
+cat(glue("Dataset loaded: {nrow(pokemon_df)} Pokemon
+Features: {ncol(pokemon_df)} columns
+Legendary: {sum(pokemon_df$is_legendary)} ({round(100*mean(pokemon_df$is_legendary),1)}%)
+"))
+```
+
+## 2. Feature Selection and Preprocessing
+
+### 2.1 Select Features
+
+```{r feature-selection}
+# Numeric features: base stats + physical attributes
+num_features <- c("hp", "attack", "defense", "sp_atk", "sp_def", "speed", 
+                  "height_m", "weight_kgs", "bmi")
+
+# Type one-hot features
+type_features <- grep("^has_", names(pokemon_df), value = TRUE)
+
+# All predictors
+predictor_cols <- c(num_features, type_features)
+
+# Target
+target <- "is_legendary"
+
+cat(glue("
+Selected features:
+- Numeric stats: {length(num_features)}
+- Type features: {length(type_features)}
+- Total predictors: {length(predictor_cols)}
+"))
+```
+
+### 2.2 Prepare Modeling Dataset
+
+```{r prepare-data}
+# Create modeling dataframe
+model_df <- pokemon_df |>
+  select(all_of(c(target, predictor_cols))) |>
+  mutate(is_legendary = factor(is_legendary, levels = c(FALSE, TRUE), 
+                               labels = c("Regular", "Legendary"))) |>
+  drop_na()
+
+cat(glue("
+Modeling dataset:
+- Rows: {nrow(model_df)}
+- Class balance: {table(model_df$is_legendary)}
+"))
+
+# Check class imbalance
+table(model_df$is_legendary) |> prop.table() |> round(3)
+```
+
+## 3. Train-Test Split
+
+```{r split-data}
+# Stratified split to preserve class ratio
+train_index <- createDataPartition(model_df$is_legendary, p = 0.8, list = FALSE)
+
+train_data <- model_df[train_index, ]
+test_data <- model_df[-train_index, ]
+
+cat(glue("
+Train set: {nrow(train_data)} ({round(100*nrow(train_data)/nrow(model_df),1)}%)
+  - Regular: {sum(train_data$is_legendary == 'Regular')}
+  - Legendary: {sum(train_data$is_legendary == 'Legendary')}
+
+Test set: {nrow(test_data)} ({round(100*nrow(test_data)/nrow(model_df),1)}%)
+  - Regular: {sum(test_data$is_legendary == 'Regular')}
+  - Legendary: {sum(test_data$is_legendary == 'Legendary')}
+"))
+```
+
+## 4. Model Training
+
+### 4.1 Logistic Regression (Baseline)
+
+```{r logistic-model}
+# Train logistic regression
+logistic_model <- train(
+  is_legendary ~ .,
+  data = train_data,
+  method = "glm",
+  family = "binomial",
+  trControl = trainControl(
+    method = "cv",
+    number = 5,
+    classProbs = TRUE,
+    summaryFunction = twoClassSummary
+  ),
+  metric = "ROC"
+)
+
+# Predictions
+logistic_pred <- predict(logistic_model, test_data, type = "prob")
+logistic_class <- predict(logistic_model, test_data)
+
+# Confusion matrix
+logistic_cm <- confusionMatrix(logistic_class, test_data$is_legendary, 
+                               positive = "Legendary")
+print(logistic_cm)
+
+# Variable importance
+logistic_imp <- varImp(logistic_model)
+plot(logistic_imp, top = 15, main = "Logistic Regression - Top 15 Features")
+```
+
+### 4.2 Decision Tree
+
+```{r tree-model}
+# Train decision tree
+tree_model <- train(
+  is_legendary ~ .,
+  data = train_data,
+  method = "rpart",
+  trControl = trainControl(
+    method = "cv",
+    number = 5,
+    classProbs = TRUE,
+    summaryFunction = twoClassSummary
+  ),
+  tuneLength = 10,
+  metric = "ROC"
+)
+
+# Plot tree
+rpart.plot(tree_model$finalModel, extra = 2, 
+           main = "Decision Tree for Legendary Classification")
+
+# Predictions
+tree_pred <- predict(tree_model, test_data, type = "prob")
+tree_class <- predict(tree_model, test_data)
+
+# Confusion matrix
+tree_cm <- confusionMatrix(tree_class, test_data$is_legendary, 
+                          positive = "Legendary")
+print(tree_cm)
+```
+
+### 4.3 Random Forest
+
+```{r rf-model}
+# Train random forest
+rf_model <- train(
+  is_legendary ~ .,
+  data = train_data,
+  method = "rf",
+  trControl = trainControl(
+    method = "cv",
+    number = 5,
+    classProbs = TRUE,
+    summaryFunction = twoClassSummary
+  ),
+  tuneGrid = expand.grid(mtry = c(3, 5, 7, 10)),
+  ntree = 500,
+  metric = "ROC"
+)
+
+# Predictions
+rf_pred <- predict(rf_model, test_data, type = "prob")
+rf_class <- predict(rf_model, test_data)
+
+# Confusion matrix
+rf_cm <- confusionMatrix(rf_class, test_data$is_legendary, 
+                        positive = "Legendary")
+print(rf_cm)
+
+# Variable importance
+rf_imp <- varImp(rf_model)
+plot(rf_imp, top = 15, main = "Random Forest - Top 15 Features")
+```
+
+## 5. Model Comparison
+
+### 5.1 ROC Curves
+
+```{r roc-comparison}
+# Calculate ROC curves
+roc_logistic <- roc(test_data$is_legendary, logistic_pred$Legendary)
+roc_tree <- roc(test_data$is_legendary, tree_pred$Legendary)
+roc_rf <- roc(test_data$is_legendary, rf_pred$Legendary)
+
+# Plot ROC curves
+plot(roc_logistic, col = "blue", main = "ROC Curves Comparison")
+plot(roc_tree, col = "green", add = TRUE)
+plot(roc_rf, col = "red", add = TRUE)
+legend("bottomright", 
+       legend = c(
+         glue("Logistic (AUC = {round(auc(roc_logistic), 3)})"),
+         glue("Tree (AUC = {round(auc(roc_tree), 3)})"),
+         glue("Random Forest (AUC = {round(auc(roc_rf), 3)})")
+       ),
+       col = c("blue", "green", "red"), lwd = 2)
+```
+
+### 5.2 Performance Metrics Summary
+
+```{r performance-summary}
+# Extract metrics
+metrics_df <- tibble(
+  Model = c("Logistic Regression", "Decision Tree", "Random Forest"),
+  Accuracy = c(
+    logistic_cm$overall["Accuracy"],
+    tree_cm$overall["Accuracy"],
+    rf_cm$overall["Accuracy"]
+  ),
+  Sensitivity = c(
+    logistic_cm$byClass["Sensitivity"],
+    tree_cm$byClass["Sensitivity"],
+    rf_cm$byClass["Sensitivity"]
+  ),
+  Specificity = c(
+    logistic_cm$byClass["Specificity"],
+    tree_cm$byClass["Specificity"],
+    rf_cm$byClass["Specificity"]
+  ),
+  Precision = c(
+    logistic_cm$byClass["Pos Pred Value"],
+    tree_cm$byClass["Pos Pred Value"],
+    rf_cm$byClass["Pos Pred Value"]
+  ),
+  F1 = c(
+    logistic_cm$byClass["F1"],
+    tree_cm$byClass["F1"],
+    rf_cm$byClass["F1"]
+  ),
+  AUC = c(
+    auc(roc_logistic),
+    auc(roc_tree),
+    auc(roc_rf)
+  )
+) |>
+  mutate(across(where(is.numeric), ~round(.x, 3)))
+
+print(knitr::kable(metrics_df, caption = "Model Performance Comparison"))
+
+# Visualize metrics
+metrics_long <- metrics_df |>
+  pivot_longer(-Model, names_to = "Metric", values_to = "Value")
+
+ggplot(metrics_long, aes(x = Metric, y = Value, fill = Model)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Model Performance Comparison",
+       y = "Score", x = "") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(0, 1)
+```
+
+## 6. Feature Importance Analysis
+
+```{r feature-importance-combined}
+# Get top features from Random Forest
+top_features <- rownames(rf_imp$importance)[order(rf_imp$importance$Overall, decreasing = TRUE)][1:15]
+
+# Combine importance from all models for top features
+importance_combined <- tibble(
+  Feature = top_features,
+  RF_Importance = rf_imp$importance[top_features, "Overall"],
+  Logistic_Importance = logistic_imp$importance[top_features, "Overall"]
+) |>
+  arrange(desc(RF_Importance))
+
+# Plot combined importance
+importance_combined |>
+  pivot_longer(-Feature, names_to = "Model", values_to = "Importance") |>
+  ggplot(aes(x = reorder(Feature, Importance), y = Importance, fill = Model)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  coord_flip() +
+  scale_fill_brewer(palette = "Set1") +
+  labs(title = "Top 15 Features by Model",
+       x = "Feature", y = "Importance")
+```
+
+## 7. Prediction Examples
+
+```{r prediction-examples}
+# Select interesting examples
+examples <- test_data |>
+  mutate(
+    Predicted_Prob = rf_pred$Legendary,
+    Predicted_Class = rf_class,
+    Correct = (Predicted_Class == is_legendary)
+  ) |>
+  arrange(desc(abs(Predicted_Prob - 0.5))) |>
+  select(is_legendary, Predicted_Class, Predicted_Prob, Correct, 
+         hp, attack, defense, sp_atk, sp_def, speed) |>
+  head(10)
+
+print(knitr::kable(examples, digits = 3, 
+                   caption = "Top 10 Most Confident Predictions"))
+```
+
+## 8. Key Findings
+
+```{r findings}
+cat(glue("
+=== CLASSIFICATION MODEL RESULTS ===
+
+1. Best Performing Model: Random Forest
+   - Accuracy: {round(rf_cm$overall['Accuracy'], 3)}
+   - AUC: {round(auc(roc_rf), 3)}
+   - Sensitivity (Recall): {round(rf_cm$byClass['Sensitivity'], 3)}
+   - Specificity: {round(rf_cm$byClass['Specificity'], 3)}
+   - F1 Score: {round(rf_cm$byClass['F1'], 3)}
+
+2. Top Predictive Features:
+   {paste(head(importance_combined$Feature, 5), collapse = ', ')}
+
+3. Model Comparison:
+   - Logistic Regression AUC: {round(auc(roc_logistic), 3)}
+   - Decision Tree AUC: {round(auc(roc_tree), 3)}
+   - Random Forest AUC: {round(auc(roc_rf), 3)}
+
+4. Class Imbalance Handling:
+   - Used stratified sampling
+   - Evaluated with multiple metrics beyond accuracy
+   - ROC-AUC as primary metric
+
+5. Insights:
+   - Base stat total components are strong predictors
+   - Type features provide additional discriminative power
+   - High accuracy suggests legendary Pokemon have distinct statistical profiles
+"))
+```
+
+## 9. Advanced Techniques (Beyond Course Scope)
+
+Note: The following sections contain advanced machine learning techniques that may exceed standard course requirements. They are commented out but preserved for reference.
+
+### 9.1 Hyperparameter Tuning with Grid Search
+
+```{r grid-search-tuning, eval=FALSE}
+# [COMMENTED OUT - Beyond course scope]
+# Advanced hyperparameter tuning with 10-fold CV and XGBoost
+# These techniques require deeper ML knowledge and are computationally intensive
+
+# cat("=== HYPERPARAMETER TUNING ===\n\n")
+#
+# # Define comprehensive grid for Random Forest
+# rf_grid <- expand.grid(
+#   mtry = c(3, 5, 7, 10, 15)
+# )
+#
+# # Train with expanded grid search
+# rf_tuned_model <- train(
+#   is_legendary ~ .,
+#   data = train_data,
+#   method = "rf",
+#   trControl = trainControl(
+#     method = "cv",
+#     number = 10,  # 10-fold CV for better estimates
+#     classProbs = TRUE,
+#     summaryFunction = twoClassSummary,
+#     savePredictions = "final"
+#   ),
+#   tuneGrid = rf_grid,
+#   ntree = 1000,  # More trees
+#   metric = "ROC"
+# )
+#
+# cat(glue("Best mtry: {rf_tuned_model$bestTune$mtry}\n"))
+# print(rf_tuned_model$results)
+#
+# # Plot tuning results
+# ggplot(rf_tuned_model$results, aes(x = mtry, y = ROC)) +
+#   geom_line(color = "blue", size = 1) +
+#   geom_point(size = 3) +
+#   labs(title = "Random Forest Hyperparameter Tuning",
+#        subtitle = "ROC-AUC vs. Number of Variables at Each Split",
+#        x = "mtry (Variables per Split)",
+#        y = "ROC-AUC (Cross-Validation)") +
+#   theme_minimal()
+#
+# # XGBoost tuning
+# xgb_grid <- expand.grid(
+#   nrounds = c(50, 100, 150),
+#   max_depth = c(3, 6, 9),
+#   eta = c(0.01, 0.1, 0.3),
+#   gamma = 0,
+#   colsample_bytree = 0.8,
+#   min_child_weight = 1,
+#   subsample = 0.8
+# )
+#
+# cat("\nTraining XGBoost with grid search...\n")
+#
+# xgb_model <- train(
+#   is_legendary ~ .,
+#   data = train_data,
+#   method = "xgbTree",
+#   trControl = trainControl(
+#     method = "cv",
+#     number = 5,
+#     classProbs = TRUE,
+#     summaryFunction = twoClassSummary
+#   ),
+#   tuneGrid = xgb_grid,
+#   metric = "ROC",
+#   verbosity = 0
+# )
+#
+# cat(glue("
+# Best XGBoost parameters:
+# nrounds: {xgb_model$bestTune$nrounds}
+# max_depth: {xgb_model$bestTune$max_depth}
+# eta: {xgb_model$bestTune$eta}
+# "))
+#
+# # Evaluate XGBoost
+# xgb_pred <- predict(xgb_model, test_data, type = "prob")
+# xgb_class <- predict(xgb_model, test_data)
+# xgb_cm <- confusionMatrix(xgb_class, test_data$is_legendary, positive = "Legendary")
+#
+# cat(glue("
+# XGBoost Performance:
+# Accuracy: {round(xgb_cm$overall['Accuracy'], 3)}
+# AUC: {round(auc(roc(test_data$is_legendary, xgb_pred$Legendary)), 3)}
+# "))
+```
+
+### 9.2 Multi-Class Classification (All Special Categories)
+
+```{r multiclass-classification, eval=FALSE}
+# [COMMENTED OUT - Beyond course scope]
+# Multi-class classification extends binary classification complexity
+# Requires handling of imbalanced multi-class data and more advanced evaluation metrics
+
+# cat("=== MULTI-CLASS CLASSIFICATION ===\n\n")
+#
+# # Prepare multi-class target
+# multiclass_df <- pokemon_df |>
+#   select(all_of(c("category", predictor_cols))) |>
+#   filter(category %in% c("Regular", "Legendary", "Mythical", "Ultra Beast", "Paradox")) |>
+#   mutate(category = str_replace_all(category, " ", "_")) |>
+#   mutate(category = factor(category)) |>
+#   drop_na()
+#
+# cat(glue("
+# Class distribution:
+# {paste(capture.output(table(multiclass_df$category)), collapse='\n')}
+# "))
+#
+# # Split data
+# set.seed(123)
+# multi_train_idx <- createDataPartition(multiclass_df$category, p = 0.8, list = FALSE)
+# multi_train <- multiclass_df[multi_train_idx, ]
+# multi_test <- multiclass_df[-multi_train_idx, ]
+#
+# # Train multi-class Random Forest
+# multi_rf_model <- train(
+#   category ~ .,
+#   data = multi_train,
+#   method = "rf",
+#   trControl = trainControl(
+#     method = "cv",
+#     number = 5,
+#     classProbs = TRUE,
+#     summaryFunction = multiClassSummary
+#   ),
+#   tuneGrid = expand.grid(mtry = c(5, 7, 10)),
+#   ntree = 500
+# )
+#
+# # Predictions
+# multi_pred <- predict(multi_rf_model, multi_test)
+# multi_cm <- confusionMatrix(multi_pred, multi_test$category)
+#
+# print(multi_cm)
+#
+# cat(glue("
+# Overall Accuracy: {round(multi_cm$overall['Accuracy'], 3)}
+# Kappa: {round(multi_cm$overall['Kappa'], 3)}
+# "))
+#
+# # Visualize confusion matrix
+# multi_cm_df <- as.data.frame(multi_cm$table)
+# colnames(multi_cm_df) <- c("Prediction", "Reference", "Freq")
+#
+# ggplot(multi_cm_df, aes(x = Reference, y = Prediction, fill = Freq)) +
+#   geom_tile() +
+#   geom_text(aes(label = Freq), color = "white", size = 5, fontface = "bold") +
+#   scale_fill_gradient(low = "lightblue", high = "darkblue") +
+#   labs(title = "Multi-Class Confusion Matrix",
+#        subtitle = "Pokemon Category Classification") +
+#   theme_minimal() +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+#
+# # Per-class metrics
+# cat("\nPer-Class Performance:\n")
+# multi_metrics <- multi_cm$byClass |>
+#   as.data.frame() |>
+#   rownames_to_column("Class") |>
+#   select(Class, Sensitivity, Specificity, `Pos Pred Value`, F1) |>
+#   mutate(across(where(is.numeric), ~round(.x, 3)))
+#
+# print(knitr::kable(multi_metrics, caption = "Multi-Class Performance Metrics"))
+```
+
+## 10. Final Model Comparison
+
+```{r final-comparison}
+cat("=== MODEL COMPARISON ===\n\n")
+
+# Compile binary classification results (standard models only)
+final_metrics <- tibble(
+  Model = c("Logistic Regression", "Decision Tree", "Random Forest"),
+  Accuracy = c(
+    logistic_cm$overall["Accuracy"],
+    tree_cm$overall["Accuracy"],
+    rf_cm$overall["Accuracy"]
+  ),
+  Sensitivity = c(
+    logistic_cm$byClass["Sensitivity"],
+    tree_cm$byClass["Sensitivity"],
+    rf_cm$byClass["Sensitivity"]
+  ),
+  Specificity = c(
+    logistic_cm$byClass["Specificity"],
+    tree_cm$byClass["Specificity"],
+    rf_cm$byClass["Specificity"]
+  ),
+  F1 = c(
+    logistic_cm$byClass["F1"],
+    tree_cm$byClass["F1"],
+    rf_cm$byClass["F1"]
+  ),
+  AUC = c(
+    auc(roc_logistic),
+    auc(roc_tree),
+    auc(roc_rf)
+  )
+) |>
+  mutate(across(where(is.numeric), ~round(.x, 3)))
+
+print(knitr::kable(final_metrics,
+                   caption = "Final Model Performance Comparison"))
+
+# Visualize comparison
+final_metrics |>
+  pivot_longer(-Model, names_to = "Metric", values_to = "Value") |>
+  ggplot(aes(x = Model, y = Value, fill = Metric)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Model Performance Comparison",
+       subtitle = "All Metrics Across 3 Classification Models",
+       y = "Score") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Identify best model
+best_model_idx <- which.max(final_metrics$AUC)
+cat(glue("
+BEST MODEL: {final_metrics$Model[best_model_idx]}
+AUC: {final_metrics$AUC[best_model_idx]}
+Accuracy: {final_metrics$Accuracy[best_model_idx]}
+F1 Score: {final_metrics$F1[best_model_idx]}
+"))
+
+cat(glue("
+=== FINAL SUMMARY ===
+
+Total models evaluated: {nrow(final_metrics)}
+Best performing: {final_metrics$Model[best_model_idx]} (AUC = {final_metrics$AUC[best_model_idx]})
+
+Models used:
+- Logistic Regression (baseline)
+- Decision Tree (interpretable)
+- Random Forest (ensemble method)
+"))
+```
+
+## 11. Save Models
+
+```{r save-all-models}
+# Ensure models directory exists
+if (!dir.exists("models")) dir.create("models", recursive = TRUE)
+
+# Save trained models
+saveRDS(logistic_model, "models/legendary_classifier_logistic.rds")
+saveRDS(tree_model, "models/legendary_classifier_tree.rds")
+saveRDS(rf_model, "models/legendary_classifier_rf.rds")
+
+cat("Models saved to models/ directory:
+- legendary_classifier_logistic.rds
+- legendary_classifier_tree.rds
+- legendary_classifier_rf.rds
+")
+```
+
+---
+
+
