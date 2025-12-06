@@ -109,43 +109,35 @@ Our exploratory analysis aimed to understand the structure, distribution, and in
 
 1. **Overview of Pokémon Statistics**
 
-- We began by examining the six base stats (HP, Attack, Defense, Special Attack, Special Defense, Speed) and the total Base Stat Total (BST). The histogram of BST revealed a multi-modal distribution rather than a unimodal or normal structure, suggesting intentional “tiering” in Pokémon design rather than random natural variation. This supported the decision to avoid parametric modeling that assumes normality when analyzing BST directly.
-
-- The distributions of individual stats displayed varied shapes and ranges—HP and Defense showing heavier right tails, Speed being more evenly spread. These differences highlighted the need to treat stats independently during later PCA and clustering steps rather than relying solely on BST.
+We began by examining the six base stats (HP, Attack, Defense, Special Attack, Special Defense, Speed) and the total Base Stat Total (BST). The histogram of BST revealed a multi-modal distribution rather than a unimodal or normal structure, suggesting intentional “tiering” in Pokémon design rather than random natural variation. This supported the decision to avoid parametric modeling that assumes normality when analyzing BST directly. The distributions of individual stats displayed varied shapes and ranges—HP and Defense showing heavier right tails, Speed being more evenly spread. These differences highlighted the need to treat stats independently during later PCA and clustering steps rather than relying solely on BST.
 
 2. **Comparing Extreme and Typical Pokémon**
 
-- To better understand variation in stat profiles, we created radar plots comparing one of the weakest fully evolved Pokémon (Wishiwashi Solo Form) with one of the strongest (Mega Rayquaza). This qualitative comparison illustrated how extreme Pokémon deviate from population means across all six stats, reinforcing that Pokémon design follows distinctive archetypes. This motivated us to later examine whether PCA would capture these archetypal differences.
+To better understand variation in stat profiles, we created radar plots comparing one of the weakest fully evolved Pokémon (Wishiwashi Solo Form) with one of the strongest (Mega Rayquaza). This qualitative comparison illustrated how extreme Pokémon deviate from population means across all six stats, reinforcing that Pokémon design follows distinctive archetypes. This motivated us to later examine whether PCA would capture these archetypal differences.
 
 3. **Physical Attributes: Height, Weight, and BMI**
 
-- Height and weight showed heavily right-skewed distributions, spanning several orders of magnitude. Applying log transformations revealed smooth, interpretable patterns, indicating biological scaling relationships similar to those observed in real animal species. The height–weight scatterplot on a log–log scale suggested a near-linear relationship, consistent with power-law scaling.
-
-- BMI contained extreme outliers (e.g., Cosmoem), so we applied a data filter to visualize the meaningful distribution. This step was necessary to prevent single outliers from compressing the rest of the data—a decision that also informed later modeling, where we excluded non-representative extreme physical measurements.
+Height and weight showed heavily right-skewed distributions, spanning several orders of magnitude. Applying log transformations revealed smooth, interpretable patterns, indicating biological scaling relationships similar to those observed in real animal species. The height–weight scatterplot on a log–log scale suggested a near-linear relationship, consistent with power-law scaling. BMI contained extreme outliers (e.g., Cosmoem), so we applied a data filter to visualize the meaningful distribution. This step was necessary to prevent single outliers from compressing the rest of the data—a decision that also informed later modeling, where we excluded non-representative extreme physical measurements.
 
 4. **Typing Structure and Prevalence**
 
-- We explored Pokémon type diversity by counting primary and secondary types. Water, Flying, and Psychic emerged as the most common, while combinations like Normal/Flying dominated dual-type frequencies—a pattern consistent with game design traditions. These findings justified including type as a categorical predictor in later classification models, since type prevalence clearly drives structural differences across populations.
-
-- Type-based BST boxplots revealed systematic differences: Dragon and Psychic Pokémon possess notably higher average BST, whereas Bug and Normal types tend to be lower. This supported the hypothesis that type encodes meaningful structural information that PCA and downstream supervised learning methods could exploit.
+We explored Pokémon type diversity by counting primary and secondary types. Water, Flying, and Psychic emerged as the most common, while combinations like Normal/Flying dominated dual-type frequencies—a pattern consistent with game design traditions. These findings justified including type as a categorical predictor in later classification models, since type prevalence clearly drives structural differences across populations. Type-based BST boxplots revealed systematic differences: Dragon and Psychic Pokémon possess notably higher average BST, whereas Bug and Normal types tend to be lower. This supported the hypothesis that type encodes meaningful structural information that PCA and downstream supervised learning methods could exploit.
 
 5. **Special Categories (Legendary, Mythical, Paradox, etc.)**
 
-- A key exploratory step involved comparing Legendary vs non-Legendary Pokémon. A Welch’s t-test showed a highly significant difference in mean BST (>100-point gap), with Legendaries displaying much tighter and higher distributions. These differences justified treating category as a grouping variable during modeling and suggested that any predictive model involving BST must carefully consider category imbalance.
+A key exploratory step involved comparing Legendary vs non-Legendary Pokémon. A Welch’s t-test showed a highly significant difference in mean BST (>100-point gap), with Legendaries displaying much tighter and higher distributions. These differences justified treating category as a grouping variable during modeling and suggested that any predictive model involving BST must carefully consider category imbalance.
 
 6. **Summary**
 
-- Our exploratory work revealed several insights that shaped later analysis decisions:
+Our exploratory work revealed several insights that shaped later analysis decisions:
 
-  - Pokémon stats are structured, not random, with clear modes and archetypes.
+- Pokémon stats are structured, not random, with clear modes and archetypes.
 
-  - Scaling transformations (e.g., log height/weight) are necessary for meaningful visualization and PCA.
+- Scaling transformations (e.g., log height/weight) are necessary for meaningful visualization and PCA.
 
-  - Type and special categories encode strong statistical signals and must be included in predictive models.
+- Type and special categories encode strong statistical signals and must be included in predictive models.
 
-  - Outliers meaningfully influence physical attribute scales and must be filtered or transformed for analysis.
-
-Collectively, the EDA provided the foundation for choosing dimensionality-reduction techniques, designing classification tasks, and constructing a rating metric that reflects Pokémon balance and design structure.
+- Outliers meaningfully influence physical attribute scales and must be filtered or transformed for analysis.
 
 # Additonal Analysis
 
@@ -155,43 +147,23 @@ To better understand the multivariate structure of Pokémon statistics and reduc
 
 1. **Variance Explained and Component Selection**
 
-- The scree plot showed that the first two principal components (PCs) captured a substantial proportion of total variance, with PC1 explaining the largest share. This justified using PC1 and PC2 for visualization and exploratory clustering. While later components each explained smaller amounts of variance, the first few PCs together captured the primary axes of differentiation across Pokémon.
+The scree plot showed that the first two principal components (PCs) captured a substantial proportion of total variance, with PC1 explaining the largest share. This justified using PC1 and PC2 for visualization and exploratory clustering. While later components each explained smaller amounts of variance, the first few PCs together captured the primary axes of differentiation across Pokémon.
 
 2. **Interpreting the Principal Components**
 
-- Examining the PCA loadings revealed distinct conceptual interpretations of the first two components:
-
-  - PC1 (Overall Power Axis):
-    - PC1 loaded positively on nearly all six stats, particularly Attack, Special Attack, and Speed. This suggests that PC1 represents a general strength or combat effectiveness dimension. Pokémon with high PC1 scores tend to be strong attackers or well-rounded fighters, whereas low-PC1 Pokémon tend to be weaker or early-stage forms.
-
-  - (Offense–Defense Tradeoff Axis):
-    - displayed contrasting loadings between offensive stats (Attack, Sp. Attack) and defensive stats (Defense, Sp. Defense). Positive PC2 values correspond to defensive-oriented Pokémon, while negative PC2 values correspond to offense-heavy species. This axis reflects a strategic design dichotomy within the Pokémon universe.
+Examining the PCA loadings revealed distinct conceptual interpretations of the first two components: PC1 (Overall Power Axis): PC1 loaded positively on nearly all six stats, particularly Attack, Special Attack, and Speed. This suggests that PC1 represents a general strength or combat effectiveness dimension. Pokémon with high PC1 scores tend to be strong attackers or well-rounded fighters, whereas low-PC1 Pokémon tend to be weaker or early-stage forms. (Offense–Defense Tradeoff Axis):displayed contrasting loadings between offensive stats (Attack, Sp. Attack) and defensive stats (Defense, Sp. Defense). Positive PC2 values correspond to defensive-oriented Pokémon, while negative PC2 values correspond to offense-heavy species. This axis reflects a strategic design dichotomy within the Pokémon universe.
 
 3. **PCA Biplots and Group Structure**
 
-- The PCA scatterplot showed clear separation of Pokémon categories:
-
-  - Legendary and pseudo-legendary Pokémon cluster toward the upper-right region of the PC1–PC2 space, reflecting both high stats and more balanced distributions.
-
-  - Early-game or unevolved Pokémon cluster near the origin, indicating uniformly low stats.
-
-  - Specialized attackers (e.g., glass cannons) occupy extreme negative PC2 regions, while tanks and walls appear in high-PC2 regions.
-
-These patterns confirm that Pokémon occupy structured roles defined by statistical profiles, and that PCA successfully captures these underlying archetypes.
+The PCA scatterplot showed clear separation of Pokémon categories: Legendary and pseudo-legendary Pokémon cluster toward the upper-right region of the PC1–PC2 space, reflecting both high stats and more balanced distributions. Early-game or unevolved Pokémon cluster near the origin, indicating uniformly low stats. Specialized attackers (e.g., glass cannons) occupy extreme negative PC2 regions, while tanks and walls appear in high-PC2 regions. These patterns confirm that Pokémon occupy structured roles defined by statistical profiles, and that PCA successfully captures these underlying archetypes.
 
 4. **How PCA Informed Later Decisions**
 
-- Findings from PCA directly influenced our modeling choices:
-
-  - PCA revealed that the dataset contains continuous gradients, not discrete clusters, causing us to refine our original clustering approach toward soft clustering and dimensionality-informed visualization rather than strict k-means segmentation.
-
-  - The strong separation between Legendary and non-Legendary Pokémon demonstrated that category variables are highly informative, motivating us to include category as a feature in later predictive models.
-
-  - The identification of offense–defense tradeoffs motivated the creation of composite metrics (e.g., offensive index, defensive index) to supplement PCA-derived insights.
+Findings from PCA directly influenced our modeling choices: PCA revealed that the dataset contains continuous gradients, not discrete clusters, causing us to refine our original clustering approach toward soft clustering and dimensionality-informed visualization rather than strict k-means segmentation. The strong separation between Legendary and non-Legendary Pokémon demonstrated that category variables are highly informative, motivating us to include category as a feature in later predictive models. The identification of offense–defense tradeoffs motivated the creation of composite metrics (e.g., offensive index, defensive index) to supplement PCA-derived insights.
 
 5. **Summary**
 
-- Overall, PCA validated that Pokémon design is multidimensional and strategically structured, with clear axes representing general power and combat roles. These insights guided both model selection and feature engineering in subsequent stages of analysis.
+Overall, PCA validated that Pokémon design is multidimensional and strategically structured, with clear axes representing general power and combat roles. These insights guided both model selection and feature engineering in subsequent stages of analysis.
 
 # Discussion
 
