@@ -648,9 +648,6 @@ dual_def &lt;- map_dfr(combn(types, 2, simplify = FALSE), \(pair) {
   select(def_type, atk_type, multiplier)
 
 def_type_df &lt;- bind_rows(single_def, dual_def)</code></pre>
-</div>
-<div id="export" class="section level3">
-<h3>Export</h3>
 <pre class="r"><code># Export final evolution dataset with all enrichments (primary dataset for all downstream analysis)
 write_csv(pokemon_evolved_df, &quot;data/pokemon_data_final_evolutions_enriched.csv&quot;)
 

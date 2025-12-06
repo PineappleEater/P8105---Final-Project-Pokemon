@@ -906,13 +906,13 @@ Tyranitar
 <h2>Top 20 Offensive Pokémon</h2>
 <pre class="r"><code>top_offensive &lt;- pokemon_rated %&gt;%
   arrange(desc(offensive_rating)) %&gt;%
-  head(20) %&gt;%
   select(name, type_1, type_2, role, offensive_rating, defensive_rating, tier)
 
-kable(top_offensive,
-      caption = &quot;Top 20 Offensive Pokémon&quot;,
-      digits = 1,
-      align = &quot;lllcccc&quot;)</code></pre>
+top_offensive |&gt; 
+  head(20) |&gt; 
+  kable(caption = &quot;Top 20 Offensive Pokémon&quot;,
+        digits = 1,
+        align = &quot;lllcccc&quot;)</code></pre>
 <table>
 <caption>Top 20 Offensive Pokémon</caption>
 <colgroup>
@@ -1123,13 +1123,13 @@ kable(top_offensive,
 <h2>Top 20 Defensive Pokémon</h2>
 <pre class="r"><code>top_defensive &lt;- pokemon_rated %&gt;%
   arrange(desc(defensive_rating)) %&gt;%
-  head(20) %&gt;%
   select(name, type_1, type_2, role, defensive_rating, offensive_rating, tier)
 
-kable(top_defensive,
-      caption = &quot;Top 20 Defensive Pokémon&quot;,
-      digits = 1,
-      align = &quot;lllcccc&quot;)</code></pre>
+top_defensive |&gt; 
+  head(20) |&gt; 
+  kable(caption = &quot;Top 20 Defensive Pokémon&quot;,
+        digits = 1,
+        align = &quot;lllcccc&quot;)</code></pre>
 <table>
 <caption>Top 20 Defensive Pokémon</caption>
 <colgroup>
@@ -1341,13 +1341,13 @@ kable(top_defensive,
 <pre class="r"><code>top_regular &lt;- pokemon_rated %&gt;%
   filter(category == &quot;Regular&quot;) %&gt;%
   arrange(desc(pmax(defensive_rating+10, offensive_rating))) %&gt;%
-  head(20) %&gt;%
   select(name, type_1, type_2, role, offensive_rating, defensive_rating, tier)
 
-kable(top_regular,
-      caption = &quot;Top 20 Regular Pokémon (Accessible for Beginners)&quot;,
-      digits = 1,
-      align = &quot;lllcccc&quot;)</code></pre>
+top_regular |&gt; 
+  head(20) |&gt; 
+  kable(caption = &quot;Top 20 Regular Pokémon (Accessible for Beginners)&quot;,
+        digits = 1,
+        align = &quot;lllcccc&quot;)</code></pre>
 <table>
 <caption>Top 20 Regular Pokémon (Accessible for Beginners)</caption>
 <colgroup>
@@ -1553,6 +1553,14 @@ kable(top_regular,
 </tr>
 </tbody>
 </table>
+<pre class="r"><code># Export Offensive Pokemon Ranking list
+write_csv(top_offensive, &quot;data/top_offensive.csv&quot;)
+
+# Export Defensive Pokemon Ranking list
+write_csv(top_defensive, &quot;data/top_defensive.csv&quot;)
+
+# Export Regular Pokemon Ranking list
+write_csv(top_regular, &quot;data/top_regular.csv&quot;)</code></pre>
 <hr />
 </div>
 </div>

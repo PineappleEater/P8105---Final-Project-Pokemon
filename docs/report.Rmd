@@ -12,14 +12,31 @@ output:
     self_contained: false
 ---
 *Team Members: Leah Li (yl5828), Ruipeng Li (rl3616), Xuange Liang (xl3493), Yiwen Zhang (yz4994)* 
+```{css, echo=FALSE}
+.poke-card {
+  border: 4px solid transparent;
+  border-image: linear-gradient(45deg, #FFD700, #FFB700, #FFF4C2) 1;
+  border-radius: 12px;         
+  padding: 20px;               
+  margin: 15px 0;              
+  background-color: #ffffff;   
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+  text-align: center;          
+}
+.indent-pca {
+  margin-left: 20px;
+  line-height: 1.4;
+}
+```
 
 ```{r, message=FALSE, warning=FALSE}
 library(rvest)
 library(tidyverse)
 library(janitor)
+pokemon_df <- read_csv("data/pokemon_data_final_evolutions_enriched.csv")
 ```
 
-# Motivation
+# **Motivation**
 - **Dataset**: 1,025 Pokémon species across 9 generations (1996-2025)
 - **Why Pokémon?**
   - Rich, structured dataset with quantitative and categorical features
@@ -27,13 +44,16 @@ library(janitor)
   - Combines statistical rigor with creative exploration
   - Practical application for competitive play and team building
 - **Motiviation**
+<div class="indent-pca">  
 The Pokémon dataset offers a rich and structured environment for applying data science methods to explore relationships between attributes, performance, and design balance. Each Pokémon is described by a variety of quantitative and categorical features—such as type, stats, generation, and legendary status—making it an excellent case study for classification, clustering, and predictive modeling. Analyzing this dataset allows us to practice fundamental data science workflows, including data cleaning, feature engineering, visualization, and model evaluation, while also addressing interesting questions such as: What characteristics make a Pokémon strong? Are legendary Pokémon statistically distinct from others? By combining statistical reasoning with creative curiosity, this project aims to turn a familiar and entertaining topic into a meaningful data-driven exploration.
+</div>
 
-# Related Work
-
+# **Related Work**
+<div class="indent-pca">  
 Prior analyses of the Pokémon dataset have appeared in a variety of data science blogs, Kaggle kernels, and academic teaching materials, demonstrating its popularity as a case study for statistical learning. Kaggle’s “Complete Pokémon Dataset” has inspired numerous exploratory and predictive modeling projects that examine type advantages, stat distributions, and the distinctiveness of legendary Pokémon. Several tutorials—including those discussed in class—use this dataset to illustrate concepts such as principal component analysis, clustering, and classification algorithms due to its clean structure and intuitive domain. Additionally, online communities like Towards Data Science and r/datascience frequently feature Pokémon-themed analyses that highlight best practices in visualization, feature engineering, and model evaluation. These prior works inform our project by showcasing the dataset’s versatility and by motivating deeper investigation into what features drive Pokémon performance, balance, and design across generations.
+</div>
 
-# Initial Questions
+# **Initial Questions**
 
 **Core Questions:**
 
@@ -48,14 +68,14 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 - **System Validation**: Does the "best" Pokémon team selected through this rating system actually match competitive standards (based on "Pokémon Masters" reviews)?
 - **Team Building Utility**: Can you build a "best" Pokémon team based on this rating system? In other words, is this system reliable or useful as a reference?
 
-# Data
+# **Data**
 
 | Source | Description | URL |
 |--------|-------------|-----|
 | **PokémonDB** | Complete Pokémon Stats and Physical Attributes scraped from web | (<a href="https://pokemondb.net/pokedex/all">Complete Pokémon Pokédex</a>)(<a href="https://pokemondb.net/pokedex/stats/height-weight">List of Pokémon by height and weight</a>) |
 | **BULBAGARDEN** | "Fully evolved Pokémon only list" scraped from web | (<a href="https://bulbapedia.bulbagarden.net/wiki/List_of_fully_evolved_Pok%C3%A9mon_by_base_stats">Fully evolved Pokémon List</a>) |
 
-## Pokémon Dataset Overview Full  
+## *Pokémon Dataset Overview Full*  
 
 <div align="center">
 
@@ -81,7 +101,7 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
   </a>
 </div>
 
-## Pokémon Dataset Overview Part  
+## *Pokémon Dataset Overview Part*  
 *Evolved and Final Form of Pokémon Only*
 
 <div align="center">
@@ -125,7 +145,7 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 
 ---
 
-## Data Cleaning Highlights
+## *Data Cleaning Highlights*
 1. **Table Joining**: Merged stats, dimensions, and evolution data by Pokédex number
 2. **Type Parsing**: Split combined type strings into `type_1` and `type_2`
 3. **Special Case Handling**:
@@ -141,159 +161,478 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
    (Click here to view the detailed cleaning process)
 </a>
 
-# Exploratory Analysis
+# **Exploratory Analysis**
 
-## EDA
-
+## *EDA*  
 Our exploratory analysis aimed to understand the structure, distribution, and internal relationships of key Pokémon attributes before proceeding to modeling. We focused on visual diagnostics, summary statistics, and transformation-based exploration to uncover patterns that informed later methodological choices.
 
-1. **Overview of Pokémon Statistics**
 
+1. **Overview of Pokémon Statistics**
+<div class="indent-pca"> 
 We began by examining the six base stats (HP, Attack, Defense, Special Attack, Special Defense, Speed) and the total Base Stat Total (BST). The histogram of BST revealed a multi-modal distribution rather than a unimodal or normal structure, suggesting intentional “tiering” in Pokémon design rather than random natural variation. This supported the decision to avoid parametric modeling that assumes normality when analyzing BST directly. The distributions of individual stats displayed varied shapes and ranges—HP and Defense showing heavier right tails, Speed being more evenly spread. These differences highlighted the need to treat stats independently during later PCA and clustering steps rather than relying solely on BST.
+</div>
 
 2. **Comparing Extreme and Typical Pokémon**
-
+<div class="indent-pca">  
 To better understand variation in stat profiles, we created radar plots comparing one of the weakest fully evolved Pokémon (Wishiwashi Solo Form) with one of the strongest (Mega Rayquaza). This qualitative comparison illustrated how extreme Pokémon deviate from population means across all six stats, reinforcing that Pokémon design follows distinctive archetypes. This motivated us to later examine whether PCA would capture these archetypal differences.
+</div>
 
 3. **Physical Attributes: Height, Weight, and BMI**
-
+<div class="indent-pca">  
 Height and weight showed heavily right-skewed distributions, spanning several orders of magnitude. Applying log transformations revealed smooth, interpretable patterns, indicating biological scaling relationships similar to those observed in real animal species. The height–weight scatterplot on a log–log scale suggested a near-linear relationship, consistent with power-law scaling. BMI contained extreme outliers (e.g., Cosmoem), so we applied a data filter to visualize the meaningful distribution. This step was necessary to prevent single outliers from compressing the rest of the data—a decision that also informed later modeling, where we excluded non-representative extreme physical measurements.
+</div>
 
 4. **Typing Structure and Prevalence**
-
+<div class="indent-pca">  
 We explored Pokémon type diversity by counting primary and secondary types. Water, Flying, and Psychic emerged as the most common, while combinations like Normal/Flying dominated dual-type frequencies—a pattern consistent with game design traditions. These findings justified including type as a categorical predictor in later classification models, since type prevalence clearly drives structural differences across populations. Type-based BST boxplots revealed systematic differences: Dragon and Psychic Pokémon possess notably higher average BST, whereas Bug and Normal types tend to be lower. This supported the hypothesis that type encodes meaningful structural information that PCA and downstream supervised learning methods could exploit.
+</div>
 
 5. **Special Categories (Legendary, Mythical, Paradox, etc.)**
-
+<div class="indent-pca">  
 A key exploratory step involved comparing Legendary vs non-Legendary Pokémon. A Welch’s t-test showed a highly significant difference in mean BST (>100-point gap), with Legendaries displaying much tighter and higher distributions. These differences justified treating category as a grouping variable during modeling and suggested that any predictive model involving BST must carefully consider category imbalance.
+</div>
 
-6. **Summary**
+6. **Summary**  
+- Our exploratory work revealed several insights that shaped later analysis decisions:
 
-Our exploratory work revealed several insights that shaped later analysis decisions:
+  - Pokémon stats are structured, not random, with clear modes and archetypes.  
+  - Scaling transformations (e.g., log height/weight) are necessary for meaningful visualization and PCA.  
+  - Type and special categories encode strong statistical signals and must be included in predictive models.  
+  - Outliers meaningfully influence physical attribute scales and must be filtered or transformed for analysis.  
 
-- Pokémon stats are structured, not random, with clear modes and archetypes.
 
-- Scaling transformations (e.g., log height/weight) are necessary for meaningful visualization and PCA.
+# **Additonal Analysis**
 
-- Type and special categories encode strong statistical signals and must be included in predictive models.
-
-- Outliers meaningfully influence physical attribute scales and must be filtered or transformed for analysis.
-
-# Additonal Analysis
-
-## PCA
-
+## *PCA*  
 To better understand the multivariate structure of Pokémon statistics and reduce dimensionality for downstream modeling, we conducted Principal Component Analysis (PCA) on standardized versions of the six base stats: HP, Attack, Defense, Special Attack, Special Defense, and Speed. Standardization was necessary because these attributes are measured on similar but not identical scales, and unscaled PCA would overweight variables with larger variance.
 
 1. **Variance Explained and Component Selection**
-
+<div class="indent-pca">  
 The scree plot showed that the first two principal components (PCs) captured a substantial proportion of total variance, with PC1 explaining the largest share. This justified using PC1 and PC2 for visualization and exploratory clustering. While later components each explained smaller amounts of variance, the first few PCs together captured the primary axes of differentiation across Pokémon.
+</div>
 
 2. **Interpreting the Principal Components**
-
+<div class="indent-pca">  
 Examining the PCA loadings revealed distinct conceptual interpretations of the first two components: PC1 (Overall Power Axis): PC1 loaded positively on nearly all six stats, particularly Attack, Special Attack, and Speed. This suggests that PC1 represents a general strength or combat effectiveness dimension. Pokémon with high PC1 scores tend to be strong attackers or well-rounded fighters, whereas low-PC1 Pokémon tend to be weaker or early-stage forms. (Offense–Defense Tradeoff Axis):displayed contrasting loadings between offensive stats (Attack, Sp. Attack) and defensive stats (Defense, Sp. Defense). Positive PC2 values correspond to defensive-oriented Pokémon, while negative PC2 values correspond to offense-heavy species. This axis reflects a strategic design dichotomy within the Pokémon universe.
+</div>
 
 3. **PCA Biplots and Group Structure**
-
+<div class="indent-pca">  
 The PCA scatterplot showed clear separation of Pokémon categories: Legendary and pseudo-legendary Pokémon cluster toward the upper-right region of the PC1–PC2 space, reflecting both high stats and more balanced distributions. Early-game or unevolved Pokémon cluster near the origin, indicating uniformly low stats. Specialized attackers (e.g., glass cannons) occupy extreme negative PC2 regions, while tanks and walls appear in high-PC2 regions. These patterns confirm that Pokémon occupy structured roles defined by statistical profiles, and that PCA successfully captures these underlying archetypes.
+</div>
 
 4. **How PCA Informed Later Decisions**
-
+<div class="indent-pca">  
 Findings from PCA directly influenced our modeling choices: PCA revealed that the dataset contains continuous gradients, not discrete clusters, causing us to refine our original clustering approach toward soft clustering and dimensionality-informed visualization rather than strict k-means segmentation. The strong separation between Legendary and non-Legendary Pokémon demonstrated that category variables are highly informative, motivating us to include category as a feature in later predictive models. The identification of offense–defense tradeoffs motivated the creation of composite metrics (e.g., offensive index, defensive index) to supplement PCA-derived insights.
+</div>
 
 5. **Summary**
-
+<div class="indent-pca">  
 Overall, PCA validated that Pokémon design is multidimensional and strategically structured, with clear axes representing general power and combat roles. These insights guided both model selection and feature engineering in subsequent stages of analysis.
+</div>
 
-## Rating System
+# **Rating System**
 
-Beyond exploratory data visualization and PCA, we conducted several formal statistical analyses to quantify the relationships between Pokémon characteristics and their computed ratings. These analyses help validate whether the rating system behaves consistently with intuitive expectations and reveal deeper structural patterns in the dataset.
+```{r, echo=FALSE}
+stats_cols <- c("hp", "attack", "defense", "speed", "sp_def", "sp_atk")
 
-1. **Linear Modeling: Predictors of Offensive and Defensive Ratings**
+max_row <- data.frame(
+  hp      = 255,
+  attack  = 255,
+  defense = 255,
+  speed   = 255,
+  sp_def  = 255,
+  sp_atk  = 255
+)
 
-To evaluate which Pokémon attributes most strongly influence the computed ratings, we fitted two multiple linear regression models:
+min_row <- data.frame(
+  hp      = 0,
+  attack  = 0,
+  defense = 0,
+  speed   = 0,
+  sp_def  = 0,
+  sp_atk  = 0
+)
 
-- Model 1: Offensive Rating ~ Attack + Special Attack + Speed + Total BST + Type (1 & 2)
+```
 
-- Model 2: Defensive Rating ~ HP + Defense + Special Defense + Total BST + Defensive Typing Score
+**Why a Dual Rating System?**  
+<div class="indent-pca">  
+Traditional metrics such as BST fail to distinguish between offensive and defensive roles.
+A Pokémon may have excellent stats but poor defensive typing, or great bulk but no offensive pressure.
+</div>
 
-These models allow us to assess how well classical stats explain the algorithm-derived ratings and whether type effects remain significant after adjusting for base stats.
+**To address these limitations, we designed a Dual Rating System consisting of:**  
 
-**Key Findings**
+ - Offensive Rating (0–100)  
+ - Defensive Rating (0–100)  
+ 
+<div class="indent-pca">  
+This kind of decomposition tries to approximate real battle conditions as closely as possible, given that we can’t take each Pokémon’s movepool into account. Offensive and defensive performance rely on different stats and completely different type advantages.   
+By separating them, we can create a rating system that’s easier to understand and better reflects each Pokémon’s intended role.   
+</div>
 
-Offensive ratings were most strongly predicted by:
+<a href="https://pineappleeater.github.io/P8105---Final-Project-Pokemon/rating.html"
+   target="_blank"
+   style="padding: 4px 8px; border-radius: 6px; background:#fff7fb; text-decoration:none; color:#444;">
+   (Click here to view the detailed algorithms.)
+</a>
 
-- Special Attack (β > Attack), suggesting special attackers are slightly favored under the effective attack formula.
+## *Top 3 Offensive Rated Pokémon*:
 
-- Speed, which contributes significantly through the dual-speed scoring function.
+<div class="row">
 
-- Total BST, positively associated but with diminishing returns—reflecting the sigmoidal BST component.
+<div class="col-md-4">
 
-Defensive ratings were driven primarily by:
+<div class="poke-card">
 
-- HP and combined defenses, which jointly contribute to the durability expectation metric.
+### Mega Mewtwo Y
 
-- Defensive typing score, confirming that type combinations meaningfully influence outcomes beyond stats alone.
+<img src="assets\reportgif\mewtwo-mega-mewtwo-y.gif" class="poke-sprite">
+```{r, echo=FALSE, fig.width=6, fig.height=6, out.width="100%", fig.align='center'}
+radar_data <- rbind(max_row, min_row, pokemon_df |>
+  filter(name == "Mega Mewtwo Y") |>
+  select(all_of(stats_cols)))
 
-These relationships validate that our rating system appropriately incorporates both raw stats and structural game mechanics (such as typing benefits).
+rownames(radar_data) <- c("Max", "Min", "Mega Mewtwo Y")
 
-2. **Testing Differences Between Legendary and Non-Legendary Pokémon**
+fmsb::radarchart(
+  radar_data,
+  axistype = 1,
+  caxislabels = c("50", "100", "150", "200", "255"),
+  pcol  = "#4FACFE",
+  pfcol = adjustcolor("#4FACFE", alpha.f = 0.3),
+  plwd  = 3,
+  plty  = 1,
+  cglcol = "grey",
+  cglty  = 1
+)
+```
+</div>
+</div> <div class="col-md-4">
 
-Given that legendary Pokémon intuitively should perform better, we conducted two-sample t-tests to compare:
+<div class="poke-card">
 
-- Mean Offensive Rating (Legendary vs Non-Legendary)
+### Mega Rayquaza
 
-- Mean Defensive Rating (Legendary vs Non-Legendary)
+<img src="assets\reportgif\rayquaza-mega-rayquaza.gif" class="poke-sprite">
+```{r, echo=FALSE, fig.width=6, fig.height=6, out.width="100%", fig.align='center'}
+radar_data <- rbind(max_row, min_row, pokemon_df |>
+  filter(name == "Mega Rayquaza") |>
+  select(all_of(stats_cols)))
 
-- Combined Tier Score (translated from SS→F scale into numerical values)
+rownames(radar_data) <- c("Max", "Min", "Mega Rayquaza")
 
-**Results**
+fmsb::radarchart(
+  radar_data,
+  axistype = 1,
+  caxislabels = c("50", "100", "150", "200", "255"),
+  pcol  = "#4FACFE",
+  pfcol = adjustcolor("#4FACFE", alpha.f = 0.3),
+  plwd  = 3,
+  plty  = 1,
+  cglcol = "grey",
+  cglty  = 1,
+)
+```
+</div>
+</div> <div class="col-md-4">
 
-- Offensive Rating: Legendary Pokémon had significantly higher mean offensive scores (p < 0.001).
+<div class="poke-card">
 
-- Defensive Rating: Similar strong separation, with legendary Pokémon maintaining substantially higher durability scores.
+### Ultra Necrozma
 
-- Tier Levels: Proportions of S/SS-tier Pokémon were dramatically enriched among legendaries.
+<img src="assets\reportgif\ultra-necrozma.gif" class="poke-sprite">
 
-These results empirically confirm that the rating system captures the intended game hierarchy without artificially inflating legendary performance.
+```{r, echo=FALSE, fig.width=6, fig.height=6, out.width="100%", fig.align='center'}
+radar_data <- rbind(max_row, min_row, pokemon_df |>
+  filter(name == "Ultra Necrozma") |>
+  select(all_of(stats_cols)))
 
-3. **Clustering Analysis: Pokémon Archetypes**
+rownames(radar_data) <- c("Max", "Min", "Ultra Necrozma")
 
-To examine whether Pokémon naturally group into meaningful “roles,” we performed k-means clustering on standardized offensive and defensive ratings:
+fmsb::radarchart(
+  radar_data,
+  axistype = 1,
+  caxislabels = c("50", "100", "150", "200", "255"),
+  pcol  = "#4FACFE",
+  pfcol = adjustcolor("#4FACFE", alpha.f = 0.3),
+  plwd  = 3,
+  plty  = 1,
+  cglcol = "grey",
+  cglty  = 1,
+)
+```
+</div>
+</div> </div>
 
-- k = 3 produced clear, interpretable clusters:
+### **⭐Are they strong?**  
+- Mega Mewtwo Y  
+  - One of the strongest special attackers ever created—huge Speed, massive Special Attack, and vast coverage make it nearly impossible to wall. Extremely fragile, but its offensive pressure is unmatched.
 
-  - Offensive Sweepers – high attack & speed, low bulk
+- Mega Rayquaza  
+  - A completely unrestricted powerhouse with overwhelming mixed offenses and access to Dragon Ascent. Hits harder than almost anything and doesn’t even need a Mega Stone, which pushes it far beyond standard balance.
 
-  - Defensive Walls – high HP/defenses, lower attack
+- Ultra Necrozma  
+  - A blisteringly fast, incredibly strong mixed attacker with great coverage. Its boosted stats and Photon Geyser give it explosive burst potential, *though it requires setup to transform*.
 
-  - Balanced All-Rounders
+<details>
+<summary><b>Offensive Pokémon List(Best to worst)</b></summary>
+```{r pokemon-table1}
+read.csv("data/top_offensive.csv") |> 
+  mutate(defensive_rating = round(defensive_rating, 2),
+         offensive_rating = round(offensive_rating, 2)) |> 
+  DT::datatable(
+    options = list(
+      pageLength = 10,  
+      scrollX = TRUE    
+    )
+  )
+```
+</details>
 
-The resulting clusters aligned closely—but not perfectly—with the algorithm’s role classification (Offensive, Balanced, Defensive). This consistency provides independent support for the role classification framework.
 
-4. **Correlation Structure and Redundancy Checks**
 
-Using Pearson correlation matrices:
+## *Top 3 Defensive Rated Pokémon*:
 
-- Offensive rating was strongly correlated with Attack, Special Attack, and Speed—but only moderately correlated with Total BST.
+<div class="row">
 
-- Defensive rating showed strong correlations with HP, Defense, and Special Defense—much stronger than its correlation with Total BST.
+<div class="col-md-4">
 
-- Type-based defensive effectiveness scores were only weakly correlated with raw stats, confirming they contribute unique information not captured by BST alone.
+<div class="poke-card">
 
-This analysis demonstrates that the constructed rating system integrates multiple dimensions without redundancy or overemphasizing any single feature.
+### Zygarde Complete Forme
 
-5. **Analysis of Tier Distribution and Balance**
+<img src="assets\reportgif\zygarde-zygarde-100.gif" class="poke-sprite">
+```{r, echo=FALSE, fig.width=6, fig.height=6, out.width="100%", fig.align='center'}
+radar_data <- rbind(max_row, min_row, pokemon_df |>
+  filter(name == "Zygarde Complete Forme") |>
+  select(all_of(stats_cols)))
 
-Using chi-square tests on the distribution of Pokémon across offensive/defensive roles and tiers:
+rownames(radar_data) <- c("Max", "Min", "Zygarde Complete Forme")
 
-- Tier distribution differed significantly across generations (p < 0.01), suggesting improvements in design balance over time.
+fmsb::radarchart(
+  radar_data,
+  axistype = 1,
+  caxislabels = c("50", "100", "150", "200", "255"),
+  pcol  = "#4FACFE",
+  pfcol = adjustcolor("#4FACFE", alpha.f = 0.3),
+  plwd  = 3,
+  plty  = 1,
+  cglcol = "grey",
+  cglty  = 1
+)
+```
+</div>
+</div> <div class="col-md-4">
 
-- Types differed significantly in their probability of producing high-tier Pokémon (e.g., Steel and Dragon enriched in A/S tiers).
+<div class="poke-card">
 
-These results align with long-standing community observations about type balance and metagame centralization.
+### Giratina Altered Forme
 
-# Discussion
+<img src="assets\reportgif\giratina-altered-forme.gif" class="poke-sprite">
+```{r, echo=FALSE, fig.width=6, fig.height=6, out.width="100%", fig.align='center'}
+radar_data <- rbind(max_row, min_row, pokemon_df |>
+  filter(name == "Giratina Altered Forme") |>
+  select(all_of(stats_cols)))
+
+rownames(radar_data) <- c("Max", "Min", "Giratina Altered Forme")
+
+fmsb::radarchart(
+  radar_data,
+  axistype = 1,
+  caxislabels = c("50", "100", "150", "200", "255"),
+  pcol  = "#4FACFE",
+  pfcol = adjustcolor("#4FACFE", alpha.f = 0.3),
+  plwd  = 3,
+  plty  = 1,
+  cglcol = "grey",
+  cglty  = 1,
+)
+```
+</div>
+</div> <div class="col-md-4">
+
+<div class="poke-card">
+
+### Zacian Crowned Sword
+
+<img src="assets\reportgif\zacian-crowned-sword.gif" class="poke-sprite">
+
+```{r, echo=FALSE, fig.width=6, fig.height=6, out.width="100%", fig.align='center'}
+radar_data <- rbind(max_row, min_row, pokemon_df |>
+  filter(name == "Zacian Crowned Sword") |>
+  select(all_of(stats_cols)))
+
+rownames(radar_data) <- c("Max", "Min", "Zacian Crowned Sword")
+
+fmsb::radarchart(
+  radar_data,
+  axistype = 1,
+  caxislabels = c("50", "100", "150", "200", "255"),
+  pcol  = "#4FACFE",
+  pfcol = adjustcolor("#4FACFE", alpha.f = 0.3),
+  plwd  = 3,
+  plty  = 1,
+  cglcol = "grey",
+  cglty  = 1,
+)
+```
+</div>
+</div> </div>
+
+### **⭐Are they strong?**  
+- Zygarde Complete Forme  
+  - Incredibly bulky with outstanding overall defenses. Its biggest limitation is activating Power Construct, which requires dropping **below 50%** HP—making its full defensive potential harder to access in real battles.
+  
+- Giratina Altered Forme  
+  - One of the most naturally tanky Pokémon in the series, with excellent mixed bulk and strong defensive typing. However, despite its durability, its practical impact in many formats is limited due to low offensive pressure and **passive** playstyle.
+
+- Zacian Crowned Sword
+  - Primarily known for overwhelming offense, but its Fairy/Steel typing and high base stats also give it strong defensive resilience. Its bulk isn’t its main role, yet it still out-tanks many offensive Pokémon. One of the **most theoretically perfect Pokémon**.
+
+<details>
+<summary><b>Defensive Pokémon List(Best to worst)</b></summary>
+```{r pokemon-table2}
+read.csv("data/top_defensive.csv") |> 
+  mutate(defensive_rating = round(defensive_rating, 2),
+         offensive_rating = round(offensive_rating, 2)) |> 
+  DT::datatable(
+    options = list(
+      pageLength = 10,  
+      scrollX = TRUE    
+    )
+  )
+```
+</details>
+
+
+
+## *Best 3 Regular Pokémon*:  
+*For Beginners*  
+*Considering both strong offense and strong defense.*  
+
+<div class="row">
+
+<div class="col-md-4">
+
+<div class="poke-card">
+
+### Mega Alakazam
+
+<img src="assets\reportgif\alakazam-mega-alakazam.gif" class="poke-sprite">
+```{r, echo=FALSE, fig.width=6, fig.height=6, out.width="100%", fig.align='center'}
+radar_data <- rbind(max_row, min_row, pokemon_df |>
+  filter(name == "Mega Alakazam") |>
+  select(all_of(stats_cols)))
+
+rownames(radar_data) <- c("Max", "Min", "Mega Alakazam")
+
+fmsb::radarchart(
+  radar_data,
+  axistype = 1,
+  caxislabels = c("50", "100", "150", "200", "255"),
+  pcol  = "#4FACFE",
+  pfcol = adjustcolor("#4FACFE", alpha.f = 0.3),
+  plwd  = 3,
+  plty  = 1,
+  cglcol = "grey",
+  cglty  = 1
+)
+```
+</div>
+</div> <div class="col-md-4">
+
+<div class="poke-card">
+
+### Mega Metagross
+
+<img src="assets\reportgif\metagross-mega-metagross.gif" class="poke-sprite">
+```{r, echo=FALSE, fig.width=6, fig.height=6, out.width="100%", fig.align='center'}
+radar_data <- rbind(max_row, min_row, pokemon_df |>
+  filter(name == "Mega Metagross") |>
+  select(all_of(stats_cols)))
+
+rownames(radar_data) <- c("Max", "Min", "Mega Metagross")
+
+fmsb::radarchart(
+  radar_data,
+  axistype = 1,
+  caxislabels = c("50", "100", "150", "200", "255"),
+  pcol  = "#4FACFE",
+  pfcol = adjustcolor("#4FACFE", alpha.f = 0.3),
+  plwd  = 3,
+  plty  = 1,
+  cglcol = "grey",
+  cglty  = 1,
+)
+```
+</div>
+</div> <div class="col-md-4">
+
+<div class="poke-card">
+
+### Mega Aggron
+
+<img src="assets\reportgif\aggron-mega-aggron.gif" class="poke-sprite">
+
+```{r, echo=FALSE, fig.width=6, fig.height=6, out.width="100%", fig.align='center'}
+radar_data <- rbind(max_row, min_row, pokemon_df |>
+  filter(name == "Mega Aggron") |>
+  select(all_of(stats_cols)))
+
+rownames(radar_data) <- c("Max", "Min", "Mega Aggron")
+
+fmsb::radarchart(
+  radar_data,
+  axistype = 1,
+  caxislabels = c("50", "100", "150", "200", "255"),
+  pcol  = "#4FACFE",
+  pfcol = adjustcolor("#4FACFE", alpha.f = 0.3),
+  plwd  = 3,
+  plty  = 1,
+  cglcol = "grey",
+  cglty  = 1,
+)
+```
+</div>
+</div> </div>
+
+### **⭐Are they strong?**  
+- Mega Alakazam  
+  - A hyper-fast **glass cannon** with overwhelming Special Attack. Extremely dangerous but very fragile.
+
+- Mega Metagross  
+  - **One of the strongest** and **most reliable** Megas: excellent stats, great movepool, and incredible all-around pressure.
+
+- Mega Aggron  
+  - A **near-unbreakable** physical wall with minimal weaknesses; low speed but exceptional tank performance.
+
+<details>
+<summary><b>Regular Pokémon List(Best to worst)</b></summary>
+```{r pokemon-table3}
+read.csv("data/top_regular.csv") |> 
+  mutate(defensive_rating = round(defensive_rating, 2),
+         offensive_rating = round(offensive_rating, 2)) |> 
+  DT::datatable(
+    options = list(
+      pageLength = 10,  
+      scrollX = TRUE    
+    )
+  )
+```
+</details>
+
+## *Effectiveness of the Rating System*  
+- Overall, the rating system effectively highlights the strongest offensive and defensive Pokémon across the series. High-ranking entries such as Mega Rayquaza, Mega Mewtwo Y, Ultra Necrozma, and Zacian-Crowned consistently align with established competitive knowledge, confirming that the model captures real power ceilings rather than producing arbitrary results.
+
+- On the defensive side, the appearance of Zygarde Complete Forme is not an error but a reflection of its unique mechanics. Although it requires dropping below 50% HP to transform, its Complete Forme possesses one of the highest bulk profiles in the franchise—making its top placement a natural outcome of its inflated defensive stats.
+
+- Taken together, the rankings demonstrate that the system successfully identifies both statistically dominant Pokémon and those whose power derives from special forms, transformations, or extreme stat distributions. The model's outputs are therefore consistent, interpretable, and aligned with known competitive trends.
+
+
+
+# **Discussion**
 
 <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">
 

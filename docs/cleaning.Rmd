@@ -252,8 +252,7 @@ dual_def <- map_dfr(combn(types, 2, simplify = FALSE), \(pair) {
 def_type_df <- bind_rows(single_def, dual_def)
 ```
 
-### Export
-```{r}
+```{r Export, message=FALSE, warning=FALSE}
 # Export final evolution dataset with all enrichments (primary dataset for all downstream analysis)
 write_csv(pokemon_evolved_df, "data/pokemon_data_final_evolutions_enriched.csv")
 

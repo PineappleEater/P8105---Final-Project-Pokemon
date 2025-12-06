@@ -458,13 +458,13 @@ ggplot(pokemon_rated, aes(x = offensive_rating, y = defensive_rating)) +
 ```{r top-offensive}
 top_offensive <- pokemon_rated %>%
   arrange(desc(offensive_rating)) %>%
-  head(20) %>%
   select(name, type_1, type_2, role, offensive_rating, defensive_rating, tier)
 
-kable(top_offensive,
-      caption = "Top 20 Offensive Pokémon",
-      digits = 1,
-      align = "lllcccc")
+top_offensive |> 
+  head(20) |> 
+  kable(caption = "Top 20 Offensive Pokémon",
+        digits = 1,
+        align = "lllcccc")
 ```
 
 ## Top 20 Defensive Pokémon
@@ -472,13 +472,13 @@ kable(top_offensive,
 ```{r top-defensive}
 top_defensive <- pokemon_rated %>%
   arrange(desc(defensive_rating)) %>%
-  head(20) %>%
   select(name, type_1, type_2, role, defensive_rating, offensive_rating, tier)
 
-kable(top_defensive,
-      caption = "Top 20 Defensive Pokémon",
-      digits = 1,
-      align = "lllcccc")
+top_defensive |> 
+  head(20) |> 
+  kable(caption = "Top 20 Defensive Pokémon",
+        digits = 1,
+        align = "lllcccc")
 ```
 
 ## Best Regular Pokémon (For Beginners)
@@ -487,15 +487,25 @@ kable(top_defensive,
 top_regular <- pokemon_rated %>%
   filter(category == "Regular") %>%
   arrange(desc(pmax(defensive_rating+10, offensive_rating))) %>%
-  head(20) %>%
   select(name, type_1, type_2, role, offensive_rating, defensive_rating, tier)
 
-kable(top_regular,
-      caption = "Top 20 Regular Pokémon (Accessible for Beginners)",
-      digits = 1,
-      align = "lllcccc")
+top_regular |> 
+  head(20) |> 
+  kable(caption = "Top 20 Regular Pokémon (Accessible for Beginners)",
+        digits = 1,
+        align = "lllcccc")
 ```
 
+```{r Export, message=FALSE, warning=FALSE}
+# Export Offensive Pokemon Ranking list
+write_csv(top_offensive, "data/top_offensive.csv")
+
+# Export Defensive Pokemon Ranking list
+write_csv(top_defensive, "data/top_defensive.csv")
+
+# Export Regular Pokemon Ranking list
+write_csv(top_regular, "data/top_regular.csv")
+```
 ---
 
 # Summary
