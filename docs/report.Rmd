@@ -37,10 +37,10 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 
 **Core Questions:**
 
-- **Legendary Classification**: Is it possible to build a classifier to identify legendary Pokémon?
-- **Physical Attributes Analysis**: How does height and weight of a Pokémon correlate with its various base stats?
+- **Pokémon Base Data Analysis**: Is there any pattern in the distribution of Pokémon types and stats?
+- **Physical Attributes Analysis**: Do Pokémon ecosystems or their height-weight distributions have any real-world analogues?
 - **Type Effectiveness**: Which type (or type combination) is the strongest overall? Which is the weakest?
-- **Type-Legendary Relationship**: Which type is the most likely to be a legendary Pokémon?
+- **Legendary Classification**: Is it possible to build a classifier to identify legendary Pokémon?
 - **Rating System Development**: Based on Pokémon type and stats, can we provide a Pokémon rating system for beginners?
 
 **Extended Questions:**
@@ -55,7 +55,7 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 | **PokémonDB** | Complete Pokémon Stats and Physical Attributes scraped from web | (<a href="https://pokemondb.net/pokedex/all">Complete Pokémon Pokédex</a>)(<a href="https://pokemondb.net/pokedex/stats/height-weight">List of Pokémon by height and weight</a>) |
 | **BULBAGARDEN** | "Fully evolved Pokémon only list" scraped from web | (<a href="https://bulbapedia.bulbagarden.net/wiki/List_of_fully_evolved_Pok%C3%A9mon_by_base_stats">Fully evolved Pokémon List</a>) |
 
-## Pokémon Dataset Overview (Full Version)
+## Pokémon Dataset Overview Full  
 
 <div align="center">
 
@@ -63,7 +63,7 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 |--------|-------|
 | **Species Count** | 1,025 Pokémon |
 | **Generations** | Gen 1–9 (1996–2025) |
-| **Features** | 30+ attributes |
+| **Features** | 18 attributes |
 
   <a href="https://raw.githubusercontent.com/PineappleEater/P8105---Final-Project-Pokemon/main/data/pokemon_data_all.csv"
      download
@@ -81,15 +81,16 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
   </a>
 </div>
 
-## Pokémon Dataset Overview (Evolved Pokémon Only)
+## Pokémon Dataset Overview Part  
+*Evolved and Final Form of Pokémon Only*
 
 <div align="center">
 
 | Metric | Value |
 |--------|-------|
-| **Species Count** | 1,025 Pokémon |
+| **Species Count** | 576 Pokémon |
 | **Generations** | Gen 1–9 (1996–2025) |
-| **Features** | 30+ attributes |
+| **Features** | 19 attributes |
 
 <a href="https://raw.githubusercontent.com/PineappleEater/P8105---Final-Project-Pokemon/main/data/pokemon_data_final_evolutions_enriched.csv"
      download
@@ -128,10 +129,11 @@ Prior analyses of the Pokémon dataset have appeared in a variety of data scienc
 1. **Table Joining**: Merged stats, dimensions, and evolution data by Pokédex number
 2. **Type Parsing**: Split combined type strings into `type_1` and `type_2`
 3. **Special Case Handling**:
-   - **Eternatus Eternamax**: No official data exists
-   - Assigned estimated dimensions based on lore: 999.9m / 9999.9kg
-   - Calculated BMI = 0.01 (representing non-physical energy entity)
-4. **Derived Variables**: BMI = weight(kg) / height(m)²
+   - **Pokémon name**: Not standard/official (Even cannot properly fix by using R code).
+     - All "Pokémon name" renamed using AI-assisted manual processes.
+   - **Eternatus Eternamax**: No official height or weight data exists
+     - Removed because unusable in normal Pokémon games and cannot be analyzed conventionally.
+4. **Creating Long table**: Using `pivot_longer` cleaned the type chart into an easy-to-read matrix of damage multipliers for every type matchup.
 
 <a href="https://pineappleeater.github.io/P8105---Final-Project-Pokemon/cleaning.html"
    target="_blank"

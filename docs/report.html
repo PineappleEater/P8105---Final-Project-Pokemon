@@ -460,14 +460,14 @@ generations.</p>
 <h1>Initial Questions</h1>
 <p><strong>Core Questions:</strong></p>
 <ul>
-<li><strong>Legendary Classification</strong>: Is it possible to build a
-classifier to identify legendary Pokémon?</li>
-<li><strong>Physical Attributes Analysis</strong>: How does height and
-weight of a Pokémon correlate with its various base stats?</li>
+<li><strong>Pokémon Base Data Analysis</strong>: Is there any pattern in
+the distribution of Pokémon types and stats?</li>
+<li><strong>Physical Attributes Analysis</strong>: Do Pokémon ecosystems
+or their height-weight distributions have any real-world analogues?</li>
 <li><strong>Type Effectiveness</strong>: Which type (or type
 combination) is the strongest overall? Which is the weakest?</li>
-<li><strong>Type-Legendary Relationship</strong>: Which type is the most
-likely to be a legendary Pokémon?</li>
+<li><strong>Legendary Classification</strong>: Is it possible to build a
+classifier to identify legendary Pokémon?</li>
 <li><strong>Rating System Development</strong>: Based on Pokémon type
 and stats, can we provide a Pokémon rating system for beginners?</li>
 </ul>
@@ -512,8 +512,8 @@ evolved Pokémon List</a>)</td>
 </tr>
 </tbody>
 </table>
-<div id="pokémon-dataset-overview-full-version" class="section level2">
-<h2>Pokémon Dataset Overview (Full Version)</h2>
+<div id="pokémon-dataset-overview-full" class="section level2">
+<h2>Pokémon Dataset Overview Full</h2>
 <div align="center">
 <table>
 <thead>
@@ -533,7 +533,7 @@ evolved Pokémon List</a>)</td>
 </tr>
 <tr class="odd">
 <td><strong>Features</strong></td>
-<td>30+ attributes</td>
+<td>18 attributes</td>
 </tr>
 </tbody>
 </table>
@@ -551,9 +551,9 @@ evolved Pokémon List</a>)</td>
      "> 📥 Download Full CSV </a></p>
 </div>
 </div>
-<div id="pokémon-dataset-overview-evolved-pokémon-only"
-class="section level2">
-<h2>Pokémon Dataset Overview (Evolved Pokémon Only)</h2>
+<div id="pokémon-dataset-overview-part" class="section level2">
+<h2>Pokémon Dataset Overview Part</h2>
+<p><em>Evolved and Final Form of Pokémon Only</em></p>
 <div align="center">
 <table>
 <thead>
@@ -565,7 +565,7 @@ class="section level2">
 <tbody>
 <tr class="odd">
 <td><strong>Species Count</strong></td>
-<td>1,025 Pokémon</td>
+<td>576 Pokémon</td>
 </tr>
 <tr class="even">
 <td><strong>Generations</strong></td>
@@ -573,7 +573,7 @@ class="section level2">
 </tr>
 <tr class="odd">
 <td><strong>Features</strong></td>
-<td>30+ attributes</td>
+<td>19 attributes</td>
 </tr>
 </tbody>
 </table>
@@ -670,12 +670,21 @@ evolution data by Pokédex number</li>
 <code>type_1</code> and <code>type_2</code></li>
 <li><strong>Special Case Handling</strong>:
 <ul>
-<li><strong>Eternatus Eternamax</strong>: No official data exists</li>
-<li>Assigned estimated dimensions based on lore: 999.9m / 9999.9kg</li>
-<li>Calculated BMI = 0.01 (representing non-physical energy entity)</li>
+<li><strong>Pokémon name</strong>: Not standard/official (Even cannot
+properly fix by using R code).
+<ul>
+<li>All “Pokémon name” renamed using AI-assisted manual processes.</li>
 </ul></li>
-<li><strong>Derived Variables</strong>: BMI = weight(kg) /
-height(m)²</li>
+<li><strong>Eternatus Eternamax</strong>: No official height or weight
+data exists
+<ul>
+<li>Removed because unusable in normal Pokémon games and cannot be
+analyzed conventionally.</li>
+</ul></li>
+</ul></li>
+<li><strong>Creating Long table</strong>: Using
+<code>pivot_longer</code> cleaned the type chart into an easy-to-read
+matrix of damage multipliers for every type matchup.</li>
 </ol>
 <p><a href="https://pineappleeater.github.io/P8105---Final-Project-Pokemon/cleaning.html"
    target="_blank"
