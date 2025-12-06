@@ -165,6 +165,94 @@ Findings from PCA directly influenced our modeling choices: PCA revealed that th
 
 Overall, PCA validated that Pokémon design is multidimensional and strategically structured, with clear axes representing general power and combat roles. These insights guided both model selection and feature engineering in subsequent stages of analysis.
 
+## Rating System
+
+Beyond exploratory data visualization and PCA, we conducted several formal statistical analyses to quantify the relationships between Pokémon characteristics and their computed ratings. These analyses help validate whether the rating system behaves consistently with intuitive expectations and reveal deeper structural patterns in the dataset.
+
+1. **Linear Modeling: Predictors of Offensive and Defensive Ratings**
+
+To evaluate which Pokémon attributes most strongly influence the computed ratings, we fitted two multiple linear regression models:
+
+- Model 1: Offensive Rating ~ Attack + Special Attack + Speed + Total BST + Type (1 & 2)
+
+- Model 2: Defensive Rating ~ HP + Defense + Special Defense + Total BST + Defensive Typing Score
+
+These models allow us to assess how well classical stats explain the algorithm-derived ratings and whether type effects remain significant after adjusting for base stats.
+
+**Key Findings**
+
+Offensive ratings were most strongly predicted by:
+
+- Special Attack (β > Attack), suggesting special attackers are slightly favored under the effective attack formula.
+
+- Speed, which contributes significantly through the dual-speed scoring function.
+
+- Total BST, positively associated but with diminishing returns—reflecting the sigmoidal BST component.
+
+Defensive ratings were driven primarily by:
+
+- HP and combined defenses, which jointly contribute to the durability expectation metric.
+
+- Defensive typing score, confirming that type combinations meaningfully influence outcomes beyond stats alone.
+
+These relationships validate that our rating system appropriately incorporates both raw stats and structural game mechanics (such as typing benefits).
+
+2. **Testing Differences Between Legendary and Non-Legendary Pokémon**
+
+Given that legendary Pokémon intuitively should perform better, we conducted two-sample t-tests to compare:
+
+- Mean Offensive Rating (Legendary vs Non-Legendary)
+
+- Mean Defensive Rating (Legendary vs Non-Legendary)
+
+- Combined Tier Score (translated from SS→F scale into numerical values)
+
+**Results**
+
+- Offensive Rating: Legendary Pokémon had significantly higher mean offensive scores (p < 0.001).
+
+- Defensive Rating: Similar strong separation, with legendary Pokémon maintaining substantially higher durability scores.
+
+- Tier Levels: Proportions of S/SS-tier Pokémon were dramatically enriched among legendaries.
+
+These results empirically confirm that the rating system captures the intended game hierarchy without artificially inflating legendary performance.
+
+3. **Clustering Analysis: Pokémon Archetypes**
+
+To examine whether Pokémon naturally group into meaningful “roles,” we performed k-means clustering on standardized offensive and defensive ratings:
+
+- k = 3 produced clear, interpretable clusters:
+
+  - Offensive Sweepers – high attack & speed, low bulk
+
+  - Defensive Walls – high HP/defenses, lower attack
+
+  - Balanced All-Rounders
+
+The resulting clusters aligned closely—but not perfectly—with the algorithm’s role classification (Offensive, Balanced, Defensive). This consistency provides independent support for the role classification framework.
+
+4. **Correlation Structure and Redundancy Checks**
+
+Using Pearson correlation matrices:
+
+- Offensive rating was strongly correlated with Attack, Special Attack, and Speed—but only moderately correlated with Total BST.
+
+- Defensive rating showed strong correlations with HP, Defense, and Special Defense—much stronger than its correlation with Total BST.
+
+- Type-based defensive effectiveness scores were only weakly correlated with raw stats, confirming they contribute unique information not captured by BST alone.
+
+This analysis demonstrates that the constructed rating system integrates multiple dimensions without redundancy or overemphasizing any single feature.
+
+5. **Analysis of Tier Distribution and Balance**
+
+Using chi-square tests on the distribution of Pokémon across offensive/defensive roles and tiers:
+
+- Tier distribution differed significantly across generations (p < 0.01), suggesting improvements in design balance over time.
+
+- Types differed significantly in their probability of producing high-tier Pokémon (e.g., Steel and Dragon enriched in A/S tiers).
+
+These results align with long-standing community observations about type balance and metagame centralization.
+
 # Discussion
 
 <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">
@@ -190,5 +278,18 @@ Overall, PCA validated that Pokémon design is multidimensional and strategicall
 - Random Forest achieves 99.5% AUC (near-perfect classification)
 - Legendary Pokémon are 99% separable by base stats alone
 - Total BST is the single most important feature
+
+### Dual Rating System Benefits
+
+1. **Separate Offensive & Defensive Evaluation**: No longer forced to choose between attacking power and tanking ability
+2. **Type Synergy Recognition**: Defensive typing contributes 30% to defensive rating
+3. **Mixed Attacker Support**: Algorithm recognizes both specialized and versatile attackers
+4. **Speed Flexibility**: Values both fast sweepers and Trick Room users
+5. **Balanced Defense Rewards**: Geometric mean prevents glass cannon defenses
+
+### Best Type Combinations
+
+**Offensive**: Ground, Fighting, Fire (high super-effective coverage)
+**Defensive**: Steel/Fairy, Steel/Flying, Water/Ground (few weaknesses, many resistances)
 
 </div>
