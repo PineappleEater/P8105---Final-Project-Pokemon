@@ -5,7 +5,7 @@ output:
   html_document:
     toc: true
     toc_float: true
-    code_folding: show
+    code_folding: hide
     theme: cosmo
     self_contained: true
 knit: (function(input, ...) {
@@ -77,6 +77,10 @@ pokemon_df <- read.csv("data/raw-data/pokeraw_df_fixed.csv") |>
   mutate(
     type_2 = na_if(type_2, "")
   )
+
+pokemon_df <- pokemon_df |> 
+  select(-name) |> 
+  rename(name = name_fix)  # Successfully completed manual correction.
 ```
 
 **Note**: Due to the complex naming conventions mixed in with the data exported from HTML, the official names of the Pokémon appeared partially garbled and overlapping. I tried many R-based methods to uniformly fix this, but none could accurately reproduce the official names. Therefore, on the last day, I reluctantly used ChatGPT to rename them line by line.
@@ -166,7 +170,8 @@ pokemon_df_final <- pokemon_df |>
       dex <= 905 ~ "Gen 8",
       TRUE ~ "Gen 9"
     )
-  )
+  ) |> 
+  select(-is_mythical, -is_paradox, -is_ultra_beast)
 
 
 pokemon_evolved_df <- pokemon_df_final |>
@@ -274,8 +279,8 @@ write_csv(pokemon_df_final, "data/pokemon_data_all.csv")
 
 | File Name | Pokémon Count | Description | Recommended Use |
 |-----------|---------------|-------------|----------------|
-| `pokemon_data_raw.csv` | 1,219 | Raw dataset (basic stats only) | Reference |
-| `pokemon_data_all.csv` | 1,219 | Complete dataset with category labels | Reference, comprehensive analysis |
+| `pokemon_data_raw.csv` | 1,218 | Raw dataset (basic stats only) | Reference |
+| `pokemon_data_all.csv` | 1,218 | Complete dataset with category labels | Reference, comprehensive analysis |
 | `pokemon_data_final_evolutions_enriched.csv` | 743 | **Final evolutions with all features** | Statistical analysis & ML modeling |
 
 `def_type_df`: Dataset that included all **Defence Type** possible of Pokémon, and it's efficiency in defending against different **Attack Types** 

@@ -1650,7 +1650,11 @@ pokemon_df &lt;- read.csv(&quot;data/raw-data/pokeraw_df_fixed.csv&quot;) |&gt;
   ) |&gt; 
   mutate(
     type_2 = na_if(type_2, &quot;&quot;)
-  )</code></pre>
+  )
+
+pokemon_df &lt;- pokemon_df |&gt; 
+  select(-name) |&gt; 
+  rename(name = name_fix)  # Successfully completed manual correction.</code></pre>
 <p><strong>Note</strong>: Due to the complex naming conventions mixed in
 with the data exported from HTML, the official names of the Pokémon
 appeared partially garbled and overlapping. I tried many R-based methods
@@ -1746,7 +1750,8 @@ pokemon_df_final &lt;- pokemon_df |&gt;
       dex &lt;= 905 ~ &quot;Gen 8&quot;,
       TRUE ~ &quot;Gen 9&quot;
     )
-  )
+  ) |&gt; 
+  select(-is_mythical, -is_paradox, -is_ultra_beast)
 
 
 pokemon_evolved_df &lt;- pokemon_df_final |&gt;
@@ -1871,13 +1876,13 @@ write_csv(pokemon_df_final, &quot;data/pokemon_data_all.csv&quot;)</code></pre>
 <tbody>
 <tr class="odd">
 <td><code>pokemon_data_raw.csv</code></td>
-<td>1,219</td>
+<td>1,218</td>
 <td>Raw dataset (basic stats only)</td>
 <td>Reference</td>
 </tr>
 <tr class="even">
 <td><code>pokemon_data_all.csv</code></td>
-<td>1,219</td>
+<td>1,218</td>
 <td>Complete dataset with category labels</td>
 <td>Reference, comprehensive analysis</td>
 </tr>
@@ -2164,7 +2169,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeCodeFolding("show" === "show");
+  window.initializeCodeFolding("hide" === "show");
 });
 </script>
 
