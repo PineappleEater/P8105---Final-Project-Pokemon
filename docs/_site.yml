@@ -13,8 +13,8 @@ navbar:
           href: eda.html
         - text: "ML & Statistical Analysis"
           href: analysis.html
-        - text: "Rating System"
-          href: rating.html
+    - text: "Rating System"
+      href: rating.html
     - text: "Interactive Explorer"
       href: shiny.html
     - icon: fa-github fa-lg
